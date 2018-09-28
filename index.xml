@@ -29,7 +29,11 @@ Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de 
       <pubDate>Fri, 28 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://re-dojo.github.io/about/</guid>
-      <description></description>
+      <description>Welcome to our reverse engineering dojo!
+Here you will find different articles about reverse engineering, binary analysis and logical programming, mostly related to CTF challenges.
+Blog posts are either written in french or english depending on our mood.
+A first article is already published: a write-up about a diamond-related programming language using virtualization obfuscation (this one is in french).
+Thanks for reading!</description>
     </item>
     
     <item>
