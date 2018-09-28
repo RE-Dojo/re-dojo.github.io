@@ -2,38 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Articles on RE-Dojo</title>
-    <link>https://re-dojo.github.io/posts/</link>
+    <link>https://re-dojo.github.io/post/</link>
     <description>Recent content in Articles on RE-Dojo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; 2018. All rights reserved.</copyright>
     <lastBuildDate>Fri, 28 Sep 2018 15:54:02 -0400</lastBuildDate>
     
-	<atom:link href="https://re-dojo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://re-dojo.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>[ECW 2017] Red Diamond (175)</title>
-      <link>https://re-dojo.github.io/posts/2018-09-28-ecw-binary3/</link>
+      <link>https://re-dojo.github.io/post/2018-09-28-ecw-binary3/</link>
       <pubDate>Fri, 28 Sep 2018 16:04:02 -0400</pubDate>
       
-      <guid>https://re-dojo.github.io/posts/2018-09-28-ecw-binary3/</guid>
+      <guid>https://re-dojo.github.io/post/2018-09-28-ecw-binary3/</guid>
       <description>Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l&amp;rsquo;année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense.
 L&amp;rsquo;épreuve qualificative de cette année reprenait les catégories classiques de CTF: Web, Forensics, Crypto et Reverse.
 Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de celui qui m&amp;rsquo;a paru le plus intéressant mais également le plus compliqué à résoudre.</description>
-    </item>
-    
-    <item>
-      <title>Welcome to the Dojo</title>
-      <link>https://re-dojo.github.io/posts/2018-09-28-welcome/</link>
-      <pubDate>Fri, 28 Sep 2018 15:54:02 -0400</pubDate>
-      
-      <guid>https://re-dojo.github.io/posts/2018-09-28-welcome/</guid>
-      <description>Welcome to our reverse engineering dojo!
-Here you will find different articles about reverse engineering, binary analysis and logical programming.
-Blog posts are either written in french or english depending on our mood.
-A first article is coming soon, a write-up about a diamond-related programming language using virtualization obfuscation (this one will be in french).
-Enjoy the read!</description>
     </item>
     
   </channel>
