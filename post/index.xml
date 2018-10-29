@@ -13,9 +13,18 @@
     
     
     <item>
+      <title>[NSEC 2018] Mars Analytica (20)</title>
+      <link>https://re-dojo.github.io/post/2018-10-28-mars-analytica/</link>
+      <pubDate>Sun, 28 Oct 2018 13:37:00 -0400</pubDate>
+      
+      <guid>https://re-dojo.github.io/post/2018-10-28-mars-analytica/</guid>
+      <description>A little bit of context In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured. One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.</description>
+    </item>
+    
+    <item>
       <title>[ECW 2017] Red Diamond (175)</title>
       <link>https://re-dojo.github.io/post/2018-09-28-ecw-binary3/</link>
-      <pubDate>Fri, 28 Sep 2018 16:04:02 -0400</pubDate>
+      <pubDate>Fri, 28 Sep 2018 13:37:00 -0400</pubDate>
       
       <guid>https://re-dojo.github.io/post/2018-09-28-ecw-binary3/</guid>
       <description>Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l&amp;rsquo;année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense.
