@@ -33,7 +33,15 @@
   </url>
   
   <url>
-    <loc>https://re-dojo.github.io/tags/</loc>
+    <loc>https://re-dojo.github.io/authors/icecr4ck/</loc>
+  </url>
+  
+  <url>
+    <loc>https://re-dojo.github.io/authors/scud/</loc>
+  </url>
+  
+  <url>
+    <loc>https://re-dojo.github.io/authors/</loc>
     <priority>0</priority>
   </url>
   
