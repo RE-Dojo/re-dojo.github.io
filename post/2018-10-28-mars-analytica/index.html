@@ -267,14 +267,15 @@ No useful strings are present in the binary.</p>
 
 <p><img src="https://re-dojo.github.io/images/mars/navigation_bar.png" alt="Image" title="Navigation bar" /></p>
 
-<p>Looking at the main function revealed a lot of <em>weird</em> stuff are going on:
-* a very large stack frame is created (0xBA4A8)
-* the classic call combination time/srand is present but the rand function is not even imported
-* 5 different large arrays of bytes are copied to the stack
-* some weird calculations based on the arrays copied is happening
-* the function ends with a push/ret</p>
+<p>Looking at the main function revealed a lot of <em>weird</em> stuff are going on:</p>
 
-<p><img src="https://re-dojo.github.io/images/marsmain.png" alt="Image" title="Main" /></p>
+<ul>
+<li>a very large stack frame is created (0xBA4A8)</li>
+<li>the classic call combination time/srand is present but the rand function is not even imported</li>
+<li>5 different large arrays of bytes are copied to the stack</li>
+<li>some weird calculations based on the arrays copied is happening</li>
+<li>the function ends with a push/ret</li>
+</ul>
 
 <p>Just out of curiosity, I took a look at the disassembly following the main function. One could see that the same weird computation is present in the following (undefined) functions. Moreover, most of these functions either ends with a <code>push/ret</code> or a <code>jmp rax</code>.
 This code construct reminded me of a virtual machine where each handler computes the address of the next handler (like a distributed dispatch or <em>direct-threaded code</em>).
@@ -302,7 +303,7 @@ At first sight it looked like that virtual machine might be stack-based.</p>
 <p>In order to implement a disassembler for the VM I had to focus on the weird computation first to be able to know the next handler.
 The main function is right entrypoint to gather information about the VM initialization. As mentioned earlier the 5 arrays are essential to the handler computation. After renaming some variables, following the computation dynamically, diffing with other handlers, it was possible to understand and reimplement the routine.</p>
 
-<pre><code class="language-asm">	mov	[rbp+var_65F40], 0
+<pre><code>	mov	[rbp+var_65F40], 0
 	mov	rax, [rbp+var_65F40]
 	mov	edx, eax
 	lea	rax, [rbp+tab2]
@@ -530,15 +531,21 @@ Some handlers are very complicated to understand due to their obfuscation but as
 
 <p><img src="https://re-dojo.github.io/images/mars/xor_handler.png" alt="Image" title="XOR handler relevant code" /></p>
 
-<p>As one can see that part is not obfuscated and it is pretty clear:
-* two values are &ldquo;popped&rdquo; from the stack
-* a XOR operation is made between the two values
-* the result is pushed on the stack</p>
+<p>As one can see that part is not obfuscated and it is pretty clear:</p>
+
+<ul>
+<li>two values are &ldquo;popped&rdquo; from the stack</li>
+<li>a XOR operation is made between the two values</li>
+<li>the result is pushed on the stack</li>
+</ul>
 
 <p>This is clearly a weakness in the binary obfuscation and I decided to take advantage of it.
-To that end, one need to:
-* make sure that a handler calls 3 functions (&ldquo;pop_value&rdquo; twice and &ldquo;push_value&rdquo;)
-* retrieve the operation right after the second &ldquo;pop_value&rdquo;</p>
+To that end, one need to:</p>
+
+<ul>
+<li>make sure that a handler calls 3 functions (&ldquo;pop_value&rdquo; twice and &ldquo;push_value&rdquo;)</li>
+<li>retrieve the operation right after the second &ldquo;pop_value&rdquo;</li>
+</ul>
 
 <p>The following code searches for the pattern:<br />
 0 call pop_value<br />
@@ -577,7 +584,7 @@ Generally speaking, it is always better to come up with a more generic and a les
 
 <p>After putting the different techniques together and having crossed my fingers for the code not to break, I obtained the following assembly listing:</p>
 
-<pre><code class="language-pseudo-assembly">0x0:	0x402335:	push 0x00000000
+<pre><code>0x0:	0x402335:	push 0x00000000
 0x1:	0x402335:	push 0x00000009
 0x2:	0x401b8f:	store[0x00000000]
 0x3:	0x4018cd:	nop
@@ -607,8 +614,10 @@ The characters are put in the virtual stack but they are not next to each other.
 It means that the first character will be put in the 7th virtual stack variable, the 2nd character at the 8th position and so on.</p>
 
 <p>After that some computations between characters are made and the result is compared to hardcoded values. The verification algorithm is based on several equations.<br />
-For instance the first equation is:<br />
-(buf[14] * buf[6])*((buf[12]-buf[10])^buf[13]) - 0x3fcf == 0</p>
+For instance the first equation is:</p>
+
+<pre><code>(buf[14] * buf[6])*((buf[12]-buf[10])^buf[13]) - 0x3fcf == 0
+</code></pre>
 
 <p>After having gathered all the different equations I used z3 to solve them. The code is pretty straightforward. First one need to declare all the characters, add a constraint to make sure the character is printable and then add the equations.</p>
 
@@ -644,10 +653,13 @@ print solution
 I want to thank <a href="https://twitter.com/0xtowel?lang=en">Towel</a> for this incredible challenge and a shoutout to <a href="https://twitter.com/w4kfu?lang=en">Wakfu</a> for the few pointers he gave without spoiling all the fun.</p>
 
 <p>The solution is far from being the best but I think as it is a CTF challenge this IDA api-based solution is acceptable as I took advantage of the VM characterics.
-Different approaches could be taken here such as:
-* using symbolic execution and the knowledge of the VM structure to resolve each handler
-* using DSE
-* using taint analysis</p>
+Different approaches could be taken here such as:</p>
+
+<ul>
+<li>using symbolic execution and the knowledge of the VM structure to resolve each handler</li>
+<li>using DSE</li>
+<li>using taint analysis</li>
+</ul>
 
 <p>Actually I plan to come back with a more elegant solution so stay tuned :)</p>
 
