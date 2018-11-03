@@ -5,11 +5,47 @@
     <link>https://re-dojo.github.io/tags/</link>
     <description>Recent content in Tags on RE-Dojo</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>&amp;copy; 2018. All rights reserved.</copyright>
+    <language>en</language>
+    <lastBuildDate>Sun, 28 Oct 2018 13:37:00 -0400</lastBuildDate>
     
 	<atom:link href="https://re-dojo.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Ctf</title>
+      <link>https://re-dojo.github.io/tags/ctf/</link>
+      <pubDate>Sun, 28 Oct 2018 13:37:00 -0400</pubDate>
+      
+      <guid>https://re-dojo.github.io/tags/ctf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ecw 2017</title>
+      <link>https://re-dojo.github.io/tags/ecw-2017/</link>
+      <pubDate>Fri, 28 Sep 2018 13:37:00 -0400</pubDate>
+      
+      <guid>https://re-dojo.github.io/tags/ecw-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Nsec 2018</title>
+      <link>https://re-dojo.github.io/tags/nsec-2018/</link>
+      <pubDate>Sun, 28 Oct 2018 13:37:00 -0400</pubDate>
+      
+      <guid>https://re-dojo.github.io/tags/nsec-2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reverse</title>
+      <link>https://re-dojo.github.io/tags/reverse/</link>
+      <pubDate>Sun, 28 Oct 2018 13:37:00 -0400</pubDate>
+      
+      <guid>https://re-dojo.github.io/tags/reverse/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>

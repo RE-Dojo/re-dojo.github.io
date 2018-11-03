@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Articles on RE-Dojo</title>
-    <link>https://re-dojo.github.io/post/</link>
-    <description>Recent content in Articles on RE-Dojo</description>
+    <title>Ecw 2017 on RE-Dojo</title>
+    <link>https://re-dojo.github.io/tags/ecw-2017/</link>
+    <description>Recent content in Ecw 2017 on RE-Dojo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 28 Sep 2018 15:54:02 -0400</lastBuildDate>
+    <lastBuildDate>Fri, 28 Sep 2018 13:37:00 -0400</lastBuildDate>
     
-	<atom:link href="https://re-dojo.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://re-dojo.github.io/tags/ecw-2017/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>[NSEC 2018] Mars Analytica (20)</title>
-      <link>https://re-dojo.github.io/post/2018-10-28-mars-analytica/</link>
-      <pubDate>Sun, 28 Oct 2018 13:37:00 -0400</pubDate>
-      
-      <guid>https://re-dojo.github.io/post/2018-10-28-mars-analytica/</guid>
-      <description>In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured. One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.</description>
-    </item>
     
     <item>
       <title>[ECW 2017] Red Diamond (175)</title>

@@ -5,8 +5,7 @@
     <link>https://re-dojo.github.io/</link>
     <description>Recent content on RE-Dojo</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <copyright>&amp;copy; 2018. All rights reserved.</copyright>
+    <language>en</language>
     <lastBuildDate>Fri, 28 Sep 2018 15:54:02 -0400</lastBuildDate>
     
 	<atom:link href="https://re-dojo.github.io/index.xml" rel="self" type="application/rss+xml" />
@@ -41,7 +40,6 @@ Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de 
       <description>Welcome to our reverse engineering dojo!
 Here you will find different articles about reverse engineering, binary analysis and logical programming, mostly related to CTF challenges.
 Blog posts are either written in french or english depending on our mood.
-A first article is already published: a write-up about a diamond-related programming language using virtualization obfuscation (this one is in french).
 Thanks for reading!</description>
     </item>
     
