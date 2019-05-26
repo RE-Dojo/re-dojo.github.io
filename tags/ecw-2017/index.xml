@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>ecw 2017 on </title>
+    <title>ecw 2017 on RE-Dojo</title>
     <link>https://re-dojo.github.io/tags/ecw-2017/</link>
-    <description>Recent content in ecw 2017 on </description>
+    <description>Recent content in ecw 2017 on RE-Dojo</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
+    <language>en-us</language>
     <lastBuildDate>Fri, 28 Sep 2018 13:37:00 -0400</lastBuildDate>
     
 	<atom:link href="https://re-dojo.github.io/tags/ecw-2017/index.xml" rel="self" type="application/rss+xml" />

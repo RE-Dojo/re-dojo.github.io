@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>nsec 2019 on </title>
+    <title>nsec 2019 on RE-Dojo</title>
     <link>https://re-dojo.github.io/tags/nsec-2019/</link>
-    <description>Recent content in nsec 2019 on </description>
+    <description>Recent content in nsec 2019 on RE-Dojo</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
+    <language>en-us</language>
     <lastBuildDate>Wed, 22 May 2019 13:37:00 -0400</lastBuildDate>
     
 	<atom:link href="https://re-dojo.github.io/tags/nsec-2019/index.xml" rel="self" type="application/rss+xml" />
