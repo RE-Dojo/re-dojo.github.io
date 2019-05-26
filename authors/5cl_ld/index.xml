@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>5cl_ld on RE-Dojo</title>
+    <title>5Cl_lD on RE-Dojo</title>
     <link>https://re-dojo.github.io/authors/5cl_ld/</link>
-    <description>Recent content in 5cl_ld on RE-Dojo</description>
+    <description>Recent content in 5Cl_lD on RE-Dojo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 28 Oct 2018 13:37:00 -0400</lastBuildDate>
+    <lastBuildDate>Wed, 22 May 2019 13:37:00 -0400</lastBuildDate>
     
 	<atom:link href="https://re-dojo.github.io/authors/5cl_ld/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>[NSEC 2019] DOOM (7)</title>
+      <link>https://re-dojo.github.io/post/2019-05-26-doom/</link>
+      <pubDate>Wed, 22 May 2019 13:37:00 -0400</pubDate>
+      
+      <guid>https://re-dojo.github.io/post/2019-05-26-doom/</guid>
+      <description>We, once again, participated in the NorthSec competition. This article is about the DOOM challenge which was pretty interesting as you had to validate it at the VR station. actgardner already made a write-up that you can find here. I wanted to complete it and show another solution that icecr4ck and I came up with.
+Tearing the game apart In order to navigate through the map I used GZDoom builder and loaded the zoombies.</description>
+    </item>
     
     <item>
       <title>[NSEC 2018] Mars Analytica (20)</title>
