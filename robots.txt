@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://re-dojo.github.io/sitemap.xml

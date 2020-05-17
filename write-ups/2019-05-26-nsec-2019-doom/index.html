@@ -9,48 +9,49 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/brand/favicon.png">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/">
-  <link rel="canonical" href="https://re-dojo.github.io/categories/">
+  <link rel="canonical" href="https://re-dojo.github.io/write-ups/2019-05-26-nsec-2019-doom/">
   
 <link rel="preload" as="style" href="/bundle.css?v=1589750201" media="all">
 <link rel="stylesheet" href="/bundle.css?v=1589750201" media="all">
 
+<link rel="preload" as="image" href="/images/mars/nsec_ctf.png">
 
 
-<title>Categories : RE-Dojo</title>
+<title>NorthSec 2019 - Doom (Reverse) - Write-up : RE-Dojo</title>
 
-<meta property="og:title" content="Categories">
+<meta property="og:title" content="NorthSec 2019 - Doom (Reverse) - Write-up">
 <meta property="og:site_name" content="RE-Dojo">
-<meta property="og:url" content="https://re-dojo.github.io/categories/">
-<link rel="image_src" href="https://re-dojo.github.io/">
-<meta property="og:image" content="https://re-dojo.github.io/">
+<meta property="og:url" content="https://re-dojo.github.io/write-ups/2019-05-26-nsec-2019-doom/">
+<link rel="image_src" href="https://re-dojo.github.io/images/mars/nsec_ctf.png">
+<meta property="og:image" content="https://re-dojo.github.io/images/mars/nsec_ctf.png">
 <meta property="og:image:width" content="">
 <meta property="og:image:height" content="">
-<meta property="og:type" content="website">
+<meta property="og:type" content="article">
 <meta property="og:locale" content="en">
-<meta property="og:description" content="">
-<meta name="description" content="">
-<meta property="og:updated_time" content="0001-01-01T00:00:00Z">
+<meta property="og:description" content="We, once again, participated in the NorthSec competition. This article is about the DOOM challenge which was pretty interesting as you had to validate it at the VR station. @actgardner already made a write-up that you can find here. I wanted to complete it and show another solution that icecr4ck and I came up with. Tearing the game apart In order to navigate through the map I used GZDoom builder and loaded the zoombies.">
+<meta name="description" content="We, once again, participated in the NorthSec competition. This article is about the DOOM challenge which was pretty interesting as you had to validate it at the VR station. @actgardner already made a write-up that you can find here. I wanted to complete it and show another solution that icecr4ck and I came up with. Tearing the game apart In order to navigate through the map I used GZDoom builder and loaded the zoombies.">
+<meta property="og:updated_time" content="2019-05-22T17:37:00Z">
 <meta property="fb:app_id" content="">
-<meta name="author" content="">
-<meta property="article:author" content="https://re-dojo.github.io/">
-<meta property="article:published_time" content="0001-01-01T00:00:00Z">
-<meta property="article:modified_time" content="0001-01-01T00:00:00Z">
+<meta name="author" content="5Cl_lD">
+<meta property="article:author" content="https://twitter.com/5cl_ld">
+<meta property="article:published_time" content="2019-05-22T17:37:00Z">
+<meta property="article:modified_time" content="2019-05-22T17:37:00Z">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Categories",
-  "alternativeHeadline": "",
-  "url": "https://re-dojo.github.io/categories/",
-  "image": "https://re-dojo.github.io/",
+  "headline": "NorthSec 2019 - Doom (Reverse) - Write-up",
+  "alternativeHeadline": "Full solution of a multiple-steps reverse engineering challenge based on the game Doom. This write-up tears up the game apart with GZDoom builder and Z3.",
+  "url": "https://re-dojo.github.io/write-ups/2019-05-26-nsec-2019-doom/",
+  "image": "https://re-dojo.github.io/images/mars/nsec_ctf.png",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://re-dojo.github.io/categories/"
+    "@id": "https://re-dojo.github.io/write-ups/2019-05-26-nsec-2019-doom/"
   },
-  "description": "",
+  "description": "We, once again, participated in the NorthSec competition. This article is about the DOOM challenge which was pretty interesting as you had to validate it at the VR station. @actgardner already made a write-up that you can find here. I wanted to complete it and show another solution that icecr4ck and I came up with. Tearing the game apart In order to navigate through the map I used GZDoom builder and loaded the zoombies.",
   "author": {
     "@type": "Person",
-    "name":  null 
+    "name": "5Cl_lD"
   },
   "publisher": {
     "@type": "Organization",
@@ -60,9 +61,9 @@
       "url": "https://re-dojo.github.io/"
     }
   },
-  "datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
-  "articleBody": ""
+  "datePublished": "2019-05-22T17:37:00Z",
+  "dateModified": "2019-05-22T17:37:00Z",
+  "articleBody": "\u003cp\u003eWe, once again, participated in the NorthSec competition.\nThis article is about the DOOM challenge which was pretty interesting as you had to validate it at the VR station.\n@actgardner already made a write-up that you can find \u003ca href=\"http://www.agardner.me/securit/ctf/northsec/2019/2019/05/19/northsec-ctf-part-1-doom.html\"\u003ehere\u003c/a\u003e.\nI wanted to complete it and show another solution that icecr4ck and I came up with.\u003c/p\u003e\n\u003ch2 id=\"tearing-the-game-apart\"\u003eTearing the game apart\u003c/h2\u003e\n\u003cp\u003eIn order to navigate through the map I used \u003cstrong\u003eGZDoom builder\u003c/strong\u003e and loaded the \u003cstrong\u003ezoombies.wad\u003c/strong\u003e file. You can use the \u0026lsquo;add resource\u0026rsquo; menu and select the folder containing all the other files from the game. This will show you the textures also.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/doom/GZbuilder_first_room.png\" alt=\"Image\" title=\"GZBuilder\"\u003e\u003c/p\u003e\n\u003cp\u003eJust by browsing the map, you can find a flag in a closed room.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/doom/qr_code_flag.png\" alt=\"Image\" title=\"Hidden QR code\"\u003e\u003c/p\u003e\n\u003cp\u003eLooking at the attributes of this door, you can see an action \u0026ldquo;When player presses use\u0026rdquo; and this action is linked to a script numbered 42.\nAfter wandering the map, one can see that there are more scripted locked doors and also hidden rooms.\n\u003cstrong\u003eSLADE\u003c/strong\u003e is a tool which lets you browse the different files and more importantly it can export the \u0026ldquo;BEHAVIOR.LMP\u0026rdquo; contained in the .wad file.\nThis file is a compiled script for doom. Then with \u003cstrong\u003elistacs\u003c/strong\u003e script you can disassemble or decompile the script (but be careful I had some wrong output with the decompilation the first time. I didn\u0026rsquo;t use the latest version).\u003c/p\u003e\n\u003cp\u003eRemember the locked door with the QR code behind it? The script number 42 is the following code:\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/doom/storage_room.png\" alt=\"Image\" title=\"Storage room script\"\u003e\u003c/p\u003e\n\u003cp\u003eThis door was never meant to be opened.\u003c/p\u003e\n\u003ch2 id=\"collecting-the-different-flags\"\u003eCollecting the different flags\u003c/h2\u003e\n\u003ch3 id=\"elevator-1-point\"\u003eElevator (1 point)\u003c/h3\u003e\n\u003cp\u003eThe first flag you can obtain is by unlocking the elevator.\nThe elevator\u0026rsquo;s script just checks if you press \u0026ldquo;4\u0026rdquo; and \u0026ldquo;2\u0026rdquo; on the the switches.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/doom/Elevator.png\" alt=\"Image\" title=\"Elevator script\"\u003e\u003c/p\u003e\n\u003cp\u003eThis first step would give you 1 point.\u003c/p\u003e\n\u003ch3 id=\"blue-card\"\u003eBlue card\u003c/h3\u003e\n\u003cp\u003eIf you noticed the hidden toxic room, that\u0026rsquo;s where the blue card awaits you.\nBut there\u0026rsquo;s a trick\u0026hellip;\nAs you can see on the picture, the highlighted edge is linked to a script but also as soon as you enter the room another script is activated.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/doom/Toxic_room.png\" alt=\"Image\" title=\"Toxic room script\"\u003e\u003c/p\u003e\n\u003cp\u003eOnce you pass the \u0026ldquo;hidden door\u0026rdquo; the script numbered 31 is executed and that\u0026rsquo;s where a logic bug resides.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/doom/logic_bug.png\" alt=\"Image\" title=\"Logic bug\"\u003e\u003c/p\u003e\n\u003cp\u003eThe script does a modulo 256 on the player\u0026rsquo;s health and then decreases this value randomly until it is below 20.\nThe script by the blue card (numbered 32) decreases the player\u0026rsquo;s health by 200.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/doom/bluecard_script.png\" alt=\"Image\" title=\"Blue card script\"\u003e\u003c/p\u003e\n\u003cp\u003eThe trick here is to go to the other hidden room.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/doom/hidden_room.png\" alt=\"Image\" title=\"Hidden room\"\u003e\u003c/p\u003e\n\u003cp\u003eThis room contains a potion of 300 health points. The trick here is to have the health between 256 and 266 so that you don\u0026rsquo;t lose health when you enter the room and then when getting the blue card you can lose 200 health points and still survive.\u003c/p\u003e\n\u003ch3 id=\"red-card\"\u003eRed card\u003c/h3\u003e\n\u003cp\u003eThe red card can be obtained after unlocking a specific door. The scripts responsible for its opening are number 21 and 22. They both call the function func4.\nThis function calls func6 which is collecting the different number or letters from the 6 switches and convert it to a base-10 number.\nAll the different digits composing that number are put in an array.\nThe verification code at the end of func4 can be converted to the following python code:\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/doom/pseudocode.png\" alt=\"Image\" title=\"Python code\"\u003e\u003c/p\u003e\n\u003cp\u003eThe code is pretty straightforward and actually pretty simple to translate it to an equation to give it to z3 (SMT solver).\nThe following script will output the expected combination.\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-python\" data-lang=\"python\"\u003e\u003cspan style=\"color:#f92672\"\u003efrom\u003c/span\u003e z3 \u003cspan style=\"color:#f92672\"\u003eimport\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e\n\u003cspan style=\"color:#f92672\"\u003efrom\u003c/span\u003e numpy \u003cspan style=\"color:#f92672\"\u003eimport\u003c/span\u003e base_repr\n\ncmb \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e [\u003cspan style=\"color:#ae81ff\"\u003e2\u003c/span\u003e, \u003cspan style=\"color:#ae81ff\"\u003e3\u003c/span\u003e, \u003cspan style=\"color:#ae81ff\"\u003e5\u003c/span\u003e, \u003cspan style=\"color:#ae81ff\"\u003e7\u003c/span\u003e, \u003cspan style=\"color:#ae81ff\"\u003e13\u003c/span\u003e, \u003cspan style=\"color:#ae81ff\"\u003e17\u003c/span\u003e, \u003cspan style=\"color:#ae81ff\"\u003e19\u003c/span\u003e, \u003cspan style=\"color:#ae81ff\"\u003e23\u003c/span\u003e, \u003cspan style=\"color:#ae81ff\"\u003e31\u003c/span\u003e, \u003cspan style=\"color:#ae81ff\"\u003e27\u003c/span\u003e]\n\nsolver \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e Solver()\ndigits \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e [Int(\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;c_\u003c/span\u003e\u003cspan style=\"color:#e6db74\"\u003e%d\u003c/span\u003e\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003e i) \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e)]\n \n\u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e):\n    solver\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eadd(digits[i] \u003cspan style=\"color:#f92672\"\u003e\u0026gt;=\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e, digits[i] \u003cspan style=\"color:#f92672\"\u003e\u0026lt;\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e)\n    solver\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eadd(((digits[i] \u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e100\u003c/span\u003e) \u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e (digits[(i\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e)\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e] \u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e) \u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e digits[(i\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e2\u003c/span\u003e)\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e]) \u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003e cmb[i] \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e)\n    solver\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eadd(((digits[i] \u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e100\u003c/span\u003e) \u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e (digits[(i\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e)\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e] \u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e) \u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e digits[(i\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e2\u003c/span\u003e)\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e]) \u003cspan style=\"color:#f92672\"\u003e!=\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e)\n\nsolution \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e \u003cspan style=\"color:#e6db74\"\u003e\u0026#39;\u0026#39;\u003c/span\u003e\n\u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e solver\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003echeck() \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e z3\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003esat:\n    model \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e solver\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003emodel()\n    \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e):\n        solution \u003cspan style=\"color:#f92672\"\u003e+=\u003c/span\u003e model[digits[i]]\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eas_string()\n\u003cspan style=\"color:#66d9ef\"\u003eprint\u003c/span\u003e base_repr(int(solution),\u003cspan style=\"color:#ae81ff\"\u003e36\u003c/span\u003e)\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eNote that z3 takes a little less than 1 minute (at least on this old arse laptop).\u003c/p\u003e\n\u003ch2 id=\"conclusion\"\u003eConclusion\u003c/h2\u003e\n\u003cp\u003eThe challenge was very funny. I would not recommend doing VR if you only slept 8 hours during the whole weekend drinking Sabotage though\u0026hellip;\u003c/p\u003e"
 }
 </script>
 
@@ -93,16 +94,123 @@
 </header>
 
   <main>
-<div class="default-terms">
-  <div class="ax-content ax-l-o">
+<div class="default-single">
+  <div class="ax-header ax-l-o">
     <div class="ax-l-i">
-      <h1 class="section-title font-content-sans font-semibold uppercase tracking-wide text-2xl text-raven-800">Categories</h1>
+      <h1 class="post-title font-content-title font-normal leading-tight tracking-default text-40">NorthSec 2019 - Doom (Reverse) - Write-up</h1>
+      <p class="post-subtitle font-content-sans font-light text-xl text-raven-500 mt-3">Full solution of a multiple-steps reverse engineering challenge based on the game Doom. This write-up tears up the game apart with GZDoom builder and Z3.</p>
 
-      <div class="mt-8">
-        <div class="flex flex-wrap justify-center">
+      <div class="ax-meta flex items-center mt-5">
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center">
+  <div class="flex-shrink-0">
+    <img
+    class="w-12 h-12 sm:w-14 sm:h-14 object-cover p-05 rounded-full border border-blue-300"
+    src="/images/author/scud.png"
+    alt="5Cl_lD">
+  </div>
+  <div class="flex-shrink-0 ml-2 leading-tight font-content-sans">
+    <a class="block text-sm text-raven-800 hover:text-raven-900 hover:underline focus:underline" target="_blank" rel="noopener nofollow" title="5Cl_lD" href="https://twitter.com/5cl_ld">5Cl_lD</a>
+    <time class="text-sm text-raven-500" datetime="2019-05-22T17:37:00Z">May 22, 2019 7:37PM</time>
+  </div>
 </div>
 
+        </div>
+        <div>
+          <div class="flex items-center">
+  <a class="flex-shrink-0 block text-raven-800 hover:text-raven-900" target="_blank" rel="noopener nofollow" title="" href="https://twitter.com/intent/tweet?text=NorthSec%202019%20-%20Doom%20%28Reverse%29%20-%20Write-up%20by%20%405Cl_lD%20https%3a%2f%2fre-dojo.github.io%2fwrite-ups%2f2019-05-26-nsec-2019-doom%2f"><svg class="w-6 h-6 fill-current" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M32 6.078c-1.2.522-2.458.868-3.78 1.036 1.36-.812 2.398-2.088 2.886-3.626a13.11 13.11 0 0 1-4.16 1.588C25.742 3.794 24.026 3 22.154 3a6.56 6.56 0 0 0-6.556 6.562c0 .52.044 1.02.152 1.496-5.454-.266-10.28-2.88-13.522-6.862-.566.982-.898 2.106-.898 3.316a6.57 6.57 0 0 0 2.914 5.452 6.48 6.48 0 0 1-2.964-.808v.072c0 3.188 2.274 5.836 5.256 6.446-.534.146-1.116.216-1.72.216-.42 0-.844-.024-1.242-.112.85 2.598 3.262 4.508 6.13 4.57a13.18 13.18 0 0 1-8.134 2.798c-.538 0-1.054-.024-1.57-.1C2.906 27.93 6.35 29 10.064 29c12.072 0 18.672-10 18.672-18.668 0-.3-.01-.57-.024-.848C30.014 8.56 31.108 7.406 32 6.078z"/></svg>
+</a>
+  <a class="ml-3 flex-shrink-0 block text-raven-800 hover:text-raven-900" target="_blank" rel="noopener nofollow" title="" href="https://www.facebook.com/dialog/share?app_id=&display=page&href=https%3a%2f%2fre-dojo.github.io%2fwrite-ups%2f2019-05-26-nsec-2019-doom%2f"><svg class="w-6 h-6 fill-current" viewBox="-7 -3.5 39 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M30.234 0H1.765C.8.001 0 .79 0 1.766v28.47C.001 31.2.79 32 1.766 32h15.328V19.625h-4.156V14.78h4.156v-3.564c0-4.134 2.523-6.384 6.21-6.384 1.766 0 3.284.13 3.726.2v4.32h-2.543c-2.006 0-2.394.953-2.394 2.352v3.085h4.797l-.625 4.844h-4.172V32h8.14C31.21 32 32 31.2 32 30.234V1.765C32 .8 31.21 0 30.234 0z"/></svg>
+</a>
+</div>
+
+        </div>
       </div>
+    </div>
+  </div>
+  <div class="ax-feature ax-l-o">
+    <div class="ax-l-i">
+
+<figure>
+<img
+class="mb-2 mx-auto leading-none shadow-xl"
+src="/images/mars/nsec_ctf.png"
+alt="NorthSec 2019 - Doom (Reverse) - Write-up">
+</figure>
+
+    </div>
+  </div><div class="ax-content ax-l-o">
+    <div class="ax-l-i">
+      <article class="cdata">
+<p>We, once again, participated in the NorthSec competition.
+This article is about the DOOM challenge which was pretty interesting as you had to validate it at the VR station.
+@actgardner already made a write-up that you can find <a href="http://www.agardner.me/securit/ctf/northsec/2019/2019/05/19/northsec-ctf-part-1-doom.html">here</a>.
+I wanted to complete it and show another solution that icecr4ck and I came up with.</p>
+<h2 id="tearing-the-game-apart">Tearing the game apart</h2>
+<p>In order to navigate through the map I used <strong>GZDoom builder</strong> and loaded the <strong>zoombies.wad</strong> file. You can use the &lsquo;add resource&rsquo; menu and select the folder containing all the other files from the game. This will show you the textures also.</p>
+<p><img src="/images/doom/GZbuilder_first_room.png" alt="Image" title="GZBuilder"></p>
+<p>Just by browsing the map, you can find a flag in a closed room.</p>
+<p><img src="/images/doom/qr_code_flag.png" alt="Image" title="Hidden QR code"></p>
+<p>Looking at the attributes of this door, you can see an action &ldquo;When player presses use&rdquo; and this action is linked to a script numbered 42.
+After wandering the map, one can see that there are more scripted locked doors and also hidden rooms.
+<strong>SLADE</strong> is a tool which lets you browse the different files and more importantly it can export the &ldquo;BEHAVIOR.LMP&rdquo; contained in the .wad file.
+This file is a compiled script for doom. Then with <strong>listacs</strong> script you can disassemble or decompile the script (but be careful I had some wrong output with the decompilation the first time. I didn&rsquo;t use the latest version).</p>
+<p>Remember the locked door with the QR code behind it? The script number 42 is the following code:</p>
+<p><img src="/images/doom/storage_room.png" alt="Image" title="Storage room script"></p>
+<p>This door was never meant to be opened.</p>
+<h2 id="collecting-the-different-flags">Collecting the different flags</h2>
+<h3 id="elevator-1-point">Elevator (1 point)</h3>
+<p>The first flag you can obtain is by unlocking the elevator.
+The elevator&rsquo;s script just checks if you press &ldquo;4&rdquo; and &ldquo;2&rdquo; on the the switches.</p>
+<p><img src="/images/doom/Elevator.png" alt="Image" title="Elevator script"></p>
+<p>This first step would give you 1 point.</p>
+<h3 id="blue-card">Blue card</h3>
+<p>If you noticed the hidden toxic room, that&rsquo;s where the blue card awaits you.
+But there&rsquo;s a trick&hellip;
+As you can see on the picture, the highlighted edge is linked to a script but also as soon as you enter the room another script is activated.</p>
+<p><img src="/images/doom/Toxic_room.png" alt="Image" title="Toxic room script"></p>
+<p>Once you pass the &ldquo;hidden door&rdquo; the script numbered 31 is executed and that&rsquo;s where a logic bug resides.</p>
+<p><img src="/images/doom/logic_bug.png" alt="Image" title="Logic bug"></p>
+<p>The script does a modulo 256 on the player&rsquo;s health and then decreases this value randomly until it is below 20.
+The script by the blue card (numbered 32) decreases the player&rsquo;s health by 200.</p>
+<p><img src="/images/doom/bluecard_script.png" alt="Image" title="Blue card script"></p>
+<p>The trick here is to go to the other hidden room.</p>
+<p><img src="/images/doom/hidden_room.png" alt="Image" title="Hidden room"></p>
+<p>This room contains a potion of 300 health points. The trick here is to have the health between 256 and 266 so that you don&rsquo;t lose health when you enter the room and then when getting the blue card you can lose 200 health points and still survive.</p>
+<h3 id="red-card">Red card</h3>
+<p>The red card can be obtained after unlocking a specific door. The scripts responsible for its opening are number 21 and 22. They both call the function func4.
+This function calls func6 which is collecting the different number or letters from the 6 switches and convert it to a base-10 number.
+All the different digits composing that number are put in an array.
+The verification code at the end of func4 can be converted to the following python code:</p>
+<p><img src="/images/doom/pseudocode.png" alt="Image" title="Python code"></p>
+<p>The code is pretty straightforward and actually pretty simple to translate it to an equation to give it to z3 (SMT solver).
+The following script will output the expected combination.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> z3 <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+<span style="color:#f92672">from</span> numpy <span style="color:#f92672">import</span> base_repr
+
+cmb <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">23</span>, <span style="color:#ae81ff">31</span>, <span style="color:#ae81ff">27</span>]
+
+solver <span style="color:#f92672">=</span> Solver()
+digits <span style="color:#f92672">=</span> [Int(<span style="color:#e6db74">&#34;c_</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>)]
+ 
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>):
+    solver<span style="color:#f92672">.</span>add(digits[i] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span>, digits[i] <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">10</span>)
+    solver<span style="color:#f92672">.</span>add(((digits[i] <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>) <span style="color:#f92672">+</span> (digits[(i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">10</span>) <span style="color:#f92672">+</span> digits[(i<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>]) <span style="color:#f92672">%</span> cmb[i] <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+    solver<span style="color:#f92672">.</span>add(((digits[i] <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>) <span style="color:#f92672">+</span> (digits[(i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">10</span>) <span style="color:#f92672">+</span> digits[(i<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>]) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+
+solution <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+<span style="color:#66d9ef">if</span> solver<span style="color:#f92672">.</span>check() <span style="color:#f92672">==</span> z3<span style="color:#f92672">.</span>sat:
+    model <span style="color:#f92672">=</span> solver<span style="color:#f92672">.</span>model()
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>):
+        solution <span style="color:#f92672">+=</span> model[digits[i]]<span style="color:#f92672">.</span>as_string()
+<span style="color:#66d9ef">print</span> base_repr(int(solution),<span style="color:#ae81ff">36</span>)
+</code></pre></div><p>Note that z3 takes a little less than 1 minute (at least on this old arse laptop).</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The challenge was very funny. I would not recommend doing VR if you only slept 8 hours during the whole weekend drinking Sabotage though&hellip;</p>
+
+      </article>
+      
+
     </div>
   </div>
 </div>

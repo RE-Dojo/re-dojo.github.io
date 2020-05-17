@@ -9,48 +9,49 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/brand/favicon.png">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/">
-  <link rel="canonical" href="https://re-dojo.github.io/categories/">
+  <link rel="canonical" href="https://re-dojo.github.io/write-ups/2018-09-28-ecw-2017-red-diamond/">
   
 <link rel="preload" as="style" href="/bundle.css?v=1589750201" media="all">
 <link rel="stylesheet" href="/bundle.css?v=1589750201" media="all">
 
+<link rel="preload" as="image" href="/images/ecw/ecw_ctf.png">
 
 
-<title>Categories : RE-Dojo</title>
+<title>ECW 2017 - Red Diamond (Reverse) - Write-up : RE-Dojo</title>
 
-<meta property="og:title" content="Categories">
+<meta property="og:title" content="ECW 2017 - Red Diamond (Reverse) - Write-up">
 <meta property="og:site_name" content="RE-Dojo">
-<meta property="og:url" content="https://re-dojo.github.io/categories/">
-<link rel="image_src" href="https://re-dojo.github.io/">
-<meta property="og:image" content="https://re-dojo.github.io/">
+<meta property="og:url" content="https://re-dojo.github.io/write-ups/2018-09-28-ecw-2017-red-diamond/">
+<link rel="image_src" href="https://re-dojo.github.io/images/ecw/ecw_ctf.png">
+<meta property="og:image" content="https://re-dojo.github.io/images/ecw/ecw_ctf.png">
 <meta property="og:image:width" content="">
 <meta property="og:image:height" content="">
-<meta property="og:type" content="website">
+<meta property="og:type" content="article">
 <meta property="og:locale" content="en">
-<meta property="og:description" content="">
-<meta name="description" content="">
-<meta property="og:updated_time" content="0001-01-01T00:00:00Z">
+<meta property="og:description" content="Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l’année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense. L’épreuve qualificative de cette année reprenait les catégories classiques de CTF: Web, Forensics, Crypto et Reverse. Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de celui qui m’a paru le plus intéressant mais également le plus compliqué à résoudre.">
+<meta name="description" content="Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l’année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense. L’épreuve qualificative de cette année reprenait les catégories classiques de CTF: Web, Forensics, Crypto et Reverse. Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de celui qui m’a paru le plus intéressant mais également le plus compliqué à résoudre.">
+<meta property="og:updated_time" content="2018-09-28T17:37:00Z">
 <meta property="fb:app_id" content="">
-<meta name="author" content="">
-<meta property="article:author" content="https://re-dojo.github.io/">
-<meta property="article:published_time" content="0001-01-01T00:00:00Z">
-<meta property="article:modified_time" content="0001-01-01T00:00:00Z">
+<meta name="author" content="Hugo Porcher (icecr4ck)">
+<meta property="article:author" content="https://twitter.com/icecr4ck">
+<meta property="article:published_time" content="2018-09-28T17:37:00Z">
+<meta property="article:modified_time" content="2018-09-28T17:37:00Z">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Categories",
-  "alternativeHeadline": "",
-  "url": "https://re-dojo.github.io/categories/",
-  "image": "https://re-dojo.github.io/",
+  "headline": "ECW 2017 - Red Diamond (Reverse) - Write-up",
+  "alternativeHeadline": "In this challenge, we have to analyze a MRuby interpreter and bytecode to find the flag. Both static and dynamic analysis methods are presented to resolve the challenge.",
+  "url": "https://re-dojo.github.io/write-ups/2018-09-28-ecw-2017-red-diamond/",
+  "image": "https://re-dojo.github.io/images/ecw/ecw_ctf.png",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://re-dojo.github.io/categories/"
+    "@id": "https://re-dojo.github.io/write-ups/2018-09-28-ecw-2017-red-diamond/"
   },
-  "description": "",
+  "description": "Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l’année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense. L’épreuve qualificative de cette année reprenait les catégories classiques de CTF: Web, Forensics, Crypto et Reverse. Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de celui qui m’a paru le plus intéressant mais également le plus compliqué à résoudre.",
   "author": {
     "@type": "Person",
-    "name":  null 
+    "name": "Hugo Porcher (icecr4ck)"
   },
   "publisher": {
     "@type": "Organization",
@@ -60,9 +61,9 @@
       "url": "https://re-dojo.github.io/"
     }
   },
-  "datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
-  "articleBody": ""
+  "datePublished": "2018-09-28T17:37:00Z",
+  "dateModified": "2018-09-28T17:37:00Z",
+  "articleBody": "\u003cp\u003ePour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le \u003ca href=\"https://challenge-ecw.fr/\"\u003echallenge ECW\u003c/a\u003e. Tout comme l\u0026rsquo;année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense.\u003c/p\u003e\n\u003cp\u003eL\u0026rsquo;épreuve qualificative de cette année reprenait les catégories classiques de CTF: Web, Forensics, Crypto et Reverse.\u003c/p\u003e\n\u003cp\u003eParmis les 4 challenges de reverse qui étaient proposés, voici la solution de celui qui m\u0026rsquo;a paru le plus intéressant mais également le plus compliqué à résoudre.\u003c/p\u003e\n\u003ch2 id=\"présentation-du-challenge\"\u003ePrésentation du challenge\u003c/h2\u003e\n\u003cp\u003eLe binaire qui nous est donné pour ce challenge est un PE x86-64, sans plus tarder on l\u0026rsquo;ouvre dans son désassembleur préféré pour voir un peu à quoi on a affaire.\u003c/p\u003e\n\u003cp\u003eOn constate rapidement un nombre élevé de fonctions (un binaire de 6 Mo tout de même), cependant l\u0026rsquo;utilisation d\u0026rsquo;IDA permet de récupérer la quasi totalité des noms de fonctions et variables, ce qui simplifie grandement le travail.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/ecw/functions.PNG\" alt=\"Exemple de fonctions\"\u003e\u003c/p\u003e\n\u003cp\u003eComme la plupart des fonctions commencent par \u003cstrong\u003emrb\u003c/strong\u003e, on fait un peu de Google pour voir à quoi ça fait référence et on trouve rapidement qu\u0026rsquo;il s\u0026rsquo;agit de MRuby, une implémentation plus légère du langage Ruby pouvant être embarqué dans un binaire écrit en C (voir \u003ca href=\"https://github.com/mruby/mruby\"\u003eMRuby\u003c/a\u003e pour plus d\u0026rsquo;infos).\u003c/p\u003e\n\u003cp\u003eAu point d\u0026rsquo;entrée de notre exécutable, on peut voir que plusieurs fonctions relatives à \u003ca href=\"https://www.cygwin.com/\"\u003eCygwin\u003c/a\u003e sont appelées, signifiant que le binaire a été compilé avec ce dernier et qu\u0026rsquo;il sera nécessaire d\u0026rsquo;installer Cygwin si on veut pouvoir exécuter/débugger l\u0026rsquo;exécutable.\u003c/p\u003e\n\u003ch2 id=\"bytecode-mruby\"\u003eBytecode MRuby\u003c/h2\u003e\n\u003cp\u003eCeci étant dit, on peut maintenant s\u0026rsquo;intéresser davantage au code du programme, et particulièrement la fonction \u003cstrong\u003ef\u003c/strong\u003e qui est la première fonction intéressante à être appelée.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/ecw/bytecode.PNG\" alt=\"Début de la fonction f\"\u003e\u003c/p\u003e\n\u003cp\u003eOn peut voir sur la capture ci-dessus qu\u0026rsquo;un segment de données commençant par \u003cstrong\u003eRITE0004\u003c/strong\u003e est copié en mémoire (dans la variable bin). Un peu de Google montre qu\u0026rsquo;il s\u0026rsquo;agit des premiers bytes d\u0026rsquo;un bytecode MRuby. Il est en effet possible de compiler un script Ruby (valable également en Python par exemple) pour qu\u0026rsquo;il puisse être exécuté plus rapidement. Cependant cela nécessite un programme tiers capable d\u0026rsquo;exécuter ces opcodes spécifiques, autrement dit une VM MRuby.\u003c/p\u003e\n\u003cp\u003eAfin de regarder plus précisément à quoi correspond ce bytecode MRuby, je l\u0026rsquo;ai extrait en utilisant ce bout de code IDAPython.\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-python\" data-lang=\"python\"\u003e\u003cspan style=\"color:#f92672\"\u003eimport\u003c/span\u003e idaapi\n\u003cspan style=\"color:#f92672\"\u003eimport\u003c/span\u003e struct\n\nsea \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e ScreenEA()\nmrb \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e open(\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;reddiamond.mrb\u0026#34;\u003c/span\u003e,\u003cspan style=\"color:#e6db74\"\u003e\u0026#39;wb\u0026#39;\u003c/span\u003e)\n\u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e0x6be\u003c/span\u003e):\n    mrb\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003ewrite(struct\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003epack(\u003cspan style=\"color:#e6db74\"\u003e\u0026#39;B\u0026#39;\u003c/span\u003e,Byte(sea\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003ei)))\nmrb\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eclose()\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eEn ouvrant le fichier \u003cem\u003ereddiamond.mrb\u003c/em\u003e avec un éditeur hexadécimal, on observe des strings qui nous intéressent pas mal comme \u0026ldquo;Let me check if you deserve a flag \u0026hellip;\u0026rdquo; ou encore \u0026ldquo;flag is:\u0026quot;.\u003c/p\u003e\n\u003cp\u003eLe challenge est donc de reverser ce petit bout de bytecode pour comprendre comment le flag est généré. Pour cela, il y a 2 écoles:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eanalyse statique: on utilise l\u0026rsquo;interpréteur MRuby (disponible \u003ca href=\"https://github.com/mruby/mruby\"\u003eici\u003c/a\u003e) pour obtenir une traduction des opcodes et reverser statiquement à partir de là\u003c/li\u003e\n\u003cli\u003eanalyse dynamique: on essaye de comprendre comment fonctionne la VM pour débugger le bytecode et breaker aux endroits opportuns\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003ePour ma part, j\u0026rsquo;ai fini par utiliser les 2 méthodes après avoir passé un bout de temps à reverser statiquement chaque opcode, je pense malgré tout qu\u0026rsquo;il était possible de tout faire statiquement pour quelqu\u0026rsquo;un de familier avec les opcodes MRuby.\u003c/p\u003e\n\u003ch2 id=\"analyse-statique\"\u003eAnalyse statique\u003c/h2\u003e\n\u003cp\u003eAprès avoir téléchargé l\u0026rsquo;interpréteur MRuby (voir plus haut pour le lien), on peut l\u0026rsquo;utiliser de la manière suivante pour récupérer tous les opcodes traduits.\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-bash\" data-lang=\"bash\"\u003e$ mruby --verbose -b reddiamond.mrb\nirep 0x7fba3c702fd0 nregs\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e7\u003c/span\u003e nlocals\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e3\u003c/span\u003e pools\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e11\u003c/span\u003e syms\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e12\u003c/span\u003e reps\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e2\u003c/span\u003e\n      \u003cspan style=\"color:#ae81ff\"\u003e000\u003c/span\u003e OP_LOADSELF\tR3\n      \u003cspan style=\"color:#ae81ff\"\u003e001\u003c/span\u003e OP_STRING\tR4\tL\u003cspan style=\"color:#f92672\"\u003e(\u003c/span\u003e0\u003cspan style=\"color:#f92672\"\u003e)\u003c/span\u003e\t; \u003cspan style=\"color:#e6db74\"\u003e\u0026#34;CRACKME!\u0026#34;\u003c/span\u003e\n      \u003cspan style=\"color:#ae81ff\"\u003e002\u003c/span\u003e OP_SEND\tR3\t:puts\t\u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e\n      \u003cspan style=\"color:#ae81ff\"\u003e003\u003c/span\u003e OP_LOADSELF\tR3\n      \u003cspan style=\"color:#ae81ff\"\u003e004\u003c/span\u003e OP_LOADSELF\tR4\n      \u003cspan style=\"color:#ae81ff\"\u003e005\u003c/span\u003e OP_LOADL\tR5\tL\u003cspan style=\"color:#f92672\"\u003e(\u003c/span\u003e1\u003cspan style=\"color:#f92672\"\u003e)\u003c/span\u003e\t; \u003cspan style=\"color:#ae81ff\"\u003e400000\u003c/span\u003e\n      \u003cspan style=\"color:#ae81ff\"\u003e006\u003c/span\u003e OP_SEND\tR4\t:rand\t\u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e\n      \u003cspan style=\"color:#ae81ff\"\u003e007\u003c/span\u003e OP_SEND\tR3\t:usleep\t\u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e\n      \u003cspan style=\"color:#ae81ff\"\u003e008\u003c/span\u003e OP_LOADSELF\tR3\n      \u003cspan style=\"color:#ae81ff\"\u003e009\u003c/span\u003e OP_STRING\tR4\tL\u003cspan style=\"color:#f92672\"\u003e(\u003c/span\u003e2\u003cspan style=\"color:#f92672\"\u003e)\u003c/span\u003e\t; \u003cspan style=\"color:#e6db74\"\u003e\u0026#34;Let me check if you deserve a flag ...\u0026#34;\u003c/span\u003e\n      \u003cspan style=\"color:#ae81ff\"\u003e010\u003c/span\u003e OP_SEND\tR3\t:puts\t\u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e\n\u003cspan style=\"color:#f92672\"\u003e[\u003c/span\u003e...\u003cspan style=\"color:#f92672\"\u003e]\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eChaque ligne commençant par \u003cstrong\u003eirep\u003c/strong\u003e représente une fonction et les lignes numérotées en dessous représentent le code de la fonction (chaque ligne = 1 opcode). On dénote ainsi 6 fonctions distinctes.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eirep 0x7fba3c702fd0 nregs=7 nlocals=3 pools=11 syms=12 reps=2\n[...]\nirep 0x7fba3c7034b0 nregs=25 nlocals=5 pools=10 syms=19 reps=1\n[...]\nirep 0x7fba3c703a80 nregs=8 nlocals=3 pools=0 syms=6 reps=0\n[...]\nirep 0x7fba3c703b70 nregs=3 nlocals=1 pools=0 syms=2 reps=2\n[...]\nirep 0x7fba3c703c30 nregs=5 nlocals=2 pools=0 syms=1 reps=0\n[...]\nirep 0x7fba3c703ce0 nregs=5 nlocals=2 pools=0 syms=1 reps=0\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eOutre nous indiquer la présence d\u0026rsquo;une fonction, cet en-tête donne également le nombre de registres (25 au max) utilisés dans la fonction ainsi que le nombre de variables locales et de symboles.\u003c/p\u003e\n\u003cp\u003eComme l\u0026rsquo;entrypoint n\u0026rsquo;est pas précisé dans un MRB, on sait que la première fonction (0x7fba3c702fd0) représente notre main, ce qui paraît logique en voyant les strings affichées.\u003c/p\u003e\n\u003cp\u003eSachant cela, on peut commencer à analyser chaque opcode pour voir un peu ce qui se passe dans cette fonction, pour cela 2 liens du repo Github de MRuby m\u0026rsquo;ont beaucoup servi (voir \u003ca href=\"https://github.com/mruby/mruby/blob/master/include/mruby/opcode.h\"\u003eici\u003c/a\u003e et \u003ca href=\"https://github.com/mruby/mruby/blob/master/src/vm.c\"\u003eici\u003c/a\u003e)\u003c/p\u003e\n\u003cp\u003eLes premiers opcodes du main vont afficher quelques strings qui ne nous intéressent pas trop et vont également exécuter plusieurs fois la fonction usleep (probablement pour éviter un bruteforce du flag).\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e000 OP_LOADSELF\tR3\n001 OP_STRING\tR4\tL(0)\t; \u0026quot;CRACKME!\u0026quot;\n002 OP_SEND\tR3\t:puts\t1\n[...]\n007 OP_SEND\tR3\t:usleep\t1\n008 OP_LOADSELF\tR3\n009 OP_STRING\tR4\tL(2)\t; \u0026quot;Let me check if you deserve a flag ...\u0026quot;\n010 OP_SEND\tR3\t:puts\t1\n[...]\n017 OP_SEND\tR3\t:usleep\t1\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eCe qui nous intéresse davantage se situe à l\u0026rsquo;opcode 27 où la fonction \u003cem\u003efound?\u003c/em\u003e est appelée. Selon le résultat de cette fonction, 2 comportements sont possibles (OP_JMPNOT):\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003esoit le programme jump à l\u0026rsquo;opcode 46, affiche la string \u0026ldquo;NO :(\u0026rdquo; et quitte le programme\u003c/li\u003e\n\u003cli\u003esoit le programme continue à l\u0026rsquo;opcode 29, afficher la string \u0026ldquo;YES :)\u0026rdquo; avec notre flag et quitte le programme\u003c/li\u003e\n\u003c/ul\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n027 OP_SEND\tR3\t:found?\t0\n028 OP_JMPNOT\tR3\t046 \n// Good boy\n029 OP_LOADSELF\tR3\n030 OP_STRING\tR4\tL(5)\t; \u0026quot;YES :)\u0026quot;\n031 OP_SEND\tR3\t:puts\t1\n032 OP_GETCONST\tR3\t:MD5\n033 OP_STRING\tR4\tL(6)\t; \u0026quot;\\342\\235\\250\\342\\225\\257\\302\\260\\342\\226\\241\\302\\260\\342\\235\\251\\342\\225\\257\\357\\270\\265\\342\\224\\273\\342\\224\\201\\342\\224\\273\u0026quot;\n034 OP_GETGLOBAL\tR5\t:$salt\n035 OP_ADD\tR4\t:+\t1\n036 OP_SEND\tR3\t:md5_hex\t1\n037 OP_MOVE\tR1\tR3\t\t; R1:flag\n038 OP_LOADSELF\tR3\n039 OP_STRING\tR4\tL(7)\t; \u0026quot;\\tflag is: '\u0026quot;\n040 OP_MOVE\tR5\tR1\t\t; R1:flag\n041 OP_STRCAT\tR4\tR5\n042 OP_STRING\tR5\tL(8)\t; \u0026quot;'\u0026quot;\n043 OP_STRCAT\tR4\tR5\n044 OP_SEND\tR3\t:puts\t1\n045 OP_JMP\t049\n// Bad boy\n046 OP_LOADSELF\tR3\n047 OP_STRING\tR4\tL(9)\t; \u0026quot;NO :(\u0026quot;\n048 OP_SEND\tR3\t:puts\t1\n049 OP_JMP\t069\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eAu premier abord, on pourrait se dire que la longue string est peut-être notre flag, cependant une rapide lecture des opcodes montre que cette string est en fait hashée (MD5) avec la variable globale \u003cstrong\u003esalt\u003c/strong\u003e pour donner le flag.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eflag = md5($salt+\u0026quot;\\xE2\\x9D\\xA8\\xE2\\x95\\xAF\\xC2\\xB0\\xE2\\x96\\xA1\\xC2\\xB0\\xE2\\x9D\\xA9\\xE2\\x95\\xAF\\xEF\\xB8\\xB5\\xE2\\x94\\xBB\\xE2\\x94\\x81\\xE2\\x94\\xBB\u0026quot;)\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eIl faut donc aller regarder un peu du côté de la fonction \u003cem\u003efound?\u003c/em\u003e pour voir où est-ce que cette variable globale est initialisée, c\u0026rsquo;est aussi là que l\u0026rsquo;analyse statique devient plus complexe\u0026hellip;\u003c/p\u003e\n\u003cp\u003eLe début de la fonction est assez compliqué pour pas grand chose au final, tout ce que fait ce petit bout de code est de générer un tableau comprenant les valeurs \u0026ldquo;utf-0\u0026rdquo; \u0026ldquo;utf-1\u0026rdquo;\u0026hellip; jusqu\u0026rsquo;à \u0026ldquo;utf-30\u0026rdquo; pour récupérer uniquement \u0026ldquo;utf-8\u0026rdquo; et \u0026ldquo;utf-16\u0026rdquo;.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n// Génération du tableau dans R2\n001 OP_STRING\tR5\tL(0)\t; \u0026quot;utf-0\u0026quot;\n002 OP_STRING\tR6\tL(1)\t; \u0026quot;utf-9\u0026quot;\n003 OP_RANGE\tR5\tR5\t0\n004 OP_SEND\tR5\t:to_a\t0\n005 OP_STRING\tR6\tL(2)\t; \u0026quot;utf-10\u0026quot;\n006 OP_STRING\tR7\tL(3)\t; \u0026quot;utf-30\u0026quot;\n007 OP_RANGE\tR6\tR6\t0\n008 OP_SEND\tR6\t:to_a\t0\n009 OP_ADD\tR5\t:+\t1\n010 OP_MOVE\tR2\tR5\t\t; R2:\u0026quot;\\302\\265\u0026quot;\n011 OP_LOADSELF\tR5\n012 OP_GETCONST\tR6\t:Iconv\n013 OP_MOVE\tR7\tR2\t\t; R2:\u0026quot;\\302\\265\u0026quot;\n// Stockage de \u0026quot;utf-8\u0026quot; dans R7\n014 OP_LOADI\tR8\t8\n015 OP_SEND\tR7\t:[]\t1\n016 OP_MOVE\tR8\tR2\t\t; R2:\u0026quot;\\302\\265\u0026quot;\n// Stockage de \u0026quot;utf-16\u0026quot; dans R8\n017 OP_LOADI\tR9\t16\n018 OP_SEND\tR8\t:[]\t1\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eLa suite du code montre que le programme extrait ces 2 strings pour convertir la string \u0026ldquo;ARGV[2]\u0026rdquo; de UTF-16 en UTF-8, en utilisant la fonction suivante.\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-ruby\" data-lang=\"ruby\"\u003e\u003cspan style=\"color:#66d9ef\"\u003eIconv\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003econv(to, from, str)\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cpre\u003e\u003ccode\u003e[...]\n// Stocke la string \u0026quot;ARGV[2]\u0026quot; en UTF-16 dans les registres R11 à R24 \n021 OP_LOADI\tR11\t0\n022 OP_LOADI\tR12\t65\n023 OP_LOADI\tR13\t0\n024 OP_LOADI\tR14\t82\n[...]\n035 OP_ARRAY\tR9\tR9\t16\n036 OP_STRING\tR10\tL(4)\t; \u0026quot;C*\u0026quot;\n037 OP_SEND\tR9\t:pack\t1\n// Appel de la fonction conv de la classe Iconv (voir opcode 12)\n038 OP_SEND\tR6\t:conv\t3\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eLa suite du programme consiste à récupérer la valeur contenue dans ARGV[2] qui \u003cstrong\u003ene correspond pas au premier mais bel et bien au second argument donné au programme\u003c/strong\u003e (le premier argument n\u0026rsquo;est donc pas utilisé par le programme).\u003c/p\u003e\n\u003cp\u003eLe programme doit donc être exécuté de la manière suivante pour obtenir le flag.\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-bash\" data-lang=\"bash\"\u003e$ ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe \u0026lt;premier_arg_osef\u0026gt; \u0026lt;second_arg_clé\u0026gt;\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eUne fois que le programme a récupéré notre input, il va prendre uniquement les 8 premiers caractères de celui-ci et les stocker dans un tableau, puis vérifier chacun d\u0026rsquo;entre eux de manière différente.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n051 OP_LOADI\tR6\t0\n052 OP_LOADI\tR7\t7\n// Range de 0 à 7 par pas de 1\n053 OP_RANGE\tR6\tR6\t0\n// R5 contient notre input, le range est donc appliqué sur celui-ci pour ne récupérer que les 8 premiers caractères dans un tableau\n054 OP_SEND\tR5\t:[]\t1\n// Le tableau contenant les 8 premiers caractères est stocké dans R3\n055 OP_MOVE\tR3\tR5\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"premier-caractère-du-tableau\"\u003ePremier caractère du tableau\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n058 OP_MOVE\tR5\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n059 OP_SEND\tR5\t:first\t0\n060 OP_STRING\tR6\tL(5)\t; \u0026quot;W\u0026quot;\n061 OP_EQ\t\tR5\t:==\t1\n062 OP_MOVE\tR4\tR5\t\t; R4:\u0026quot;\\302\\247\u0026quot;\n063 OP_JMPNOT\tR5\t068\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eLe premier caractère est très facile à comprendre, le programme va simplement utiliser la fonction \u003cem\u003efirst\u003c/em\u003e pour récupérer le premier caractère du tableau et le comparer à \u0026ldquo;W\u0026rdquo;, le retour de l\u0026rsquo;égalité est placé dans R4 (qui correspond à la valeur de retour de la fonction) puis il jump à l\u0026rsquo;opcode 68 si l\u0026rsquo;égalité n\u0026rsquo;est pas vérifiée. Ce dernier correspond au OP_JMPNOT du caractère suivant qu\u0026rsquo;il va suivre également, et ainsi de suite jusqu\u0026rsquo;à la fin de la fonction pour finalement retourner la valeur 0.\u003c/p\u003e\n\u003ch3 id=\"second-dernier-caractère-du-tableau\"\u003eSecond (dernier) caractère du tableau\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n064 OP_MOVE\tR5\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n065 OP_SEND\tR5\t:last\t0\n066 OP_STRING\tR6\tL(6)\t; \u0026quot;a\u0026quot;\n067 OP_EQ\t\tR5\t:==\t1\n068 OP_MOVE\tR4\tR5\t\t; R4:\u0026quot;\\302\\247\u0026quot;\n069 OP_JMPNOT\tR5\t077\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eLe second caractère est en réalité le dernier puisque le programme utilise la fonction \u003cem\u003elast\u003c/em\u003e, celui-ci est comparé à \u0026ldquo;a\u0026rdquo;, puis la même routine est appliquée selon le résultat de l\u0026rsquo;égalité.\u003c/p\u003e\n\u003ch3 id=\"troisième-caractère-du-tableau\"\u003eTroisième caractère du tableau\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n070 OP_MOVE\tR5\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n071 OP_LOADI\tR6\t1\n072 OP_ADDI\tR6\t:+\t1\n073 OP_SEND\tR5\t:[]\t1\n074 OP_MOVE\tR6\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n075 OP_SEND\tR6\t:first\t0\n076 OP_EQ\t\tR5\t:==\t1\n077 OP_MOVE\tR4\tR5\t\t; R4:\u0026quot;\\302\\247\u0026quot;\n078 OP_JMPNOT\tR5\t085\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eCelui-ci commence déjà à devenir plus compliqué, en convertissant les opcodes en quelque chose de plus compréhensible ça donne la séquence suivante:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eR6 = 1\u003c/li\u003e\n\u003cli\u003eR6 += 1\u003c/li\u003e\n\u003cli\u003eR5 = input[R6]\u003c/li\u003e\n\u003cli\u003eR6 = first(input)\u003c/li\u003e\n\u003cli\u003eR5 == R6 ?\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eCela revient finalement à comparer le troisième caractère de notre clé avec \u0026ldquo;W\u0026rdquo;.\u003c/p\u003e\n\u003ch3 id=\"quatrième-le-second-en-fait-caractère-du-tableau\"\u003eQuatrième (le second en fait\u0026hellip;) caractère du tableau\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n079 OP_MOVE\tR5\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n080 OP_LOADI\tR6\t1\n081 OP_SEND\tR5\t:[]\t1\n082 OP_LOADI\tR6\t0\n083 OP_SEND\tR6\t:to_s\t0\n084 OP_EQ\t\tR5\t:==\t1\n085 OP_MOVE\tR4\tR5\t\t; R4:\u0026quot;\\302\\247\u0026quot;\n086 OP_JMPNOT\tR5\t095\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eLes instructions ci-dessus peuvent facilement se traduire de la manière suivante:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eR6 = 1\u003c/li\u003e\n\u003cli\u003eR5 = input[R6]\u003c/li\u003e\n\u003cli\u003eR6 = to_s(0)\u003c/li\u003e\n\u003cli\u003eR5 == R6 ?\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eUn peu de google montre que la fonction to_s convertit simplement un integer en string, donc le deuxième caractère est \u0026ldquo;0\u0026rdquo;.\u003c/p\u003e\n\u003ch3 id=\"cinquième-eh-ben-non-le-quatrième-caractère-du-tableau\"\u003eCinquième (eh ben non le quatrième) caractère du tableau\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n087 OP_MOVE\tR5\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n088 OP_LOADI\tR6\t3\n089 OP_SEND\tR5\t:[]\t1\n090 OP_SEND\tR5\t:to_i\t0\n091 OP_SUBI\tR5\t:-\t1\n092 OP_LOADI\tR6\t2\n093 OP_ADDI\tR6\t:+\t2\n094 OP_EQ\t\tR5\t:==\t1\n095 OP_MOVE\tR4\tR5\t\t; R4:\u0026quot;\\302\\247\u0026quot;\n096 OP_JMPNOT\tR5\t103\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eEncore une fois on peut représenter le code de la manière suivante:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eR6 = 3\u003c/li\u003e\n\u003cli\u003eR5 = input[R6]\u003c/li\u003e\n\u003cli\u003eR5 = to_i(R5)\u003c/li\u003e\n\u003cli\u003eR5 -= 1\u003c/li\u003e\n\u003cli\u003eR6 = 2\u003c/li\u003e\n\u003cli\u003eR6 += 2\u003c/li\u003e\n\u003cli\u003eR5 == R6 ?\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eÀ l\u0026rsquo;inverse de la fonction to_s, la fonction to_i convertit une string en integer, le programme va donc chercher le quatrième caractère de notre input, le convertir en integer et lui soustraire 1 pour finalement le comparer à 4. Le quatrième caractère est donc \u0026ldquo;5\u0026rdquo;.\u003c/p\u003e\n\u003ch3 id=\"cinquième-cette-fois-cest-bon-caractère-du-tableau\"\u003eCinquième (cette fois c\u0026rsquo;est bon) caractère du tableau\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n097 OP_MOVE\tR5\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n098 OP_STRING\tR6\tL(7)\t; \u0026quot;4\u0026quot;\n099 OP_SEND\tR6\t:to_i\t0\n100 OP_SEND\tR5\t:[]\t1\n101 OP_STRING\tR6\tL(8)\t; \u0026quot;9\u0026quot;\n102 OP_EQ\t\tR5\t:==\t1\n103 OP_MOVE\tR4\tR5\t\t; R4:\u0026quot;\\302\\247\u0026quot;\n104 OP_JMPNOT\tR5\t113\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eToujours le même raisonnement, le cinquième caractère est donc \u0026ldquo;9\u0026rdquo;, voici une traduction sous forme de pseudo-code.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003einput[to_i(\u0026quot;4\u0026quot;)] == \u0026quot;9\u0026quot; ?\n\u003c/code\u003e\u003c/pre\u003e\u003ch3 id=\"sixième-caractère-du-tableau\"\u003eSixième caractère du tableau\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n105 OP_MOVE\tR5\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n106 OP_LOADI\tR6\t5\n107 OP_LOADI\tR7\t-1\n108 OP_RANGE\tR6\tR6\t0\n109 OP_SEND\tR5\t:[]\t1\n110 OP_SEND\tR5\t:first\t0\n111 OP_STRING\tR6\tL(9)\t; \u0026quot;(\u0026quot;\n112 OP_EQ\t\tR5\t:==\t1\n113 OP_MOVE\tR4\tR5\t\t; R4:\u0026quot;\\302\\247\u0026quot;\n114 OP_JMPNOT\tR5\t122\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eCelui-ci se veut un peu plus tricky à comprendre, l\u0026rsquo;idée derrière consiste à générer un range allant de 5 à 0 par pas de -1 (instructions 106 à 108), et d\u0026rsquo;appliquer ce range à notre input pour obtenir un tableau inversé des 6 premiers caractères de notre clé.\u003c/p\u003e\n\u003cp\u003eUne fois ce tableau obtenu, le premier élément de ce dernier (correspondant au 6e caractère de l\u0026rsquo;input) est comparé au caractère \u0026ldquo;(\u0026quot;.\u003c/p\u003e\n\u003ch3 id=\"le-septième-et-dernier-ou-pas-caractère-du-tableau\"\u003eLe septième et dernier (ou pas) caractère du tableau\u003c/h3\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n115 OP_MOVE\tR5\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n116 OP_LOADSYM\tR6\t:[]\n117 OP_LOADI\tR7\t-2\n118 OP_SEND\tR5\t:send\t2\n119 OP_SEND\tR5\t:to_f\t0\n120 OP_LOADI\tR6\t8\n121 OP_EQ\t\tR5\t:==\t1\n122 OP_MOVE\tR4\tR5 \n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eAprès avoir fait un peu de google pour comprendre que la fonction to_f convertit un integer/string en float et qu\u0026rsquo;un tableau peut être indexé en sens inverse avec des indices négatifs, ce caractère ne présente aucune difficulté.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eto_f(input[-2]) == 8 ?\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eLe septième caractère est donc \u0026ldquo;8\u0026rdquo;, ce qui fait que nous avons pu récupérer les 8 premiers caractères de la clé,  c\u0026rsquo;est à dire \u003cstrong\u003eW0W59(8a\u003c/strong\u003e.\u003c/p\u003e\n\u003cp\u003eCependant, la fonction ne s\u0026rsquo;arrête pas là et c\u0026rsquo;est ici que les problèmes commencent.\u003c/p\u003e\n\u003ch3 id=\"limites-de-lanalyse-statique\"\u003eLimites de l\u0026rsquo;analyse statique\u003c/h3\u003e\n\u003cp\u003eL\u0026rsquo;analyse des opcodes en statique commence à montrer ces limites lorsqu\u0026rsquo;il faut comprendre la séquence d\u0026rsquo;instructions suivantes.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n123 OP_LOADI\tR5\t8\n124 OP_LAMBDA\tR6\tI(+1)\tblock\n125 OP_SENDB\tR5\t:times\t0\n126 OP_MOVE\tR5\tR4\n127 OP_JMPNOT\tR5\t132\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eOn peut voir que la fonction \u003cem\u003etimes\u003c/em\u003e est appelée pour répéter un bloc de code 8 fois, le problème est que ne nous savons pas de quel bloc il s\u0026rsquo;agit.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n132 OP_MOVE\tR4\tR5\t\t; R4:\u0026quot;\\302\\247\u0026quot;\n133 OP_SETGLOBAL\t:$salt\tR3\t\t; R3:\u0026quot;\\302\\244\u0026quot;\n134 OP_RETURN\tR4\tnormal\t\t; R4:\u0026quot;\\302\\247\u0026quot;\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eSi ce bloc de code retourne 0, le programme jump à l\u0026rsquo;instruction 132 qui stocke notre input dans la variable globale \u003cstrong\u003esalt\u003c/strong\u003e et termine la fonction en retournant 0.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n128 OP_MOVE\tR5\tR2\t\t; R2:\u0026quot;\\302\\265\u0026quot;\n129 OP_SEND\tR5\t:size\t0\n130 OP_LOADI\tR6\t16\n131 OP_EQ\tR5\t:==\t1\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eIl faut donc que ce bloc retourne \u003cem\u003eVrai\u003c/em\u003e pour obtenir le flag, si c\u0026rsquo;est le cas, la taille de notre input est comparée à 16 avant de poursuivre.\u003c/p\u003e\n\u003cp\u003eComme nous avons les 8 premiers caractères et que le bloc de code (qui nous est inconnu) est exécuté 8 fois, on peut supposer que cette routine doit vérifier un caractère à la fois à partir du 9e.\u003c/p\u003e\n\u003cp\u003eIl nous faut juste savoir ce qui est exécuté et c\u0026rsquo;est là que l\u0026rsquo;analyse dynamique entre en jeu !\u003c/p\u003e\n\u003ch2 id=\"lanalyse-dynamique\"\u003eL\u0026rsquo;analyse dynamique\u003c/h2\u003e\n\u003cp\u003eL\u0026rsquo;analyse dynamique implique d\u0026rsquo;exécuter le programme, il faut donc installer \u003cem\u003ecygwin\u003c/em\u003e au préalable pour pouvoir lancer le challenge.\u003c/p\u003e\n\u003cp\u003ePersonnellement, j\u0026rsquo;ai choisi d\u0026rsquo;utiliser \u003cem\u003egdb\u003c/em\u003e pour debugger le binaire puisqu\u0026rsquo;il est intégré dans \u003cem\u003ecygwin\u003c/em\u003e.\u003c/p\u003e\n\u003cp\u003eComme précisé précedemment le binaire doit être exécuté de la manière suivante si on veut avoir une quelconque chance d\u0026rsquo;obtenir le flag.\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-bash\" data-lang=\"bash\"\u003e$ ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe \u0026lt;premier_arg_osef\u0026gt; \u0026lt;second_arg_clé\u0026gt;\n\u003cspan style=\"color:#75715e\"\u003e# ou dans gdb\u003c/span\u003e\n$ gdb ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe\n\u003cspan style=\"color:#f92672\"\u003e(\u003c/span\u003egdb\u003cspan style=\"color:#f92672\"\u003e)\u003c/span\u003e r \u0026lt;premier_arg_osef\u0026gt; \u0026lt;second_arg_clé\u0026gt;\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eSachant cela, revenons dans IDA pour comprendre comment on va pouvoir breaker sur une instruction particulière de notre bytecode.\u003c/p\u003e\n\u003cp\u003eLorsqu\u0026rsquo;on analyse un binaire protégé par une VM, une des premières choses à comprendre est de voir comment celle-ci va aller chercher une instruction en mémoire (le dispatcher), puis comment celle-ci va être décodée (pour récupérer l\u0026rsquo;opcode et les opérandes) et enfin comment le bon handler (le code natif correspondant à l\u0026rsquo;opcode, il y en a un pour chaque opcode) va être appelé. Une fois qu\u0026rsquo;on est en possession de ces informations, on sait dans quelle variable le pointeur d\u0026rsquo;instruction est stocké (ce qui nous permet de breaker sur n\u0026rsquo;importe quelle instruction) et on sait où sont nos opérandes.\u003c/p\u003e\n\u003cp\u003eEn résumé une VM est une grosse boucle qui va effectuer les actions suivantes:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eprendre une instruction en mémoire (là où le bytecode a été mappé)\u003c/li\u003e\n\u003cli\u003edécoder l\u0026rsquo;instruction pour récupéré l\u0026rsquo;opcode et les opérandes\u003c/li\u003e\n\u003cli\u003eexécuter l\u0026rsquo;handler correspondant à l\u0026rsquo;opcode\u003c/li\u003e\n\u003cli\u003erecommencer en prenant l\u0026rsquo;instruction suivante\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eDans notre cas, il faut jeter un coup d\u0026rsquo;oeil à la fonction \u003cem\u003emrb_vm_exec\u003c/em\u003e qui comporte notamment les différents handlers des opcodes. Comme IDA récupère tous les symboles, on peut voir qu\u0026rsquo;au début de la fonction, la variable \u003cem\u003epc\u003c/em\u003e est initialisée avec le registre r9.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/ecw/init_pc.png\" alt=\"Initialisation du program counter\"\u003e\u003c/p\u003e\n\u003cp\u003eCette variable correspond au \u003cem\u003eProgram Counter\u003c/em\u003e qui est notre pointeur d\u0026rsquo;instruction. Autrement dit, on peut se servir du contenu du registre r9 pour breaker au moment où le bytecode MRuby commence à être exécuté.\u003c/p\u003e\n\u003cp\u003eComme c\u0026rsquo;est la variable pc qui contient notre pointeur d\u0026rsquo;instruction, on peut regarder à quel moment elle est mise à jour pour passer à l\u0026rsquo;instruction suivante. Il s\u0026rsquo;agit d\u0026rsquo;un point particulièrement important car il existe plusieurs manières de gérer ce point là:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003esoit il existe un dispatcher qui gère la mise à jour du pointeur d\u0026rsquo;instruction et dans ce cas chaque handler va jumper vers ce dispatcher une fois fini pour qu\u0026rsquo;il puisse récupérer et décoder l\u0026rsquo;instruction suivante\u003c/li\u003e\n\u003cli\u003esoit chaque handler gère la mise à jour du pointeur d\u0026rsquo;instruction et le décodage de l\u0026rsquo;instruction et dans ce cas on passe directement de handler à handler\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003ePour distinguer les 2, il suffit simplement de regarder les cross-références de la variable \u003cem\u003epc\u003c/em\u003e dans IDA. Dans notre cas, on constate rapidement qu\u0026rsquo;elle est mise à jour dans chaque handler et qu\u0026rsquo;on se trouve donc dans le second cas. Comme les instructions sont alignées sur 32-bits en MRuby, le pointeur d\u0026rsquo;instruction est incrémenté de 4 à chaque instruction.\u003c/p\u003e\n\u003cp\u003eSachant cela, on peut désormais breaker à l\u0026rsquo;instruction que l\u0026rsquo;on souhaite en mettant un premier breakpoint conditionnel (voir \u003ca href=\"https://sourceware.org/gdb/onlinedocs/gdb/Conditions.html\"\u003eici\u003c/a\u003e pour la doc) pour breaker au début du bytecode, à partir de là on peut récupérer l\u0026rsquo;adresse mémoire à laquelle on retrouve notre pointeur d\u0026rsquo;instruction, puis mettre un watchpoint conditionnel (voir \u003ca href=\"https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html\"\u003eici\u003c/a\u003e) sur ce dernier pour breaker à l\u0026rsquo;instruction que l\u0026rsquo;on souhaite.\u003c/p\u003e\n\u003cp\u003eIl y a toutefois un bémol à cette technique, il y a plusieurs instructions qui sont strictement identiques (que ce soit l\u0026rsquo;opcode ou les opérandes). Dans ce cas, le seul moyen de savoir où l\u0026rsquo;on se situe dans le flot d\u0026rsquo;instructions est de regarder les instructions précédentes et suivantes pour se repérer. Sinon, une bonne solution est d\u0026rsquo;avancer dans le code petit à petit pour être sur de s\u0026rsquo;y retrouver.\u003c/p\u003e\n\u003cp\u003eUn exemple pour illustrer tout ça. Mettons que je veuille breaker à la 3e instruction du main.\u003c/p\u003e\n\u003cp\u003eLa première étape va consister à breaker sur le début du programme en utilisant les commandes suivantes (l\u0026rsquo;adresse 0x1004350EC correspond à l\u0026rsquo;instruction initialisant le pointeur d\u0026rsquo;instruction dans la fonction vm_mrb_exec et 0x01800006 correspond à la première instruction).\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e(gdb) b *0x1004350EC\n(gdb) condition 1 *$r9 == 0x01800006\n(gdb) r \u0026lt;premier_arg_osef\u0026gt; \u0026lt;second_arg_clé\u0026gt;\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eOn peut alors récupérer l\u0026rsquo;adresse mémoire où se trouve la variable \u003cem\u003epc\u003c/em\u003e (0xffffc298 dans mon cas) pour créer notre watchpoint conditionnel. Le pointeur d\u0026rsquo;instruction est initialisé à 0x60009d170, donc notre 3e instruction à laquelle on veut breaker est à 0x60009d178.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e(gdb) watch *0xffffc298\n(gdb) condition 2 *0xffffc298 == 0x9d178\n(gdb) c\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eEt on se retrouve ainsi au moment où le pointeur d\u0026rsquo;instruction est mis à jour à la fin du handler de la seconde instruction :-)\u003c/p\u003e\n\u003cp\u003eSi on revient maintenant au blocage sur l\u0026rsquo;analyse statique, il nous suffit d\u0026rsquo;utiliser cette technique pour breaker sur l\u0026rsquo;instruction 125 de la fonction \u003cem\u003efound?\u003c/em\u003e. Puis de breaker sur l\u0026rsquo;instruction suivante (en incrémentant de 4 la condition de notre watchpoint) pour voir quel handler est appelé.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n125 OP_SENDB    R5      :times  0\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eFinalement, on se rend compte que le bloc qui est appelé est en réalité la 3e fonction du bytecode (voir ci-dessous).\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003eirep 0x7fd0a4d06620 nregs=8 nlocals=3 pools=0 syms=6 reps=0\n      000 OP_ENTER\t1:0:0:0:0:0:0\n      001 OP_GETUPVAR\tR3\t4\t0\n      002 OP_JMPNOT\tR3\t015\n      003 OP_GETUPVAR\tR3\t2\t0\n      004 OP_MOVE\tR4\tR1\t\t; R1:n\n      005 OP_SEND\tR3\t:[]\t1\n      006 OP_GETUPVAR\tR4\t2\t0\n      007 OP_MOVE\tR5\tR1\t\t; R1:n\n      008 OP_SEND\tR5\t:-@\t0\n      009 OP_SUBI\tR5\t:-\t1\n      010 OP_SEND\tR4\t:[]\t1\n      011 OP_MOVE\tR5\tR1\t\t; R1:n\n      012 OP_ADDI\tR5\t:+\t1\n      013 OP_SEND\tR4\t:^\t1\n      014 OP_EQ\t\tR3\t:==\t1\n      015 OP_SETUPVAR\tR3\t4\t0\n      016 OP_RETURN\tR3\tnormal\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eCette fonction va donc être appelée 8 fois d\u0026rsquo;affilée (fonction \u003cem\u003etimes\u003c/em\u003e vu précédemment) pour tester les 8 caractères restants de notre clé.\u003c/p\u003e\n\u003ch2 id=\"retour-à-lanalyse-statique\"\u003eRetour à l\u0026rsquo;analyse statique\u003c/h2\u003e\n\u003cp\u003eMaintenant qu\u0026rsquo;on sait quelle fonction est appelée, il ne reste plus qu\u0026rsquo;à l\u0026rsquo;analyser pour voir ce qu\u0026rsquo;elle fait.\u003c/p\u003e\n\u003cp\u003eL\u0026rsquo;opcode OP_GETUPVAR va aller chercher la valeur du registre de la fonction appelante selon l\u0026rsquo;opérande qui est utilisé.\u003c/p\u003e\n\u003cp\u003ePar exemple pour l\u0026rsquo;instruction 1 de notre bloc, c\u0026rsquo;est la valeur de R4 de la fonction \u003cem\u003efound?\u003c/em\u003e qui va être stockée dans R3.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n001 OP_GETUPVAR   R3      4       0\n002 OP_JMPNOT     R3      015\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003ePour rappel, cette valeur correspond au résultat de l\u0026rsquo;égalité du 8e caractère (le 7e en fait si vous vous souvenez bien) de notre input. Comme cette instruction est suivie du opcode OP_JMPNOT, si l\u0026rsquo;égalité est fausse, le programme jump directement à l\u0026rsquo;instruction 15 du bloc qui stocke la valeur de R3 dans le registre R4 de la fonction \u003cem\u003efound?\u003c/em\u003e et termine l\u0026rsquo;exécution de la fonction.\u003c/p\u003e\n\u003cp\u003eSi notre caractère est bon, la fonction continue à l\u0026rsquo;instruction 3.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n003 OP_GETUPVAR   R3      2       0\n004 OP_MOVE       R4      R1              ; R1:n\n005 OP_SEND       R3      :[]     1\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eCette fois-ci OP_GETUPVAR permet de récupérer le R2 de \u003cem\u003efound?\u003c/em\u003e qui correspond à notre input en entier (pas juste les 8 premiers caractères) défini à l\u0026rsquo;instruction 49 de la fonction \u003cem\u003efound?\u003c/em\u003e. Grâce aux symboles on peut voir que R1 représente \u003cem\u003en\u003c/em\u003e, c\u0026rsquo;est-à-dire l\u0026rsquo;itération de la fonction times, il va donc varier de 0 à 7 par pas de 1 à chaque exécution de la fonction. Comme il s\u0026rsquo;agit de la première exécution, R1 est vide donc le premier caractère de notre input est stocké dans R3 (c\u0026rsquo;est-à dire le caractère \u0026ldquo;W\u0026rdquo;).\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n006 OP_GETUPVAR   R4      2       0\n007 OP_MOVE       R5      R1              ; R1:n\n008 OP_SEND       R5      :-@     0\n009 OP_SUBI       R5      :-      1\n010 OP_SEND       R4      :[]     1\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eEnsuite, notre clé est à nouveau récupérée pour être stockée dans R4 en utilisant à nouveau l\u0026rsquo;opcode OP_GETUPVAR, puis R1 (qui vaut toujours 0) est stocké dans R5 et l\u0026rsquo;instruction 8 converti la valeur de R5 en valeur négative (1 en -1 par exemple). Cependant, comme R5 vaut 0, il reste à 0. Finalement, on soustrait 1 à R5 (ce qui donne -1) pour récupérer le dernier caractère de notre input (le 16e donc) et le stocker dans R4.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e[...]\n011 OP_MOVE       R5      R1              ; R1:n\n012 OP_ADDI       R5      :+      1\n013 OP_SEND       R4      :^      1\n014 OP_EQ         R3      :==     1\n[...]\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eFinalement, l\u0026rsquo;itérateur (R1) est à nouveau copié dans R5, auquel on ajoute 1, puis on XOR le tout avec R4 qui correspond au dernier caractère de notre clé. Cela a simplement pour effet d\u0026rsquo;ajouter 1 à l\u0026rsquo;ordinal de ce dernier. Le résultat est ensuite comparé à R3 correspondant au premier caractère de la clé. On peut ainsi rapidement en déduire que le dernier caractère de la clé est \u0026ldquo;V\u0026rdquo;.\u003c/p\u003e\n\u003cp\u003eComme R1 est incrémenté à chaque exécution de la fonction, on comprend que les caractères de la seconde partie de la clé sont vérifiés à partir de la première partie. Pour résumer tout ça, voici une implémentation du check des 8 derniers caractères en pseudo-code.\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-python\" data-lang=\"python\"\u003eis_equal \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e \u003cspan style=\"color:#75715e\"\u003e# on part du principe que le 8e caractère est bon\u003c/span\u003e\n\u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e8\u003c/span\u003e):\n\t\u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e is_equal:\n\t\ta \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e input[\u003cspan style=\"color:#f92672\"\u003e-\u003c/span\u003ei\u003cspan style=\"color:#f92672\"\u003e-\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e]\u003cspan style=\"color:#f92672\"\u003e^\u003c/span\u003e(\u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003ei)\n\t\t\u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e input[i] \u003cspan style=\"color:#f92672\"\u003e!=\u003c/span\u003e a:\n\t\t\tis_equal \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e\n\u003cspan style=\"color:#66d9ef\"\u003ereturn\u003c/span\u003e is_equal\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eLe déroulement de cette boucle nous permet enfin de récupérer la clé en entier, soit: \u003cstrong\u003eW0W59(8ai?.\u0026lt;1T2V\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eIl ne reste plus qu\u0026rsquo;à valider pour voir si on arrive à obtenir le flag, en prenant le soin de escape les caractères spéciaux pour Bash avec des backslashes.\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-bash\" data-lang=\"bash\"\u003e$ /cygdrive/c/Users/john/Desktop/86288dbbdadbe4d7e04dc1a4c4603f5b.exe give_me_the_flag W0W59\u003cspan style=\"color:#ae81ff\"\u003e\\(\u003c/span\u003e8ai?.\u003cspan style=\"color:#ae81ff\"\u003e\\\u0026lt;\u003c/span\u003e1T2V\nCRACKME!\nLet me check \u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e you deserve a flag ...\nYES :\u003cspan style=\"color:#f92672\"\u003e)\u003c/span\u003e\n        flag is: \u003cspan style=\"color:#e6db74\"\u003e\u0026#39;983b428e721bcfceabf6c77d9e819d8d\u0026#39;\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eEt miracle, ça marche !! :-)\u003c/p\u003e\n\u003ch2 id=\"conclusion-et-remerciements\"\u003eConclusion et remerciements\u003c/h2\u003e\n\u003cp\u003eC\u0026rsquo;est tout pour ce write-up (bien joué à tous ceux qui on eu le courage de tout lire), selon moi c\u0026rsquo;était sans doute un des challenges les plus durs de ce CTF mais aussi l\u0026rsquo;un des plus enrichissant !\u003c/p\u003e\n\u003cp\u003eJe remercie les auteurs du chall qui ont dû se casser la tête pour le créer, mais également tous ceux qui ont organisé le CTF d\u0026rsquo;une manière générale, j\u0026rsquo;espère que c\u0026rsquo;est un event qui pourra perdurer.\u003c/p\u003e\n\u003cp\u003eMerci à scud pour l\u0026rsquo;aide sur la compréhension de la VM MRuby, je n\u0026rsquo;aurais sans doute pas réussi à finir sans ça.\u003c/p\u003e"
 }
 </script>
 
@@ -93,16 +94,483 @@
 </header>
 
   <main>
-<div class="default-terms">
-  <div class="ax-content ax-l-o">
+<div class="default-single">
+  <div class="ax-header ax-l-o">
     <div class="ax-l-i">
-      <h1 class="section-title font-content-sans font-semibold uppercase tracking-wide text-2xl text-raven-800">Categories</h1>
+      <h1 class="post-title font-content-title font-normal leading-tight tracking-default text-40">ECW 2017 - Red Diamond (Reverse) - Write-up</h1>
+      <p class="post-subtitle font-content-sans font-light text-xl text-raven-500 mt-3">In this challenge, we have to analyze a MRuby interpreter and bytecode to find the flag. Both static and dynamic analysis methods are presented to resolve the challenge.</p>
 
-      <div class="mt-8">
-        <div class="flex flex-wrap justify-center">
+      <div class="ax-meta flex items-center mt-5">
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center">
+  <div class="flex-shrink-0">
+    <img
+    class="w-12 h-12 sm:w-14 sm:h-14 object-cover p-05 rounded-full border border-blue-300"
+    src="/images/author/icecr4ck.png"
+    alt="Hugo Porcher (icecr4ck)">
+  </div>
+  <div class="flex-shrink-0 ml-2 leading-tight font-content-sans">
+    <a class="block text-sm text-raven-800 hover:text-raven-900 hover:underline focus:underline" target="_blank" rel="noopener nofollow" title="Hugo Porcher (icecr4ck)" href="https://twitter.com/icecr4ck">Hugo Porcher (icecr4ck)</a>
+    <time class="text-sm text-raven-500" datetime="2018-09-28T17:37:00Z">Sep 28, 2018 7:37PM</time>
+  </div>
 </div>
 
+        </div>
+        <div>
+          <div class="flex items-center">
+  <a class="flex-shrink-0 block text-raven-800 hover:text-raven-900" target="_blank" rel="noopener nofollow" title="" href="https://twitter.com/intent/tweet?text=ECW%202017%20-%20Red%20Diamond%20%28Reverse%29%20-%20Write-up%20by%20%40icecr4ck%20https%3a%2f%2fre-dojo.github.io%2fwrite-ups%2f2018-09-28-ecw-2017-red-diamond%2f"><svg class="w-6 h-6 fill-current" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M32 6.078c-1.2.522-2.458.868-3.78 1.036 1.36-.812 2.398-2.088 2.886-3.626a13.11 13.11 0 0 1-4.16 1.588C25.742 3.794 24.026 3 22.154 3a6.56 6.56 0 0 0-6.556 6.562c0 .52.044 1.02.152 1.496-5.454-.266-10.28-2.88-13.522-6.862-.566.982-.898 2.106-.898 3.316a6.57 6.57 0 0 0 2.914 5.452 6.48 6.48 0 0 1-2.964-.808v.072c0 3.188 2.274 5.836 5.256 6.446-.534.146-1.116.216-1.72.216-.42 0-.844-.024-1.242-.112.85 2.598 3.262 4.508 6.13 4.57a13.18 13.18 0 0 1-8.134 2.798c-.538 0-1.054-.024-1.57-.1C2.906 27.93 6.35 29 10.064 29c12.072 0 18.672-10 18.672-18.668 0-.3-.01-.57-.024-.848C30.014 8.56 31.108 7.406 32 6.078z"/></svg>
+</a>
+  <a class="ml-3 flex-shrink-0 block text-raven-800 hover:text-raven-900" target="_blank" rel="noopener nofollow" title="" href="https://www.facebook.com/dialog/share?app_id=&display=page&href=https%3a%2f%2fre-dojo.github.io%2fwrite-ups%2f2018-09-28-ecw-2017-red-diamond%2f"><svg class="w-6 h-6 fill-current" viewBox="-7 -3.5 39 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M30.234 0H1.765C.8.001 0 .79 0 1.766v28.47C.001 31.2.79 32 1.766 32h15.328V19.625h-4.156V14.78h4.156v-3.564c0-4.134 2.523-6.384 6.21-6.384 1.766 0 3.284.13 3.726.2v4.32h-2.543c-2.006 0-2.394.953-2.394 2.352v3.085h4.797l-.625 4.844h-4.172V32h8.14C31.21 32 32 31.2 32 30.234V1.765C32 .8 31.21 0 30.234 0z"/></svg>
+</a>
+</div>
+
+        </div>
       </div>
+    </div>
+  </div>
+  <div class="ax-feature ax-l-o">
+    <div class="ax-l-i">
+
+<figure>
+<img
+class="mb-2 mx-auto leading-none shadow-xl"
+src="/images/ecw/ecw_ctf.png"
+alt="ECW 2017 - Red Diamond (Reverse) - Write-up">
+</figure>
+
+    </div>
+  </div><div class="ax-content ax-l-o">
+    <div class="ax-l-i">
+      <article class="cdata">
+<p>Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le <a href="https://challenge-ecw.fr/">challenge ECW</a>. Tout comme l&rsquo;année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense.</p>
+<p>L&rsquo;épreuve qualificative de cette année reprenait les catégories classiques de CTF: Web, Forensics, Crypto et Reverse.</p>
+<p>Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de celui qui m&rsquo;a paru le plus intéressant mais également le plus compliqué à résoudre.</p>
+<h2 id="présentation-du-challenge">Présentation du challenge</h2>
+<p>Le binaire qui nous est donné pour ce challenge est un PE x86-64, sans plus tarder on l&rsquo;ouvre dans son désassembleur préféré pour voir un peu à quoi on a affaire.</p>
+<p>On constate rapidement un nombre élevé de fonctions (un binaire de 6 Mo tout de même), cependant l&rsquo;utilisation d&rsquo;IDA permet de récupérer la quasi totalité des noms de fonctions et variables, ce qui simplifie grandement le travail.</p>
+<p><img src="/images/ecw/functions.PNG" alt="Exemple de fonctions"></p>
+<p>Comme la plupart des fonctions commencent par <strong>mrb</strong>, on fait un peu de Google pour voir à quoi ça fait référence et on trouve rapidement qu&rsquo;il s&rsquo;agit de MRuby, une implémentation plus légère du langage Ruby pouvant être embarqué dans un binaire écrit en C (voir <a href="https://github.com/mruby/mruby">MRuby</a> pour plus d&rsquo;infos).</p>
+<p>Au point d&rsquo;entrée de notre exécutable, on peut voir que plusieurs fonctions relatives à <a href="https://www.cygwin.com/">Cygwin</a> sont appelées, signifiant que le binaire a été compilé avec ce dernier et qu&rsquo;il sera nécessaire d&rsquo;installer Cygwin si on veut pouvoir exécuter/débugger l&rsquo;exécutable.</p>
+<h2 id="bytecode-mruby">Bytecode MRuby</h2>
+<p>Ceci étant dit, on peut maintenant s&rsquo;intéresser davantage au code du programme, et particulièrement la fonction <strong>f</strong> qui est la première fonction intéressante à être appelée.</p>
+<p><img src="/images/ecw/bytecode.PNG" alt="Début de la fonction f"></p>
+<p>On peut voir sur la capture ci-dessus qu&rsquo;un segment de données commençant par <strong>RITE0004</strong> est copié en mémoire (dans la variable bin). Un peu de Google montre qu&rsquo;il s&rsquo;agit des premiers bytes d&rsquo;un bytecode MRuby. Il est en effet possible de compiler un script Ruby (valable également en Python par exemple) pour qu&rsquo;il puisse être exécuté plus rapidement. Cependant cela nécessite un programme tiers capable d&rsquo;exécuter ces opcodes spécifiques, autrement dit une VM MRuby.</p>
+<p>Afin de regarder plus précisément à quoi correspond ce bytecode MRuby, je l&rsquo;ai extrait en utilisant ce bout de code IDAPython.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> idaapi
+<span style="color:#f92672">import</span> struct
+
+sea <span style="color:#f92672">=</span> ScreenEA()
+mrb <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;reddiamond.mrb&#34;</span>,<span style="color:#e6db74">&#39;wb&#39;</span>)
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0x6be</span>):
+    mrb<span style="color:#f92672">.</span>write(struct<span style="color:#f92672">.</span>pack(<span style="color:#e6db74">&#39;B&#39;</span>,Byte(sea<span style="color:#f92672">+</span>i)))
+mrb<span style="color:#f92672">.</span>close()
+</code></pre></div><p>En ouvrant le fichier <em>reddiamond.mrb</em> avec un éditeur hexadécimal, on observe des strings qui nous intéressent pas mal comme &ldquo;Let me check if you deserve a flag &hellip;&rdquo; ou encore &ldquo;flag is:&quot;.</p>
+<p>Le challenge est donc de reverser ce petit bout de bytecode pour comprendre comment le flag est généré. Pour cela, il y a 2 écoles:</p>
+<ul>
+<li>analyse statique: on utilise l&rsquo;interpréteur MRuby (disponible <a href="https://github.com/mruby/mruby">ici</a>) pour obtenir une traduction des opcodes et reverser statiquement à partir de là</li>
+<li>analyse dynamique: on essaye de comprendre comment fonctionne la VM pour débugger le bytecode et breaker aux endroits opportuns</li>
+</ul>
+<p>Pour ma part, j&rsquo;ai fini par utiliser les 2 méthodes après avoir passé un bout de temps à reverser statiquement chaque opcode, je pense malgré tout qu&rsquo;il était possible de tout faire statiquement pour quelqu&rsquo;un de familier avec les opcodes MRuby.</p>
+<h2 id="analyse-statique">Analyse statique</h2>
+<p>Après avoir téléchargé l&rsquo;interpréteur MRuby (voir plus haut pour le lien), on peut l&rsquo;utiliser de la manière suivante pour récupérer tous les opcodes traduits.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ mruby --verbose -b reddiamond.mrb
+irep 0x7fba3c702fd0 nregs<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span> nlocals<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> pools<span style="color:#f92672">=</span><span style="color:#ae81ff">11</span> syms<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span> reps<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>
+      <span style="color:#ae81ff">000</span> OP_LOADSELF	R3
+      <span style="color:#ae81ff">001</span> OP_STRING	R4	L<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>	; <span style="color:#e6db74">&#34;CRACKME!&#34;</span>
+      <span style="color:#ae81ff">002</span> OP_SEND	R3	:puts	<span style="color:#ae81ff">1</span>
+      <span style="color:#ae81ff">003</span> OP_LOADSELF	R3
+      <span style="color:#ae81ff">004</span> OP_LOADSELF	R4
+      <span style="color:#ae81ff">005</span> OP_LOADL	R5	L<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span>	; <span style="color:#ae81ff">400000</span>
+      <span style="color:#ae81ff">006</span> OP_SEND	R4	:rand	<span style="color:#ae81ff">1</span>
+      <span style="color:#ae81ff">007</span> OP_SEND	R3	:usleep	<span style="color:#ae81ff">1</span>
+      <span style="color:#ae81ff">008</span> OP_LOADSELF	R3
+      <span style="color:#ae81ff">009</span> OP_STRING	R4	L<span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>	; <span style="color:#e6db74">&#34;Let me check if you deserve a flag ...&#34;</span>
+      <span style="color:#ae81ff">010</span> OP_SEND	R3	:puts	<span style="color:#ae81ff">1</span>
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+</code></pre></div><p>Chaque ligne commençant par <strong>irep</strong> représente une fonction et les lignes numérotées en dessous représentent le code de la fonction (chaque ligne = 1 opcode). On dénote ainsi 6 fonctions distinctes.</p>
+<pre><code>irep 0x7fba3c702fd0 nregs=7 nlocals=3 pools=11 syms=12 reps=2
+[...]
+irep 0x7fba3c7034b0 nregs=25 nlocals=5 pools=10 syms=19 reps=1
+[...]
+irep 0x7fba3c703a80 nregs=8 nlocals=3 pools=0 syms=6 reps=0
+[...]
+irep 0x7fba3c703b70 nregs=3 nlocals=1 pools=0 syms=2 reps=2
+[...]
+irep 0x7fba3c703c30 nregs=5 nlocals=2 pools=0 syms=1 reps=0
+[...]
+irep 0x7fba3c703ce0 nregs=5 nlocals=2 pools=0 syms=1 reps=0
+[...]
+</code></pre><p>Outre nous indiquer la présence d&rsquo;une fonction, cet en-tête donne également le nombre de registres (25 au max) utilisés dans la fonction ainsi que le nombre de variables locales et de symboles.</p>
+<p>Comme l&rsquo;entrypoint n&rsquo;est pas précisé dans un MRB, on sait que la première fonction (0x7fba3c702fd0) représente notre main, ce qui paraît logique en voyant les strings affichées.</p>
+<p>Sachant cela, on peut commencer à analyser chaque opcode pour voir un peu ce qui se passe dans cette fonction, pour cela 2 liens du repo Github de MRuby m&rsquo;ont beaucoup servi (voir <a href="https://github.com/mruby/mruby/blob/master/include/mruby/opcode.h">ici</a> et <a href="https://github.com/mruby/mruby/blob/master/src/vm.c">ici</a>)</p>
+<p>Les premiers opcodes du main vont afficher quelques strings qui ne nous intéressent pas trop et vont également exécuter plusieurs fois la fonction usleep (probablement pour éviter un bruteforce du flag).</p>
+<pre><code>000 OP_LOADSELF	R3
+001 OP_STRING	R4	L(0)	; &quot;CRACKME!&quot;
+002 OP_SEND	R3	:puts	1
+[...]
+007 OP_SEND	R3	:usleep	1
+008 OP_LOADSELF	R3
+009 OP_STRING	R4	L(2)	; &quot;Let me check if you deserve a flag ...&quot;
+010 OP_SEND	R3	:puts	1
+[...]
+017 OP_SEND	R3	:usleep	1
+[...]
+</code></pre><p>Ce qui nous intéresse davantage se situe à l&rsquo;opcode 27 où la fonction <em>found?</em> est appelée. Selon le résultat de cette fonction, 2 comportements sont possibles (OP_JMPNOT):</p>
+<ul>
+<li>soit le programme jump à l&rsquo;opcode 46, affiche la string &ldquo;NO :(&rdquo; et quitte le programme</li>
+<li>soit le programme continue à l&rsquo;opcode 29, afficher la string &ldquo;YES :)&rdquo; avec notre flag et quitte le programme</li>
+</ul>
+<pre><code>[...]
+027 OP_SEND	R3	:found?	0
+028 OP_JMPNOT	R3	046 
+// Good boy
+029 OP_LOADSELF	R3
+030 OP_STRING	R4	L(5)	; &quot;YES :)&quot;
+031 OP_SEND	R3	:puts	1
+032 OP_GETCONST	R3	:MD5
+033 OP_STRING	R4	L(6)	; &quot;\342\235\250\342\225\257\302\260\342\226\241\302\260\342\235\251\342\225\257\357\270\265\342\224\273\342\224\201\342\224\273&quot;
+034 OP_GETGLOBAL	R5	:$salt
+035 OP_ADD	R4	:+	1
+036 OP_SEND	R3	:md5_hex	1
+037 OP_MOVE	R1	R3		; R1:flag
+038 OP_LOADSELF	R3
+039 OP_STRING	R4	L(7)	; &quot;\tflag is: '&quot;
+040 OP_MOVE	R5	R1		; R1:flag
+041 OP_STRCAT	R4	R5
+042 OP_STRING	R5	L(8)	; &quot;'&quot;
+043 OP_STRCAT	R4	R5
+044 OP_SEND	R3	:puts	1
+045 OP_JMP	049
+// Bad boy
+046 OP_LOADSELF	R3
+047 OP_STRING	R4	L(9)	; &quot;NO :(&quot;
+048 OP_SEND	R3	:puts	1
+049 OP_JMP	069
+[...]
+</code></pre><p>Au premier abord, on pourrait se dire que la longue string est peut-être notre flag, cependant une rapide lecture des opcodes montre que cette string est en fait hashée (MD5) avec la variable globale <strong>salt</strong> pour donner le flag.</p>
+<pre><code>flag = md5($salt+&quot;\xE2\x9D\xA8\xE2\x95\xAF\xC2\xB0\xE2\x96\xA1\xC2\xB0\xE2\x9D\xA9\xE2\x95\xAF\xEF\xB8\xB5\xE2\x94\xBB\xE2\x94\x81\xE2\x94\xBB&quot;)
+</code></pre><p>Il faut donc aller regarder un peu du côté de la fonction <em>found?</em> pour voir où est-ce que cette variable globale est initialisée, c&rsquo;est aussi là que l&rsquo;analyse statique devient plus complexe&hellip;</p>
+<p>Le début de la fonction est assez compliqué pour pas grand chose au final, tout ce que fait ce petit bout de code est de générer un tableau comprenant les valeurs &ldquo;utf-0&rdquo; &ldquo;utf-1&rdquo;&hellip; jusqu&rsquo;à &ldquo;utf-30&rdquo; pour récupérer uniquement &ldquo;utf-8&rdquo; et &ldquo;utf-16&rdquo;.</p>
+<pre><code>[...]
+// Génération du tableau dans R2
+001 OP_STRING	R5	L(0)	; &quot;utf-0&quot;
+002 OP_STRING	R6	L(1)	; &quot;utf-9&quot;
+003 OP_RANGE	R5	R5	0
+004 OP_SEND	R5	:to_a	0
+005 OP_STRING	R6	L(2)	; &quot;utf-10&quot;
+006 OP_STRING	R7	L(3)	; &quot;utf-30&quot;
+007 OP_RANGE	R6	R6	0
+008 OP_SEND	R6	:to_a	0
+009 OP_ADD	R5	:+	1
+010 OP_MOVE	R2	R5		; R2:&quot;\302\265&quot;
+011 OP_LOADSELF	R5
+012 OP_GETCONST	R6	:Iconv
+013 OP_MOVE	R7	R2		; R2:&quot;\302\265&quot;
+// Stockage de &quot;utf-8&quot; dans R7
+014 OP_LOADI	R8	8
+015 OP_SEND	R7	:[]	1
+016 OP_MOVE	R8	R2		; R2:&quot;\302\265&quot;
+// Stockage de &quot;utf-16&quot; dans R8
+017 OP_LOADI	R9	16
+018 OP_SEND	R8	:[]	1
+[...]
+</code></pre><p>La suite du code montre que le programme extrait ces 2 strings pour convertir la string &ldquo;ARGV[2]&rdquo; de UTF-16 en UTF-8, en utilisant la fonction suivante.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Iconv</span><span style="color:#f92672">.</span>conv(to, from, str)
+</code></pre></div><pre><code>[...]
+// Stocke la string &quot;ARGV[2]&quot; en UTF-16 dans les registres R11 à R24 
+021 OP_LOADI	R11	0
+022 OP_LOADI	R12	65
+023 OP_LOADI	R13	0
+024 OP_LOADI	R14	82
+[...]
+035 OP_ARRAY	R9	R9	16
+036 OP_STRING	R10	L(4)	; &quot;C*&quot;
+037 OP_SEND	R9	:pack	1
+// Appel de la fonction conv de la classe Iconv (voir opcode 12)
+038 OP_SEND	R6	:conv	3
+[...]
+</code></pre><p>La suite du programme consiste à récupérer la valeur contenue dans ARGV[2] qui <strong>ne correspond pas au premier mais bel et bien au second argument donné au programme</strong> (le premier argument n&rsquo;est donc pas utilisé par le programme).</p>
+<p>Le programme doit donc être exécuté de la manière suivante pour obtenir le flag.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</code></pre></div><p>Une fois que le programme a récupéré notre input, il va prendre uniquement les 8 premiers caractères de celui-ci et les stocker dans un tableau, puis vérifier chacun d&rsquo;entre eux de manière différente.</p>
+<pre><code>[...]
+051 OP_LOADI	R6	0
+052 OP_LOADI	R7	7
+// Range de 0 à 7 par pas de 1
+053 OP_RANGE	R6	R6	0
+// R5 contient notre input, le range est donc appliqué sur celui-ci pour ne récupérer que les 8 premiers caractères dans un tableau
+054 OP_SEND	R5	:[]	1
+// Le tableau contenant les 8 premiers caractères est stocké dans R3
+055 OP_MOVE	R3	R5
+[...]
+</code></pre><h3 id="premier-caractère-du-tableau">Premier caractère du tableau</h3>
+<pre><code>[...]
+058 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+059 OP_SEND	R5	:first	0
+060 OP_STRING	R6	L(5)	; &quot;W&quot;
+061 OP_EQ		R5	:==	1
+062 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+063 OP_JMPNOT	R5	068
+[...]
+</code></pre><p>Le premier caractère est très facile à comprendre, le programme va simplement utiliser la fonction <em>first</em> pour récupérer le premier caractère du tableau et le comparer à &ldquo;W&rdquo;, le retour de l&rsquo;égalité est placé dans R4 (qui correspond à la valeur de retour de la fonction) puis il jump à l&rsquo;opcode 68 si l&rsquo;égalité n&rsquo;est pas vérifiée. Ce dernier correspond au OP_JMPNOT du caractère suivant qu&rsquo;il va suivre également, et ainsi de suite jusqu&rsquo;à la fin de la fonction pour finalement retourner la valeur 0.</p>
+<h3 id="second-dernier-caractère-du-tableau">Second (dernier) caractère du tableau</h3>
+<pre><code>[...]
+064 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+065 OP_SEND	R5	:last	0
+066 OP_STRING	R6	L(6)	; &quot;a&quot;
+067 OP_EQ		R5	:==	1
+068 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+069 OP_JMPNOT	R5	077
+[...]
+</code></pre><p>Le second caractère est en réalité le dernier puisque le programme utilise la fonction <em>last</em>, celui-ci est comparé à &ldquo;a&rdquo;, puis la même routine est appliquée selon le résultat de l&rsquo;égalité.</p>
+<h3 id="troisième-caractère-du-tableau">Troisième caractère du tableau</h3>
+<pre><code>[...]
+070 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+071 OP_LOADI	R6	1
+072 OP_ADDI	R6	:+	1
+073 OP_SEND	R5	:[]	1
+074 OP_MOVE	R6	R3		; R3:&quot;\302\244&quot;
+075 OP_SEND	R6	:first	0
+076 OP_EQ		R5	:==	1
+077 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+078 OP_JMPNOT	R5	085
+[...]
+</code></pre><p>Celui-ci commence déjà à devenir plus compliqué, en convertissant les opcodes en quelque chose de plus compréhensible ça donne la séquence suivante:</p>
+<ul>
+<li>R6 = 1</li>
+<li>R6 += 1</li>
+<li>R5 = input[R6]</li>
+<li>R6 = first(input)</li>
+<li>R5 == R6 ?</li>
+</ul>
+<p>Cela revient finalement à comparer le troisième caractère de notre clé avec &ldquo;W&rdquo;.</p>
+<h3 id="quatrième-le-second-en-fait-caractère-du-tableau">Quatrième (le second en fait&hellip;) caractère du tableau</h3>
+<pre><code>[...]
+079 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+080 OP_LOADI	R6	1
+081 OP_SEND	R5	:[]	1
+082 OP_LOADI	R6	0
+083 OP_SEND	R6	:to_s	0
+084 OP_EQ		R5	:==	1
+085 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+086 OP_JMPNOT	R5	095
+[...]
+</code></pre><p>Les instructions ci-dessus peuvent facilement se traduire de la manière suivante:</p>
+<ul>
+<li>R6 = 1</li>
+<li>R5 = input[R6]</li>
+<li>R6 = to_s(0)</li>
+<li>R5 == R6 ?</li>
+</ul>
+<p>Un peu de google montre que la fonction to_s convertit simplement un integer en string, donc le deuxième caractère est &ldquo;0&rdquo;.</p>
+<h3 id="cinquième-eh-ben-non-le-quatrième-caractère-du-tableau">Cinquième (eh ben non le quatrième) caractère du tableau</h3>
+<pre><code>[...]
+087 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+088 OP_LOADI	R6	3
+089 OP_SEND	R5	:[]	1
+090 OP_SEND	R5	:to_i	0
+091 OP_SUBI	R5	:-	1
+092 OP_LOADI	R6	2
+093 OP_ADDI	R6	:+	2
+094 OP_EQ		R5	:==	1
+095 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+096 OP_JMPNOT	R5	103
+[...]
+</code></pre><p>Encore une fois on peut représenter le code de la manière suivante:</p>
+<ul>
+<li>R6 = 3</li>
+<li>R5 = input[R6]</li>
+<li>R5 = to_i(R5)</li>
+<li>R5 -= 1</li>
+<li>R6 = 2</li>
+<li>R6 += 2</li>
+<li>R5 == R6 ?</li>
+</ul>
+<p>À l&rsquo;inverse de la fonction to_s, la fonction to_i convertit une string en integer, le programme va donc chercher le quatrième caractère de notre input, le convertir en integer et lui soustraire 1 pour finalement le comparer à 4. Le quatrième caractère est donc &ldquo;5&rdquo;.</p>
+<h3 id="cinquième-cette-fois-cest-bon-caractère-du-tableau">Cinquième (cette fois c&rsquo;est bon) caractère du tableau</h3>
+<pre><code>[...]
+097 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+098 OP_STRING	R6	L(7)	; &quot;4&quot;
+099 OP_SEND	R6	:to_i	0
+100 OP_SEND	R5	:[]	1
+101 OP_STRING	R6	L(8)	; &quot;9&quot;
+102 OP_EQ		R5	:==	1
+103 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+104 OP_JMPNOT	R5	113
+[...]
+</code></pre><p>Toujours le même raisonnement, le cinquième caractère est donc &ldquo;9&rdquo;, voici une traduction sous forme de pseudo-code.</p>
+<pre><code>input[to_i(&quot;4&quot;)] == &quot;9&quot; ?
+</code></pre><h3 id="sixième-caractère-du-tableau">Sixième caractère du tableau</h3>
+<pre><code>[...]
+105 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+106 OP_LOADI	R6	5
+107 OP_LOADI	R7	-1
+108 OP_RANGE	R6	R6	0
+109 OP_SEND	R5	:[]	1
+110 OP_SEND	R5	:first	0
+111 OP_STRING	R6	L(9)	; &quot;(&quot;
+112 OP_EQ		R5	:==	1
+113 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+114 OP_JMPNOT	R5	122
+[...]
+</code></pre><p>Celui-ci se veut un peu plus tricky à comprendre, l&rsquo;idée derrière consiste à générer un range allant de 5 à 0 par pas de -1 (instructions 106 à 108), et d&rsquo;appliquer ce range à notre input pour obtenir un tableau inversé des 6 premiers caractères de notre clé.</p>
+<p>Une fois ce tableau obtenu, le premier élément de ce dernier (correspondant au 6e caractère de l&rsquo;input) est comparé au caractère &ldquo;(&quot;.</p>
+<h3 id="le-septième-et-dernier-ou-pas-caractère-du-tableau">Le septième et dernier (ou pas) caractère du tableau</h3>
+<pre><code>[...]
+115 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+116 OP_LOADSYM	R6	:[]
+117 OP_LOADI	R7	-2
+118 OP_SEND	R5	:send	2
+119 OP_SEND	R5	:to_f	0
+120 OP_LOADI	R6	8
+121 OP_EQ		R5	:==	1
+122 OP_MOVE	R4	R5 
+[...]
+</code></pre><p>Après avoir fait un peu de google pour comprendre que la fonction to_f convertit un integer/string en float et qu&rsquo;un tableau peut être indexé en sens inverse avec des indices négatifs, ce caractère ne présente aucune difficulté.</p>
+<pre><code>to_f(input[-2]) == 8 ?
+</code></pre><p>Le septième caractère est donc &ldquo;8&rdquo;, ce qui fait que nous avons pu récupérer les 8 premiers caractères de la clé,  c&rsquo;est à dire <strong>W0W59(8a</strong>.</p>
+<p>Cependant, la fonction ne s&rsquo;arrête pas là et c&rsquo;est ici que les problèmes commencent.</p>
+<h3 id="limites-de-lanalyse-statique">Limites de l&rsquo;analyse statique</h3>
+<p>L&rsquo;analyse des opcodes en statique commence à montrer ces limites lorsqu&rsquo;il faut comprendre la séquence d&rsquo;instructions suivantes.</p>
+<pre><code>[...]
+123 OP_LOADI	R5	8
+124 OP_LAMBDA	R6	I(+1)	block
+125 OP_SENDB	R5	:times	0
+126 OP_MOVE	R5	R4
+127 OP_JMPNOT	R5	132
+[...]
+</code></pre><p>On peut voir que la fonction <em>times</em> est appelée pour répéter un bloc de code 8 fois, le problème est que ne nous savons pas de quel bloc il s&rsquo;agit.</p>
+<pre><code>[...]
+132 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+133 OP_SETGLOBAL	:$salt	R3		; R3:&quot;\302\244&quot;
+134 OP_RETURN	R4	normal		; R4:&quot;\302\247&quot;
+</code></pre><p>Si ce bloc de code retourne 0, le programme jump à l&rsquo;instruction 132 qui stocke notre input dans la variable globale <strong>salt</strong> et termine la fonction en retournant 0.</p>
+<pre><code>[...]
+128 OP_MOVE	R5	R2		; R2:&quot;\302\265&quot;
+129 OP_SEND	R5	:size	0
+130 OP_LOADI	R6	16
+131 OP_EQ	R5	:==	1
+[...]
+</code></pre><p>Il faut donc que ce bloc retourne <em>Vrai</em> pour obtenir le flag, si c&rsquo;est le cas, la taille de notre input est comparée à 16 avant de poursuivre.</p>
+<p>Comme nous avons les 8 premiers caractères et que le bloc de code (qui nous est inconnu) est exécuté 8 fois, on peut supposer que cette routine doit vérifier un caractère à la fois à partir du 9e.</p>
+<p>Il nous faut juste savoir ce qui est exécuté et c&rsquo;est là que l&rsquo;analyse dynamique entre en jeu !</p>
+<h2 id="lanalyse-dynamique">L&rsquo;analyse dynamique</h2>
+<p>L&rsquo;analyse dynamique implique d&rsquo;exécuter le programme, il faut donc installer <em>cygwin</em> au préalable pour pouvoir lancer le challenge.</p>
+<p>Personnellement, j&rsquo;ai choisi d&rsquo;utiliser <em>gdb</em> pour debugger le binaire puisqu&rsquo;il est intégré dans <em>cygwin</em>.</p>
+<p>Comme précisé précedemment le binaire doit être exécuté de la manière suivante si on veut avoir une quelconque chance d&rsquo;obtenir le flag.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+<span style="color:#75715e"># ou dans gdb</span>
+$ gdb ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe
+<span style="color:#f92672">(</span>gdb<span style="color:#f92672">)</span> r &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</code></pre></div><p>Sachant cela, revenons dans IDA pour comprendre comment on va pouvoir breaker sur une instruction particulière de notre bytecode.</p>
+<p>Lorsqu&rsquo;on analyse un binaire protégé par une VM, une des premières choses à comprendre est de voir comment celle-ci va aller chercher une instruction en mémoire (le dispatcher), puis comment celle-ci va être décodée (pour récupérer l&rsquo;opcode et les opérandes) et enfin comment le bon handler (le code natif correspondant à l&rsquo;opcode, il y en a un pour chaque opcode) va être appelé. Une fois qu&rsquo;on est en possession de ces informations, on sait dans quelle variable le pointeur d&rsquo;instruction est stocké (ce qui nous permet de breaker sur n&rsquo;importe quelle instruction) et on sait où sont nos opérandes.</p>
+<p>En résumé une VM est une grosse boucle qui va effectuer les actions suivantes:</p>
+<ul>
+<li>prendre une instruction en mémoire (là où le bytecode a été mappé)</li>
+<li>décoder l&rsquo;instruction pour récupéré l&rsquo;opcode et les opérandes</li>
+<li>exécuter l&rsquo;handler correspondant à l&rsquo;opcode</li>
+<li>recommencer en prenant l&rsquo;instruction suivante</li>
+</ul>
+<p>Dans notre cas, il faut jeter un coup d&rsquo;oeil à la fonction <em>mrb_vm_exec</em> qui comporte notamment les différents handlers des opcodes. Comme IDA récupère tous les symboles, on peut voir qu&rsquo;au début de la fonction, la variable <em>pc</em> est initialisée avec le registre r9.</p>
+<p><img src="/images/ecw/init_pc.png" alt="Initialisation du program counter"></p>
+<p>Cette variable correspond au <em>Program Counter</em> qui est notre pointeur d&rsquo;instruction. Autrement dit, on peut se servir du contenu du registre r9 pour breaker au moment où le bytecode MRuby commence à être exécuté.</p>
+<p>Comme c&rsquo;est la variable pc qui contient notre pointeur d&rsquo;instruction, on peut regarder à quel moment elle est mise à jour pour passer à l&rsquo;instruction suivante. Il s&rsquo;agit d&rsquo;un point particulièrement important car il existe plusieurs manières de gérer ce point là:</p>
+<ul>
+<li>soit il existe un dispatcher qui gère la mise à jour du pointeur d&rsquo;instruction et dans ce cas chaque handler va jumper vers ce dispatcher une fois fini pour qu&rsquo;il puisse récupérer et décoder l&rsquo;instruction suivante</li>
+<li>soit chaque handler gère la mise à jour du pointeur d&rsquo;instruction et le décodage de l&rsquo;instruction et dans ce cas on passe directement de handler à handler</li>
+</ul>
+<p>Pour distinguer les 2, il suffit simplement de regarder les cross-références de la variable <em>pc</em> dans IDA. Dans notre cas, on constate rapidement qu&rsquo;elle est mise à jour dans chaque handler et qu&rsquo;on se trouve donc dans le second cas. Comme les instructions sont alignées sur 32-bits en MRuby, le pointeur d&rsquo;instruction est incrémenté de 4 à chaque instruction.</p>
+<p>Sachant cela, on peut désormais breaker à l&rsquo;instruction que l&rsquo;on souhaite en mettant un premier breakpoint conditionnel (voir <a href="https://sourceware.org/gdb/onlinedocs/gdb/Conditions.html">ici</a> pour la doc) pour breaker au début du bytecode, à partir de là on peut récupérer l&rsquo;adresse mémoire à laquelle on retrouve notre pointeur d&rsquo;instruction, puis mettre un watchpoint conditionnel (voir <a href="https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html">ici</a>) sur ce dernier pour breaker à l&rsquo;instruction que l&rsquo;on souhaite.</p>
+<p>Il y a toutefois un bémol à cette technique, il y a plusieurs instructions qui sont strictement identiques (que ce soit l&rsquo;opcode ou les opérandes). Dans ce cas, le seul moyen de savoir où l&rsquo;on se situe dans le flot d&rsquo;instructions est de regarder les instructions précédentes et suivantes pour se repérer. Sinon, une bonne solution est d&rsquo;avancer dans le code petit à petit pour être sur de s&rsquo;y retrouver.</p>
+<p>Un exemple pour illustrer tout ça. Mettons que je veuille breaker à la 3e instruction du main.</p>
+<p>La première étape va consister à breaker sur le début du programme en utilisant les commandes suivantes (l&rsquo;adresse 0x1004350EC correspond à l&rsquo;instruction initialisant le pointeur d&rsquo;instruction dans la fonction vm_mrb_exec et 0x01800006 correspond à la première instruction).</p>
+<pre><code>(gdb) b *0x1004350EC
+(gdb) condition 1 *$r9 == 0x01800006
+(gdb) r &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</code></pre><p>On peut alors récupérer l&rsquo;adresse mémoire où se trouve la variable <em>pc</em> (0xffffc298 dans mon cas) pour créer notre watchpoint conditionnel. Le pointeur d&rsquo;instruction est initialisé à 0x60009d170, donc notre 3e instruction à laquelle on veut breaker est à 0x60009d178.</p>
+<pre><code>(gdb) watch *0xffffc298
+(gdb) condition 2 *0xffffc298 == 0x9d178
+(gdb) c
+</code></pre><p>Et on se retrouve ainsi au moment où le pointeur d&rsquo;instruction est mis à jour à la fin du handler de la seconde instruction :-)</p>
+<p>Si on revient maintenant au blocage sur l&rsquo;analyse statique, il nous suffit d&rsquo;utiliser cette technique pour breaker sur l&rsquo;instruction 125 de la fonction <em>found?</em>. Puis de breaker sur l&rsquo;instruction suivante (en incrémentant de 4 la condition de notre watchpoint) pour voir quel handler est appelé.</p>
+<pre><code>[...]
+125 OP_SENDB    R5      :times  0
+[...]
+</code></pre><p>Finalement, on se rend compte que le bloc qui est appelé est en réalité la 3e fonction du bytecode (voir ci-dessous).</p>
+<pre><code>irep 0x7fd0a4d06620 nregs=8 nlocals=3 pools=0 syms=6 reps=0
+      000 OP_ENTER	1:0:0:0:0:0:0
+      001 OP_GETUPVAR	R3	4	0
+      002 OP_JMPNOT	R3	015
+      003 OP_GETUPVAR	R3	2	0
+      004 OP_MOVE	R4	R1		; R1:n
+      005 OP_SEND	R3	:[]	1
+      006 OP_GETUPVAR	R4	2	0
+      007 OP_MOVE	R5	R1		; R1:n
+      008 OP_SEND	R5	:-@	0
+      009 OP_SUBI	R5	:-	1
+      010 OP_SEND	R4	:[]	1
+      011 OP_MOVE	R5	R1		; R1:n
+      012 OP_ADDI	R5	:+	1
+      013 OP_SEND	R4	:^	1
+      014 OP_EQ		R3	:==	1
+      015 OP_SETUPVAR	R3	4	0
+      016 OP_RETURN	R3	normal
+</code></pre><p>Cette fonction va donc être appelée 8 fois d&rsquo;affilée (fonction <em>times</em> vu précédemment) pour tester les 8 caractères restants de notre clé.</p>
+<h2 id="retour-à-lanalyse-statique">Retour à l&rsquo;analyse statique</h2>
+<p>Maintenant qu&rsquo;on sait quelle fonction est appelée, il ne reste plus qu&rsquo;à l&rsquo;analyser pour voir ce qu&rsquo;elle fait.</p>
+<p>L&rsquo;opcode OP_GETUPVAR va aller chercher la valeur du registre de la fonction appelante selon l&rsquo;opérande qui est utilisé.</p>
+<p>Par exemple pour l&rsquo;instruction 1 de notre bloc, c&rsquo;est la valeur de R4 de la fonction <em>found?</em> qui va être stockée dans R3.</p>
+<pre><code>[...]
+001 OP_GETUPVAR   R3      4       0
+002 OP_JMPNOT     R3      015
+[...]
+</code></pre><p>Pour rappel, cette valeur correspond au résultat de l&rsquo;égalité du 8e caractère (le 7e en fait si vous vous souvenez bien) de notre input. Comme cette instruction est suivie du opcode OP_JMPNOT, si l&rsquo;égalité est fausse, le programme jump directement à l&rsquo;instruction 15 du bloc qui stocke la valeur de R3 dans le registre R4 de la fonction <em>found?</em> et termine l&rsquo;exécution de la fonction.</p>
+<p>Si notre caractère est bon, la fonction continue à l&rsquo;instruction 3.</p>
+<pre><code>[...]
+003 OP_GETUPVAR   R3      2       0
+004 OP_MOVE       R4      R1              ; R1:n
+005 OP_SEND       R3      :[]     1
+[...]
+</code></pre><p>Cette fois-ci OP_GETUPVAR permet de récupérer le R2 de <em>found?</em> qui correspond à notre input en entier (pas juste les 8 premiers caractères) défini à l&rsquo;instruction 49 de la fonction <em>found?</em>. Grâce aux symboles on peut voir que R1 représente <em>n</em>, c&rsquo;est-à-dire l&rsquo;itération de la fonction times, il va donc varier de 0 à 7 par pas de 1 à chaque exécution de la fonction. Comme il s&rsquo;agit de la première exécution, R1 est vide donc le premier caractère de notre input est stocké dans R3 (c&rsquo;est-à dire le caractère &ldquo;W&rdquo;).</p>
+<pre><code>[...]
+006 OP_GETUPVAR   R4      2       0
+007 OP_MOVE       R5      R1              ; R1:n
+008 OP_SEND       R5      :-@     0
+009 OP_SUBI       R5      :-      1
+010 OP_SEND       R4      :[]     1
+[...]
+</code></pre><p>Ensuite, notre clé est à nouveau récupérée pour être stockée dans R4 en utilisant à nouveau l&rsquo;opcode OP_GETUPVAR, puis R1 (qui vaut toujours 0) est stocké dans R5 et l&rsquo;instruction 8 converti la valeur de R5 en valeur négative (1 en -1 par exemple). Cependant, comme R5 vaut 0, il reste à 0. Finalement, on soustrait 1 à R5 (ce qui donne -1) pour récupérer le dernier caractère de notre input (le 16e donc) et le stocker dans R4.</p>
+<pre><code>[...]
+011 OP_MOVE       R5      R1              ; R1:n
+012 OP_ADDI       R5      :+      1
+013 OP_SEND       R4      :^      1
+014 OP_EQ         R3      :==     1
+[...]
+</code></pre><p>Finalement, l&rsquo;itérateur (R1) est à nouveau copié dans R5, auquel on ajoute 1, puis on XOR le tout avec R4 qui correspond au dernier caractère de notre clé. Cela a simplement pour effet d&rsquo;ajouter 1 à l&rsquo;ordinal de ce dernier. Le résultat est ensuite comparé à R3 correspondant au premier caractère de la clé. On peut ainsi rapidement en déduire que le dernier caractère de la clé est &ldquo;V&rdquo;.</p>
+<p>Comme R1 est incrémenté à chaque exécution de la fonction, on comprend que les caractères de la seconde partie de la clé sont vérifiés à partir de la première partie. Pour résumer tout ça, voici une implémentation du check des 8 derniers caractères en pseudo-code.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">is_equal <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#75715e"># on part du principe que le 8e caractère est bon</span>
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+	<span style="color:#66d9ef">if</span> is_equal:
+		a <span style="color:#f92672">=</span> input[<span style="color:#f92672">-</span>i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">^</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">+</span>i)
+		<span style="color:#66d9ef">if</span> input[i] <span style="color:#f92672">!=</span> a:
+			is_equal <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+<span style="color:#66d9ef">return</span> is_equal
+</code></pre></div><p>Le déroulement de cette boucle nous permet enfin de récupérer la clé en entier, soit: <strong>W0W59(8ai?.&lt;1T2V</strong></p>
+<p>Il ne reste plus qu&rsquo;à valider pour voir si on arrive à obtenir le flag, en prenant le soin de escape les caractères spéciaux pour Bash avec des backslashes.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ /cygdrive/c/Users/john/Desktop/86288dbbdadbe4d7e04dc1a4c4603f5b.exe give_me_the_flag W0W59<span style="color:#ae81ff">\(</span>8ai?.<span style="color:#ae81ff">\&lt;</span>1T2V
+CRACKME!
+Let me check <span style="color:#66d9ef">if</span> you deserve a flag ...
+YES :<span style="color:#f92672">)</span>
+        flag is: <span style="color:#e6db74">&#39;983b428e721bcfceabf6c77d9e819d8d&#39;</span>
+</code></pre></div><p>Et miracle, ça marche !! :-)</p>
+<h2 id="conclusion-et-remerciements">Conclusion et remerciements</h2>
+<p>C&rsquo;est tout pour ce write-up (bien joué à tous ceux qui on eu le courage de tout lire), selon moi c&rsquo;était sans doute un des challenges les plus durs de ce CTF mais aussi l&rsquo;un des plus enrichissant !</p>
+<p>Je remercie les auteurs du chall qui ont dû se casser la tête pour le créer, mais également tous ceux qui ont organisé le CTF d&rsquo;une manière générale, j&rsquo;espère que c&rsquo;est un event qui pourra perdurer.</p>
+<p>Merci à scud pour l&rsquo;aide sur la compréhension de la VM MRuby, je n&rsquo;aurais sans doute pas réussi à finir sans ça.</p>
+
+      </article>
+      
+
     </div>
   </div>
 </div>

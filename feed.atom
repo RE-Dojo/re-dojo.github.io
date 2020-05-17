@@ -1,0 +1,1439 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>RE-Dojo</title>
+  <subtitle>Test 1</subtitle>
+  <id>https://re-dojo.github.io/</id>
+  <author>
+    <name>RE-Dojo</name>
+    <uri>https://re-dojo.github.io/</uri>
+  </author>
+  <updated>2020-05-17T21:16:41Z</updated>
+  <link rel="self" type="application/atom+xml" href="https://re-dojo.github.io/feed.atom" hreflang="en"/>
+  <link rel="alternate" type="text/html" href="https://re-dojo.github.io/" hreflang="en"/>
+  <entry>
+    <title>FCSC 2020 - Keykoolol (Reverse) - Write-up</title><author>
+      <name>Hugo Porcher (icecr4ck)</name>
+      <uri>https://twitter.com/icecr4ck</uri>
+    </author>
+    <id>https://re-dojo.github.io/write-ups/2020-05-09-fcsc-2020-keykoolol/</id>
+    <updated>2020-05-17T16:00:00Z</updated>
+    <published>2020-05-09T16:00:00Z</published>
+    <content type="html"><p>A few weeks ago, I participated in the France CyberSecurity Challenge (or <a href="https://france-cybersecurity-challenge.fr/">FCSC</a> in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (<a href="https://www.ssi.gouv.fr/en/">ANSSI</a>) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.</p>
+<p>Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named <strong>keykoolol</strong>.</p>
+<p>The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it. Then, we have to use this keygen to generate good serials for several usernames to get the flag.</p>
+<p>As I spent a bit of time to solve it, here is my solution for the challenge.</p>
+<h2 id="first-look">First look</h2>
+<p>The binary is an ELF x86-64 executable and its size is quite small, only 14KB.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ file keykoolol
+keykoolol: ELF 64-bit LSB pie executable, x86-64, version <span style="color:#ae81ff">1</span> <span style="color:#f92672">(</span>SYSV<span style="color:#f92672">)</span>, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, <span style="color:#66d9ef">for</span> GNU/Linux 3.2.0, BuildID<span style="color:#f92672">[</span>sha1<span style="color:#f92672">]=</span>1422aa3ad6edad4cc689ec6ed5d9fd4e6263cd72, stripped
+</code></pre></div><p>If we execute it with dummy inputs, we get the following output.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./keykoolol
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Username: aaaaaa
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Serial:   bbbbbbbbb
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Incorrect serial.
+</code></pre></div><p>Let&rsquo;s open it in our favorite disassembler to see what the code looks like. Here is what the <code>main</code> function looks like with IDA decompiler.</p>
+
+
+<figure>
+<img
+class="mb-2 mx-auto leading-none shadow-xl"
+src="/images/fcsc/main.png">
+<figcaption class="text-sm text-right text-raven-500">
+<h4>IDA decompiler output of main function</h4>
+</figcaption>
+</figure>
+
+<p>As you can see, the code of the <code>main</code> function is easily readable and consists of the following steps.</p>
+<ol>
+<li>Read the username and the serial from stdin.</li>
+<li>Remove the new line character of both inputs.</li>
+<li>Call a function (renamed as <code>check</code> here) taking 6 parameters including the username, the serial and their respective lengths.</li>
+<li>If the function return value is different than 0, the couple username/serial is correct.</li>
+</ol>
+<p>Without further ado, let&rsquo;s look at the function <code>check</code>.</p>
+<h2 id="analysis-of-the-function-checking-the-serial">Analysis of the function checking the serial</h2>
+<p>When opening the <code>check</code> function in IDA decompiler, the first thing we notice is the time taken by IDA to decompile it.</p>
+<p>If we look at the disassembly control flow graph, we quickly understand why, the function is huge!</p>
+
+
+<figure>
+<img
+class="mb-2 mx-auto leading-none shadow-xl"
+src="/images/fcsc/cfg.png">
+<figcaption class="text-sm text-right text-raven-500">
+<h4>IDA disassembly CFG of check</h4>
+</figcaption>
+</figure>
+
+<p>Let&rsquo;s dig into the code to understand the structure of the function.</p>
+
+
+<figure>
+<img
+class="mb-2 mx-auto leading-none shadow-xl"
+src="/images/fcsc/init_vm_memory.png">
+<figcaption class="text-sm text-right text-raven-500">
+<h4>IDA decompiler output of check function - 1</h4>
+</figcaption>
+</figure>
+
+<p>The function starts with initializing the first 40 bytes at 0x203040 and the first 2048 bytes at 0x203080 to 0.</p>
+
+
+<figure>
+<img
+class="mb-2 mx-auto leading-none shadow-xl"
+src="/images/fcsc/copy_bytecode_username_serial.png">
+<figcaption class="text-sm text-right text-raven-500">
+<h4>IDA decompiler output of check function - 2</h4>
+</figcaption>
+</figure>
+
+<p>Then, it copies successively:</p>
+<ul>
+<li>the buffer at 0x24E0 (first parameter of the function) to the address 0x203080;</li>
+<li>the username buffer to the address 0x203490 (0x203080+1024+16);</li>
+<li>the serial buffer after the username buffer address plus 16.</li>
+</ul>
+<p>Afterwards, it enters into an infinite loop and reads an integer of 32 bits from the buffer at 0x24E0 (which is now at 0x203080).</p>
+
+
+<figure>
+<img
+class="mb-2 mx-auto leading-none shadow-xl"
+src="/images/fcsc/vm_switch.png">
+<figcaption class="text-sm text-right text-raven-500">
+<h4>IDA decompiler output of check function - 3</h4>
+</figcaption>
+</figure>
+
+<p>The most significant byte of the 32 bits integer is read and, depending on the value, the control flow moves to one of the 256 entries of the switch (this explains the stair-like structure of the CFG).</p>
+<p>If we look carefully at the different branches of the switch, we can observe the following code pattern in almost every branch of the switch:</p>
+<ol>
+<li>A simple operation is made on the memory between 0x203040 and 0x203080.</li>
+<li>A variable is increased by 4 (which is incidentally the same size of the integer read before entering the switch).</li>
+<li>If the switch value is different than 255, the control flow goes back to the start of the while loop.</li>
+</ol>
+<p>This structure leads us to conclude that we are dealing with a virtual machine here, and not a small one as it implements 256 instructions.</p>
+<h2 id="structure-of-the-vm">Structure of the VM</h2>
+<p>From here, we can make several assumptions on the structure of the virtual machine:</p>
+<ul>
+<li>the VM has <strong>16 registers</strong> of 32 bits, stored at 0x203040;</li>
+<li>the mysterious buffer copied from 0x24E0 is the <strong>bytecode of the VM</strong>;</li>
+<li>the VM program counter is stored into <strong>ESI</strong>;</li>
+<li>the VM flags (more or less equivalent to a very simplified version of the EFLAGS register) are stored into <strong>R9</strong>;</li>
+<li>the execution of the opcode 255 means the serial is not correct as it sets the return value of <code>check</code> to 0;</li>
+<li>the memory at 0x203880 corresponds to the <strong>stack of the VM</strong>.</li>
+</ul>
+<p>Also, we can evaluate the real opcodes executed by the VM by looking at the differents opcodes present in the bytecode. However, this implies that the code of the VM does not patch itself (SPOILER: it does).</p>
+<p>Still, here is the list of the 55 different opcodes present in the bytecode preceded by the number of occurrences.</p>
+<pre><code>23 15
+22 212
+16 0
+14 216
+13 8
+13 19
+12 29
+12 12
+8 24
+8 18
+7 2
+6 6
+6 202
+5 223
+5 21
+5 11
+4 25
+4 221
+4 220
+4 214
+4 10
+3 28
+3 27
+3 26
+3 23
+3 215
+3 206
+3 17
+3 1
+2 9
+2 3
+2 255
+2 254
+2 219
+2 218
+2 210
+2 207
+2 204
+2 20
+2 14
+1 98
+1 63
+1 42
+1 35
+1 244
+1 217
+1 213
+1 201
+1 200
+1 197
+1 195
+1 194
+1 193
+1 192
+1 188
+</code></pre><h2 id="disassembling-the-vm-bytecode">Disassembling the VM bytecode</h2>
+<p>In order to disassemble the VM bytecode and continue the analysis, several strategies are at our disposal:</p>
+<ul>
+<li>implement each opcode in a Python script (for example) and read the bytecode with it;</li>
+<li>write an architecture plugin for the VM, supported by disassemblers like IDA or Binary Ninja and open the bytecode with it;</li>
+<li>make a trace of the VM execution and extract the VM instructions from it (using <a href="https://triton.quarkslab.com/">Triton</a> for example).</li>
+</ul>
+<p>As I am a bit lazy and I did not want to reimplement each instruction, I chose a solution somehow similar to the last one that consists to use <a href="https://github.com/cea-sec/miasm">Miasm</a> dynamic symbolic execution (or DSE in short) to disassemble <strong>automagically</strong> every executed VM instruction. The ultimate goal is to get a clean trace of the VM execution. The advantage of this solution is that if the VM does self-modification, we can observe it and disassemble the modified VM bytecode.</p>
+<p>I will not present the concepts of <!-- raw HTML omitted -->symbolic execution<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup><!-- raw HTML omitted --> and <!-- raw HTML omitted -->concolic execution<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup><!-- raw HTML omitted --> here as they are already good definitions on the Internets.</p>
+<h3 id="miasm-dse">Miasm DSE</h3>
+<p>The usage of Miasm dynamic symbolic execution is not really documented (as the whole project actually) but you can find examples on Miasm <a href="https://miasm.re/blog/2017/10/05/playing_with_dynamic_symbolic_execution.html">blog</a> and a pseudo-documentation in the <a href="https://github.com/cea-sec/miasm/blob/master/miasm/analysis/dse.py">code</a>.</p>
+<p>Besides, the developers of Miasm are easily reachable if you encounter an issue, either via the <a href="https://gitter.im/cea-sec/miasm">Gitter</a> or directly via the <a href="https://github.com/cea-sec/miasm/issues">GitHub</a> repository.</p>
+<h3 id="strategy">Strategy</h3>
+<p>Here is an illustration of what a VM cycle looks like in our case (drawing is not my main strength as you can see).</p>
+<pre><code>                      +------------+
+                      |Fetch/Decode&lt;--------------------------+
+                      +-----+------+                          |
+                            |                                 |
+                            |                                 |
+                            |                                 |
+                      +-----v------+                          |
+                      | Dispatcher |                          |
+                      +------+-----+                          |
+                             |                                |
+       +--------------------------------------------+         |
+       |                     |                      |         |
+       |                     |                      |         |
++------v-------+      +------v------+      +--------v-----+   |
+|  Handler 1   |      |  Handler 2  |      |    VM Exit   |   |
++------+-------+      +------+------+      +-------+------+   |
+       |                     |                     |          |
+       +-------------------------------------------+          |
+                             |                                |
+                      +------v------+                         |
+                      |    Next     |                         |
+                      +------+------+                         |
+                             |                                |
+                             +--------------------------------+
+</code></pre><p>In order to disassemble a given VM instruction, we need to get the <strong>constraints</strong> on the VM state (registers + flags + stack) at each VM cycle.</p>
+<ol>
+<li>At the <strong>dispatcher</strong>, we update the DSE state from the concrete execution and we symbolize the memory corresponding to the state of the VM.</li>
+<li>The code of the handler corresponding to the VM instruction is executed.</li>
+<li>At the <strong>next</strong> step, we evaluate the modifications made on the DSE state and print them.</li>
+<li>If the instruction is not a VM exit, we go back to 1.</li>
+</ol>
+<h3 id="implementation">Implementation</h3>
+<p>In Miasm, the concrete execution feature is provided by the <code>Jitter</code>, we can jit a ELF x86-64 executable by importing the class <code>Sandbox_Linux_x86_64</code> defined in <code>miasm.analysis.sandbox</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> miasm.analysis.sandbox <span style="color:#f92672">import</span> Sandbox_Linux_x86_64
+
+parser <span style="color:#f92672">=</span> Sandbox_Linux_x86_64<span style="color:#f92672">.</span>parser(<span style="color:#e6db74">&#34;Disassembler for keykoolol challenge&#34;</span>)
+parser<span style="color:#f92672">.</span>add_argument(<span style="color:#e6db74">&#34;filename&#34;</span>, help<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Challenge filename&#34;</span>)
+options <span style="color:#f92672">=</span> parser<span style="color:#f92672">.</span>parse_args()
+
+sb <span style="color:#f92672">=</span> Sandbox_Linux_x86_64(options<span style="color:#f92672">.</span>filename, options, globals())
+sb<span style="color:#f92672">.</span>run()
+</code></pre></div><p>When executing the Python code above, we encounter the following error.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python keykoolol.py keykoolol
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+ValueError: <span style="color:#f92672">(</span><span style="color:#e6db74">&#39;unknown api&#39;</span>, <span style="color:#e6db74">&#39;0x711110c4&#39;</span>, <span style="color:#e6db74">&#34;&#39;xxx___printf_chk&#39;&#34;</span><span style="color:#f92672">)</span>
+</code></pre></div><p>As there are calls to external APIs, we have to handle them in our code.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">xxx___printf_chk</span>(jitter):
+    ret_ad, args <span style="color:#f92672">=</span> jitter<span style="color:#f92672">.</span>func_args_systemv([<span style="color:#e6db74">&#34;flag&#34;</span>, <span style="color:#e6db74">&#34;format&#34;</span>, <span style="color:#e6db74">&#34;arg&#34;</span>])
+    <span style="color:#66d9ef">print</span>(jitter<span style="color:#f92672">.</span>get_c_str(args<span style="color:#f92672">.</span>format))
+    <span style="color:#66d9ef">return</span> jitter<span style="color:#f92672">.</span>func_ret_systemv(ret_ad, <span style="color:#ae81ff">1</span>)
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">xxx_fgets</span>(jitter):
+    ret_ad, args <span style="color:#f92672">=</span> jitter<span style="color:#f92672">.</span>func_args_systemv([<span style="color:#e6db74">&#34;dest&#34;</span>, <span style="color:#e6db74">&#34;size&#34;</span>, <span style="color:#e6db74">&#34;stream&#34;</span>])
+    s <span style="color:#f92672">=</span> input()
+    jitter<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>set_mem(args<span style="color:#f92672">.</span>dest, s<span style="color:#f92672">.</span>encode())
+    <span style="color:#66d9ef">return</span> jitter<span style="color:#f92672">.</span>func_ret_systemv(ret_ad, len(s))
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">xxx_strcspn</span>(jitter):
+    ret_ad, args <span style="color:#f92672">=</span> jitter<span style="color:#f92672">.</span>func_args_systemv([<span style="color:#e6db74">&#34;s&#34;</span>, <span style="color:#e6db74">&#34;rejected&#34;</span>])
+    s <span style="color:#f92672">=</span> jitter<span style="color:#f92672">.</span>get_c_str(args<span style="color:#f92672">.</span>s)
+    jitter<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>set_mem(args<span style="color:#f92672">.</span>s, s<span style="color:#f92672">.</span>strip()<span style="color:#f92672">.</span>encode())
+    <span style="color:#66d9ef">return</span> jitter<span style="color:#f92672">.</span>func_ret_systemv(ret_ad, len(s))
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">xxx___memcpy_chk</span>(jitter):
+    ret_ad, args <span style="color:#f92672">=</span> jitter<span style="color:#f92672">.</span>func_args_systemv([<span style="color:#e6db74">&#34;dest&#34;</span>, <span style="color:#e6db74">&#34;src&#34;</span>, <span style="color:#e6db74">&#34;len&#34;</span>, <span style="color:#e6db74">&#34;destlen&#34;</span>])
+    src <span style="color:#f92672">=</span> jitter<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>get_mem(args<span style="color:#f92672">.</span>src, args<span style="color:#f92672">.</span>len)
+    jitter<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>set_mem(args<span style="color:#f92672">.</span>dest, src)
+    <span style="color:#66d9ef">return</span> jitter<span style="color:#f92672">.</span>func_ret_systemv(ret_ad, args<span style="color:#f92672">.</span>dest)
+</code></pre></div><p>Once the handles are added, we can enter the username and the serial we want (here <code>aaaaaaa</code> and <code>aaaaaaaaaaa</code>) and observe the &ldquo;execution&rdquo; of the binary.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python keykoolol.py keykoolol
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+<span style="color:#f92672">[</span>INFO    <span style="color:#f92672">]</span>: xxx___libc_start_main<span style="color:#f92672">(</span>main<span style="color:#f92672">=</span>0x730, argc<span style="color:#f92672">=</span>0x13371acc, ubp_av<span style="color:#f92672">=</span>0x140000, init<span style="color:#f92672">=</span>0x23a0, fini<span style="color:#f92672">=</span>0x2410, rtld_fini<span style="color:#f92672">=</span>0x0, stack_end<span style="color:#f92672">=</span>0x13fff8<span style="color:#f92672">)</span> ret addr: 0x88a
+<span style="color:#f92672">[</span>INFO    <span style="color:#f92672">]</span>: xxx___printf_chk<span style="color:#f92672">(</span>flag<span style="color:#f92672">=</span>0x1, format<span style="color:#f92672">=</span>0x2424, arg<span style="color:#f92672">=</span>0x99ccd668<span style="color:#f92672">)</span> ret addr: 0x76a
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Username: 
+<span style="color:#f92672">[</span>INFO    <span style="color:#f92672">]</span>: xxx_fgets<span style="color:#f92672">(</span>dest<span style="color:#f92672">=</span>0x13fbc8, size<span style="color:#f92672">=</span>0x200, stream<span style="color:#f92672">=</span>0x71111064<span style="color:#f92672">)</span> ret addr: 0x77e
+aaaaaaa
+<span style="color:#f92672">[</span>INFO    <span style="color:#f92672">]</span>: xxx_strcspn<span style="color:#f92672">(</span>s<span style="color:#f92672">=</span>0x13fbc8, rejected<span style="color:#f92672">=</span>0x2433<span style="color:#f92672">)</span> ret addr: 0x78d
+<span style="color:#f92672">[</span>INFO    <span style="color:#f92672">]</span>: xxx___printf_chk<span style="color:#f92672">(</span>flag<span style="color:#f92672">=</span>0x1, format<span style="color:#f92672">=</span>0x2435, arg<span style="color:#f92672">=</span>0x71111064<span style="color:#f92672">)</span> ret addr: 0x7a5
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Serial:   
+<span style="color:#f92672">[</span>INFO    <span style="color:#f92672">]</span>: xxx_fgets<span style="color:#f92672">(</span>dest<span style="color:#f92672">=</span>0x13fdc8, size<span style="color:#f92672">=</span>0x200, stream<span style="color:#f92672">=</span>0x71111064<span style="color:#f92672">)</span> ret addr: 0x7b9
+aaaaaaaaaaa
+<span style="color:#f92672">[</span>INFO    <span style="color:#f92672">]</span>: xxx_strcspn<span style="color:#f92672">(</span>s<span style="color:#f92672">=</span>0x13fdc8, rejected<span style="color:#f92672">=</span>0x2433<span style="color:#f92672">)</span> ret addr: 0x7c8
+<span style="color:#f92672">[</span>INFO    <span style="color:#f92672">]</span>: xxx___memcpy_chk<span style="color:#f92672">(</span>dest<span style="color:#f92672">=</span>0x203080, src<span style="color:#f92672">=</span>0x24e0, len<span style="color:#f92672">=</span>0x400, destlen<span style="color:#f92672">=</span>0x800<span style="color:#f92672">)</span> ret addr: 0x9c5
+<span style="color:#f92672">[</span>INFO    <span style="color:#f92672">]</span>: xxx_puts<span style="color:#f92672">(</span>s<span style="color:#f92672">=</span>0x24a9<span style="color:#f92672">)</span> ret addr: 0x834
+<span style="color:#f92672">[</span>!<span style="color:#f92672">]</span> Incorrect serial.
+</code></pre></div><p>Now we ensured the concrete execution works well, we add the DSE by instantiating the <code>DSEEngine</code> class. Also, we ask it to stub external APIs (similarly to the way the Sandbox does).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> miasm.analysis.dse <span style="color:#f92672">import</span> DSEEngine
+
+[<span style="color:#f92672">...</span>]
+
+dse <span style="color:#f92672">=</span> DSEEngine(sb<span style="color:#f92672">.</span>machine)
+dse<span style="color:#f92672">.</span>add_lib_handler(sb<span style="color:#f92672">.</span>libs, globals())
+</code></pre></div><p>However, this is not sufficient as the DSE also needs to be attached to the Jitter. To do so, it is possible to use the call to <code>__memcpy_chk</code> to attach it as follows.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">xxx___memcpy_chk</span>(jitter):
+    ret_ad, args <span style="color:#f92672">=</span> jitter<span style="color:#f92672">.</span>func_args_systemv([<span style="color:#e6db74">&#34;dest&#34;</span>, <span style="color:#e6db74">&#34;src&#34;</span>, <span style="color:#e6db74">&#34;len&#34;</span>, <span style="color:#e6db74">&#34;destlen&#34;</span>])
+    src <span style="color:#f92672">=</span> jitter<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>get_mem(args<span style="color:#f92672">.</span>src, args<span style="color:#f92672">.</span>len)
+    jitter<span style="color:#f92672">.</span>vm<span style="color:#f92672">.</span>set_mem(args<span style="color:#f92672">.</span>dest, src)
+
+    <span style="color:#66d9ef">global</span> dse
+    dse<span style="color:#f92672">.</span>attach(jitter)
+
+    <span style="color:#66d9ef">return</span> jitter<span style="color:#f92672">.</span>func_ret_systemv(ret_ad, args<span style="color:#f92672">.</span>dest)
+</code></pre></div><p>Afterwards, we set a breakpoint at the dispatcher to symbolize the memory corresponding to the registers of the VM, and we also create 2 dictionaries:</p>
+<ul>
+<li><code>vm_registers_symb</code>: containing the symbols of the VM registers;</li>
+<li><code>already_disass</code>: keeping the VM instructions already disassembled in order to not print unrolled loops.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">[<span style="color:#f92672">...</span>]
+DISPATCHER_ADDR <span style="color:#f92672">=</span> <span style="color:#ae81ff">0xa5d</span>
+NEXT_ADDR <span style="color:#f92672">=</span> <span style="color:#ae81ff">0xa77</span>
+
+vm_registers_symb <span style="color:#f92672">=</span> {}
+already_disass <span style="color:#f92672">=</span> {}
+
+dse<span style="color:#f92672">.</span>add_instrumentation(DISPATCHER_ADDR, symbolize_vm)
+[<span style="color:#f92672">...</span>]
+</code></pre></div><p>The callback <code>symbolize_vm</code> is implemented as follows and corresponds to the strategy described above. The only difference relates to the opcode 30 that executes the <!-- raw HTML omitted --><code>aesenc</code><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup><!-- raw HTML omitted --> instruction. As the latter is not currently implemented in Miasm jitter (and I did not take the time to try to implement it&hellip;), I added a dirty patch to bypass the execution of the corresponding handler.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> miasm.expression.expression <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+[<span style="color:#f92672">...</span>]
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">symbolize_vm</span>(dse):
+    <span style="color:#66d9ef">global</span> vm_registers_symb, already_disass
+
+    <span style="color:#75715e"># update the DSE state (including the memory) from the concrete state</span>
+    dse<span style="color:#f92672">.</span>update_state_from_concrete(mem<span style="color:#f92672">=</span>True)
+
+    <span style="color:#75715e"># symbolize the memory corresponding to the VM registers (16 registers of 32 bits at 0x203040)</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">16</span>):
+        vm_registers_symb[ExprMem(ExprInt(<span style="color:#ae81ff">0x203040</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">64</span>), <span style="color:#ae81ff">32</span>)] <span style="color:#f92672">=</span> ExprId(<span style="color:#e6db74">&#34;VM_R{}&#34;</span><span style="color:#f92672">.</span>format(i), <span style="color:#ae81ff">32</span>)
+
+    <span style="color:#75715e"># symbolize the VM registers that correpond to real registers</span>
+    vm_registers_symb[dse<span style="color:#f92672">.</span>ir_arch<span style="color:#f92672">.</span>arch<span style="color:#f92672">.</span>regs<span style="color:#f92672">.</span>R9] <span style="color:#f92672">=</span> ExprId(<span style="color:#e6db74">&#34;VM_FLAGS&#34;</span>, <span style="color:#ae81ff">64</span>)
+    vm_registers_symb[dse<span style="color:#f92672">.</span>ir_arch<span style="color:#f92672">.</span>arch<span style="color:#f92672">.</span>regs<span style="color:#f92672">.</span>RSI] <span style="color:#f92672">=</span> ExprId(<span style="color:#e6db74">&#34;VM_PC&#34;</span>, <span style="color:#ae81ff">64</span>)
+
+    <span style="color:#75715e"># update the DSE state with the VM registers symbols</span>
+    dse<span style="color:#f92672">.</span>update_state(vm_registers_symb)
+
+    <span style="color:#75715e"># get the VM state (PC, instruction bytes and opcode)</span>
+    vm_pc <span style="color:#f92672">=</span> int(dse<span style="color:#f92672">.</span>jitter<span style="color:#f92672">.</span>cpu<span style="color:#f92672">.</span>RSI)
+    vm_instr <span style="color:#f92672">=</span> int(dse<span style="color:#f92672">.</span>jitter<span style="color:#f92672">.</span>cpu<span style="color:#f92672">.</span>RCX)
+    vm_opcode <span style="color:#f92672">=</span> int(dse<span style="color:#f92672">.</span>jitter<span style="color:#f92672">.</span>cpu<span style="color:#f92672">.</span>RAX)
+
+    <span style="color:#75715e"># if the VM instruction was not already disassembled, we print the state and add a breakpoint at NEXT_ADDR</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> vm_pc <span style="color:#f92672">in</span> already_disass <span style="color:#f92672">or</span> (vm_pc <span style="color:#f92672">in</span> already_disass <span style="color:#f92672">and</span> vm_instr <span style="color:#f92672">!=</span> already_disass[vm_pc]):
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{:x}:&#34;</span><span style="color:#f92672">.</span>format(vm_pc), end<span style="color:#f92672">=</span><span style="color:#e6db74">&#34; &#34;</span>)
+
+        already_disass[vm_pc] <span style="color:#f92672">=</span> vm_instr
+
+        <span style="color:#75715e"># VM opcode 0xFF exits the VM </span>
+        <span style="color:#66d9ef">if</span> vm_opcode <span style="color:#f92672">==</span> <span style="color:#ae81ff">0xFF</span>:
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;EXIT&#34;</span>)
+
+        <span style="color:#75715e"># VM opcode 30 executes aesenc instruction but this instruction is not implemented in miasm jitter</span>
+        <span style="color:#66d9ef">if</span> vm_opcode <span style="color:#f92672">==</span> <span style="color:#ae81ff">30</span>:
+            arg0 <span style="color:#f92672">=</span> vm_registers_symb[ExprMem(ExprInt(<span style="color:#ae81ff">0x203040</span><span style="color:#f92672">+</span>(((vm_instr <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">16</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xF</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>), <span style="color:#ae81ff">64</span>), <span style="color:#ae81ff">32</span>)]
+            arg1 <span style="color:#f92672">=</span> vm_registers_symb[ExprMem(ExprInt(<span style="color:#ae81ff">0x203040</span><span style="color:#f92672">+</span>(((vm_instr <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">12</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xF</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>), <span style="color:#ae81ff">64</span>), <span style="color:#ae81ff">32</span>)]
+            dest <span style="color:#f92672">=</span> vm_registers_symb[ExprMem(ExprInt(<span style="color:#ae81ff">0x203040</span><span style="color:#f92672">+</span>(((vm_instr <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">20</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xF</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>), <span style="color:#ae81ff">64</span>), <span style="color:#ae81ff">32</span>)]
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;@128[{} + 0x203080] = AESENC(@128[{} + 0x203080], @128[{} + 0x203080])&#34;</span><span style="color:#f92672">.</span>format(dest, arg0, arg1))
+	
+        dse<span style="color:#f92672">.</span>add_instrumentation(NEXT_ADDR, disass_vm_instruction)
+
+    <span style="color:#75715e"># as we do not want miasm to raise an exception when aesenc is jitted, we jump after the instruction and update the DSE state accordingly</span>
+    <span style="color:#66d9ef">if</span> vm_instr <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">24</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">30</span>:
+        dse<span style="color:#f92672">.</span>jitter<span style="color:#f92672">.</span>pc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x232d</span>
+        dse<span style="color:#f92672">.</span>jitter<span style="color:#f92672">.</span>cpu<span style="color:#f92672">.</span>RIP <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x232d</span>
+        dse<span style="color:#f92672">.</span>update_state({
+            dse<span style="color:#f92672">.</span>ir_arch<span style="color:#f92672">.</span>arch<span style="color:#f92672">.</span>regs<span style="color:#f92672">.</span>RIP: ExprInt(<span style="color:#ae81ff">0x232d</span>, <span style="color:#ae81ff">64</span>),
+            dse<span style="color:#f92672">.</span>ir_arch<span style="color:#f92672">.</span>arch<span style="color:#f92672">.</span>regs<span style="color:#f92672">.</span>RAX: ExprInt(vm_pc<span style="color:#f92672">+</span><span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">64</span>) <span style="color:#75715e"># update pc </span>
+        })
+
+    <span style="color:#66d9ef">return</span> True
+</code></pre></div><p>As you can see, a breakpoint is added at the <code>next</code> step if the VM instruction was not seen before.</p>
+<p>The callback <code>disass_vm_instruction</code> disassembles a VM instruction by extracting the modifications on the DSE state made between the dispatcher and the next step. In Miasm, those modifications are available in <code>dse.symb.modified</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">disass_vm_instruction</span>(dse):
+    <span style="color:#66d9ef">global</span> vm_registers_symb
+
+    vm_instr <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>
+
+    <span style="color:#75715e"># get memory modifications</span>
+    <span style="color:#66d9ef">for</span> dst, src <span style="color:#f92672">in</span> dse<span style="color:#f92672">.</span>symb<span style="color:#f92672">.</span>modified(ids<span style="color:#f92672">=</span>False):
+        <span style="color:#75715e"># do not print vm registers unchanged</span>
+        <span style="color:#66d9ef">if</span> dst <span style="color:#f92672">in</span> vm_registers_symb <span style="color:#f92672">and</span> src <span style="color:#f92672">==</span> vm_registers_symb[dst]:
+            <span style="color:#66d9ef">continue</span>
+        vm_instr <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;{} = {}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(dst<span style="color:#f92672">.</span>replace_expr(vm_registers_symb), dse<span style="color:#f92672">.</span>eval_expr(src))
+
+    <span style="color:#75715e"># get register modifications</span>
+    <span style="color:#66d9ef">for</span> dst, src <span style="color:#f92672">in</span> dse<span style="color:#f92672">.</span>symb<span style="color:#f92672">.</span>modified(mems<span style="color:#f92672">=</span>False):
+        <span style="color:#75715e"># dst = ExprMem(VM_REG)</span>
+        <span style="color:#66d9ef">if</span> src <span style="color:#f92672">in</span> vm_registers_symb:
+            vm_instr <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;{} = {}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(dst, dse<span style="color:#f92672">.</span>eval_expr(src))
+        <span style="color:#75715e"># VM_REG != VM_REG_ID</span>
+        <span style="color:#66d9ef">elif</span> dst <span style="color:#f92672">in</span> vm_registers_symb <span style="color:#f92672">and</span> src <span style="color:#f92672">!=</span> vm_registers_symb[dst] <span style="color:#f92672">and</span> vm_registers_symb[dst] <span style="color:#f92672">!=</span> ExprId(<span style="color:#e6db74">&#34;VM_PC&#34;</span>, <span style="color:#ae81ff">64</span>):
+            vm_instr <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;{} = {}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(vm_registers_symb[dst], dse<span style="color:#f92672">.</span>eval_expr(src))
+
+    <span style="color:#75715e"># if no modifications then print ZF and VM_PC changes</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> vm_instr:
+        <span style="color:#66d9ef">for</span> dst, src <span style="color:#f92672">in</span> dse<span style="color:#f92672">.</span>symb<span style="color:#f92672">.</span>modified(mems<span style="color:#f92672">=</span>False):
+            <span style="color:#66d9ef">if</span> dst <span style="color:#f92672">==</span> dse<span style="color:#f92672">.</span>ir_arch<span style="color:#f92672">.</span>arch<span style="color:#f92672">.</span>regs<span style="color:#f92672">.</span>zf:
+                vm_instr <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;ZF = {}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(dse<span style="color:#f92672">.</span>eval_expr(src))
+            <span style="color:#66d9ef">elif</span> dst <span style="color:#f92672">in</span> vm_registers_symb <span style="color:#f92672">and</span> vm_registers_symb[dst] <span style="color:#f92672">==</span> ExprId(<span style="color:#e6db74">&#34;VM_PC&#34;</span>, <span style="color:#ae81ff">64</span>):
+                vm_instr <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;VM_PC = {}</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>format(dse<span style="color:#f92672">.</span>eval_expr(src))
+
+    <span style="color:#66d9ef">print</span>(vm_instr<span style="color:#f92672">.</span>strip())
+
+    <span style="color:#75715e"># remove callback</span>
+    <span style="color:#66d9ef">del</span> dse<span style="color:#f92672">.</span>instrumentation[NEXT_ADDR]
+
+    <span style="color:#66d9ef">return</span> True
+</code></pre></div><p>The full script is available <a href="https://github.com/icecr4ck/write-ups/blob/master/FCSC-2020/Keykoolol/disass_vm.py">here</a>.</p>
+<h2 id="vm-trace-analysis">VM trace analysis</h2>
+<p>First, let&rsquo;s define the state of the VM registers before the execution of the first instruction.</p>
+<pre><code>VM_R0 = 0
+VM_R1 = 0
+VM_R2 = 0
+VM_R3 = 0
+VM_R4 = 0
+VM_R5 = 0
+VM_R6 = 0
+VM_R7 = 0
+VM_R8 = username buffer address in VM memory
+VM_R9 = username length
+VM_R10 = serial buffer address in VM memory
+VM_R11 = serial length
+VM_R12 = end of serial buffer address in VM memory
+VM_R13 = 0
+VM_R14 = 0
+VM_R15 = 0
+</code></pre><p>If we execute the script with the DSE and dummy inputs, here is the trace we get:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python keykoolol.py keykoolol
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+0: VM_R11 <span style="color:#f92672">=</span> VM_R11 + 0xFFFFFFFF
+
+4: VM_FLAGS <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>VM_R11 + 0xFFFFFF01 <span style="color:#ae81ff">0</span> 32, 0x0 <span style="color:#ae81ff">32</span> 64<span style="color:#f92672">}</span>
+
+8: ZF <span style="color:#f92672">=</span> VM_FLAGS<span style="color:#f92672">[</span>0:32<span style="color:#f92672">]</span>?<span style="color:#f92672">(</span>0x0,0x1<span style="color:#f92672">)</span>
+VM_PC <span style="color:#f92672">=</span> 0x74
+
+74: VM_R0 <span style="color:#f92672">=</span> 0x0
+
+78: EXIT
+Traceback <span style="color:#f92672">(</span>most recent call last<span style="color:#f92672">)</span>:
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+RuntimeError: Symbolic stub <span style="color:#e6db74">&#39;b&#39;</span>xxx_puts_symb<span style="color:#e6db74">&#39;&#39;</span> not found
+</code></pre></div><p>As you can see, the VM disassembler worked well, however the VM quickly exited because value of <code>VM_R11</code> is different than 256. As we know <code>VM_R11</code> corresponds to the length of the serial, we can conclude the serial length has to be equal to 256.</p>
+<p>Also, an exception has been raised because the symbolic stub <code>xxx_puts_symb</code> was not implemented. As we do not really care of what the function <code>puts</code> prints, we can implement it like this.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">xxx_puts_symb</span>(dse):
+    <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">RuntimeError</span>(<span style="color:#e6db74">&#34;Exit&#34;</span>)
+</code></pre></div><p>Let&rsquo;s execute again our script with a serial of 256 characters.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python keykoolol.py keykoolol
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+0: VM_R11 <span style="color:#f92672">=</span> VM_R11 + 0xFFFFFFFF
+
+4: VM_FLAGS <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>VM_R11 + 0xFFFFFF01 <span style="color:#ae81ff">0</span> 32, 0x0 <span style="color:#ae81ff">32</span> 64<span style="color:#f92672">}</span>
+
+8: ZF <span style="color:#f92672">=</span> VM_FLAGS<span style="color:#f92672">[</span>0:32<span style="color:#f92672">]</span>?<span style="color:#f92672">(</span>0x0,0x1<span style="color:#f92672">)</span>
+VM_PC <span style="color:#f92672">=</span> <span style="color:#f92672">{(</span>VM_PC + 0x4<span style="color:#f92672">)[</span>0:32<span style="color:#f92672">]</span> <span style="color:#ae81ff">0</span> 32, 0x0 <span style="color:#ae81ff">32</span> 64<span style="color:#f92672">}</span>
+
+c: VM_R0 <span style="color:#f92672">=</span> VM_R10
+
+10: VM_R1 <span style="color:#f92672">=</span> VM_R12
+
+14: @32<span style="color:#f92672">[</span>0x203880<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> VM_PC<span style="color:#f92672">[</span>0:32<span style="color:#f92672">]</span> + 0x4
+
+374: VM_R3 <span style="color:#f92672">=</span> 0x0
+
+378: VM_R2 <span style="color:#f92672">=</span> VM_R0
+
+37c: VM_R2 <span style="color:#f92672">=</span> VM_R2 + VM_R3
+
+380: VM_R2 <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>@8<span style="color:#f92672">[{</span>VM_R2 <span style="color:#ae81ff">0</span> 32, 0x0 <span style="color:#ae81ff">32</span> 64<span style="color:#f92672">}</span> + 0x203080<span style="color:#f92672">]</span> <span style="color:#ae81ff">0</span> 8, 0x0 <span style="color:#ae81ff">8</span> 32<span style="color:#f92672">}</span>
+
+384: VM_FLAGS <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>VM_R2 <span style="color:#ae81ff">0</span> 32, 0x0 <span style="color:#ae81ff">32</span> 64<span style="color:#f92672">}</span>
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+</code></pre></div><p>This time, far more instructions are executed. As there are too many of them, it would not be readable if I print them all here. The full trace is available <a href="https://raw.githubusercontent.com/icecr4ck/write-ups/master/FCSC-2020/Keykoolol/vm_trace_with_bad_inputs.txt">here</a>.</p>
+<p>I will not go through the analysis of each VM instruction. Instead, here are the different steps of the execution of the VM bytecode.</p>
+<ol>
+<li>Check if the length of the serial is equal to 256, if not exit the VM.</li>
+<li>Decode the serial from hexadecimal.</li>
+<li>Compute a custom &ldquo;hash&rdquo; of length 16 from the username (the exact algorithm is detailed below) and copy it after the decoded serial in memory.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">custom_hash</span>(username):
+    hash <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">16</span> 
+    <span style="color:#66d9ef">for</span> i, c <span style="color:#f92672">in</span> enumerate(username):
+        <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">16</span>):
+            hash[(i<span style="color:#f92672">+</span>j) <span style="color:#f92672">%</span> <span style="color:#ae81ff">16</span>] <span style="color:#f92672">^=</span> ((((ord(c) <span style="color:#f92672">+</span> j) <span style="color:#f92672">*</span> <span style="color:#ae81ff">0xD</span>) <span style="color:#f92672">^</span> <span style="color:#ae81ff">0x25</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">0xFF</span>)
+    <span style="color:#66d9ef">return</span> hash
+</code></pre></div><ol start="4">
+<li>Decrypt the bytecode at 0xC8 (offset in the VM bytecode) with the XOR key 0xF4E3D2C1.</li>
+<li>Expand the custom hash as follows to get a buffer of length 96.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">expand_custom_hash</span>(custom_hash):
+    expanded_buffer <span style="color:#f92672">=</span> custom_hash <span style="color:#f92672">+</span> [<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">80</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">80</span>):
+        expanded_buffer[i<span style="color:#f92672">+</span><span style="color:#ae81ff">16</span>] <span style="color:#f92672">=</span> ((expanded_buffer[i] <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>) <span style="color:#f92672">^</span> <span style="color:#ae81ff">0xFF</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xFF</span>
+    <span style="color:#66d9ef">return</span> expanded_buffer
+</code></pre></div><ol start="5">
+<li>Decrypt the bytecode at 0x148 (offset in the VM bytecode) with the XOR key 0xA1B2C3D4.</li>
+<li>Split the serial in 8 buffers of 16 bytes and perform 32 rounds of AES encryption with <code>aesenc</code> on the first 6 buffers of the serial as shown below.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">aesenc</span>(buffer, key):
+    <span style="color:#75715e"># call aesenc instruction</span>
+
+<span style="color:#75715e"># serial = buf1 + buf2 + ... + buf8</span>
+<span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">32</span>):
+    buf1 <span style="color:#f92672">=</span> aesenc(buf6, buf1)
+    buf6 <span style="color:#f92672">=</span> aesenc(buf5, buf8)
+    buf5 <span style="color:#f92672">=</span> aesenc(buf4, buf7)
+    buf4 <span style="color:#f92672">=</span> aesenc(buf3, buf4)
+    buf3 <span style="color:#f92672">=</span> aesenc(buf2, buf7)
+    buf2 <span style="color:#f92672">=</span> aesenc(buf1, buf7)
+</code></pre></div><ol start="7">
+<li>Decrypt the bytecode at 0x334 (offset in the VM bytecode) with the XOR key 0xAABBCCDD.</li>
+<li>Compare the encrypted serial with the expanded buffer computed from the username, if they match the serial is valid.</li>
+</ol>
+<p>As you can see the VM bytecode patches itself not less than 3 times during its execution.</p>
+<p>The length of the serial is of 128 bytes once hexadecimal decoded, but the last 2 buffers of 16 bytes are not checked.</p>
+<p>As we know how the serial is verified, we can now implement our own keygen to generate a serial for any username.</p>
+<h2 id="implementation-of-the-keygen">Implementation of the keygen</h2>
+<p>I chose to implement the keygen in Rust, no reason in particular, except to improve my skills in programming with this language.</p>
+<p>Regardless the language chosen for the implementation of the keygen, it has to implement the following steps:</p>
+<ol>
+<li>Generate the custom hash from the username with the algorithm detailed above.</li>
+<li>Expand the custom hash to get the AES encrypted serial.</li>
+<li>Perform 32 rounds of inverse AES encryption on the expanded custom hash (we cannot use the <code>aesdec</code> instruction as a round of decryption is different than the inverse of the round of encryption) to get the serial.</li>
+</ol>
+
+
+<figure>
+<img
+class="mb-2 mx-auto leading-none shadow-xl"
+src="/images/fcsc/aes.png">
+<figcaption class="text-sm text-right text-raven-500">
+<h4>AES encryption/decryption flowchart</h4>
+</figcaption>
+</figure>
+
+<p>Here is one possible serial for the username <code>admin</code> with the last 2 buffers of the serial set to 1.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./keygen_keykoolol admin <span style="color:#ae81ff">1</span>
+b40e0b81eb1d09c017b3c6d9001118a63b6a2377d1e14470531ee487fe9de34b86c949836a5d789baf503680717547b7910facdc11bd56c22626326ca7053d6ce72e2e638c1d0881c2e699c412485b567128c297e5c7cfa02b6f10b18dbbee140101010101010101010101010101010101010101010101010101010101010101
+</code></pre></div><p>The code of my keygen is available <a href="https://github.com/icecr4ck/write-ups/blob/master/FCSC-2020/Keykoolol/keygen/src/main.rs">here</a>.</p>
+<h2 id="last-but-not-least-getting-the-flag">Last but not least: getting the flag!</h2>
+<p>Once you had a functional keygen, you still had to communicate with the challenge server to get the flag.</p>
+<pre><code>$ nc challenges2.challenge-anssi.fr 3000
+Give me two valid serials for username: Michael Barnett
+&gt;&gt;&gt; afaeff615f362ffbe36eccf4f2e80e6b18404cf0f96398e4881789c0c2b4310a58733ccd2273f48e4983fe171fdfed95d9867c67742609d24a4dbf6917742c41ba804a642b96c6792e8264454e120e26860480c292ab29537820ada4cb4b8edc0101010101010101010101010101010101010101010101010101010101010101
+&gt;&gt;&gt; 8e60f3338de9499d5bd3b9b2ab1371b11d61775ccf9575d47b5f669a04b60be01bf9299819c7f6eee12471fffba41f88d490854810aa62c7c23c554d65fbbdecf6eec3ebcb00f4126f09eee7281d694650942ab7e4b33a500343e83ca5d232720000000000000000000000000000000000000000000000000000000000000000
+Give me two valid serials for username: Shelly Heilman
+&gt;&gt;&gt; 
+</code></pre><p>Unfortunately, I quickly understood that I needed to automate the communication with the server as there was not only one username to generate the serial of.</p>
+<p>I chose <code>pwntools</code> as it offers a simple interface for this kind of stuff.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python get_flag.py
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+<span style="color:#f92672">[</span>DEBUG<span style="color:#f92672">]</span> Received 0x64 bytes:
+    b<span style="color:#e6db74">&#39;Well done! Here is the flag: FCSC{REDACTED}\n&#39;</span>
+</code></pre></div><p>My script is available <a href="https://github.com/icecr4ck/write-ups/blob/master/FCSC-2020/Keykoolol/get_flag.py">here</a>.</p>
+<p>Congrats if you have read this write-up to the end, I will try to be more concise next time !</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://en.wikipedia.org/wiki/Symbolic_execution">Symbolic execution - Wikipedia</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://en.wikipedia.org/wiki/Concolic_testing">Concolic testing - Wikipedia</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://www.felixcloutier.com/x86/aesenc">AESENC — Perform One Round of an AES Encryption Flow</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section></content>
+  </entry>
+  <entry>
+    <title>NorthSec 2019 - Doom (Reverse) - Write-up</title><author>
+      <name>5Cl_lD</name>
+      <uri>https://twitter.com/5cl_ld</uri>
+    </author>
+    <id>https://re-dojo.github.io/write-ups/2019-05-26-nsec-2019-doom/</id>
+    <updated>2019-05-22T17:37:00Z</updated>
+    <published>2019-05-22T17:37:00Z</published>
+    <content type="html"><p>We, once again, participated in the NorthSec competition.
+This article is about the DOOM challenge which was pretty interesting as you had to validate it at the VR station.
+@actgardner already made a write-up that you can find <a href="http://www.agardner.me/securit/ctf/northsec/2019/2019/05/19/northsec-ctf-part-1-doom.html">here</a>.
+I wanted to complete it and show another solution that icecr4ck and I came up with.</p>
+<h2 id="tearing-the-game-apart">Tearing the game apart</h2>
+<p>In order to navigate through the map I used <strong>GZDoom builder</strong> and loaded the <strong>zoombies.wad</strong> file. You can use the &lsquo;add resource&rsquo; menu and select the folder containing all the other files from the game. This will show you the textures also.</p>
+<p><img src="/images/doom/GZbuilder_first_room.png" alt="Image" title="GZBuilder"></p>
+<p>Just by browsing the map, you can find a flag in a closed room.</p>
+<p><img src="/images/doom/qr_code_flag.png" alt="Image" title="Hidden QR code"></p>
+<p>Looking at the attributes of this door, you can see an action &ldquo;When player presses use&rdquo; and this action is linked to a script numbered 42.
+After wandering the map, one can see that there are more scripted locked doors and also hidden rooms.
+<strong>SLADE</strong> is a tool which lets you browse the different files and more importantly it can export the &ldquo;BEHAVIOR.LMP&rdquo; contained in the .wad file.
+This file is a compiled script for doom. Then with <strong>listacs</strong> script you can disassemble or decompile the script (but be careful I had some wrong output with the decompilation the first time. I didn&rsquo;t use the latest version).</p>
+<p>Remember the locked door with the QR code behind it? The script number 42 is the following code:</p>
+<p><img src="/images/doom/storage_room.png" alt="Image" title="Storage room script"></p>
+<p>This door was never meant to be opened.</p>
+<h2 id="collecting-the-different-flags">Collecting the different flags</h2>
+<h3 id="elevator-1-point">Elevator (1 point)</h3>
+<p>The first flag you can obtain is by unlocking the elevator.
+The elevator&rsquo;s script just checks if you press &ldquo;4&rdquo; and &ldquo;2&rdquo; on the the switches.</p>
+<p><img src="/images/doom/Elevator.png" alt="Image" title="Elevator script"></p>
+<p>This first step would give you 1 point.</p>
+<h3 id="blue-card">Blue card</h3>
+<p>If you noticed the hidden toxic room, that&rsquo;s where the blue card awaits you.
+But there&rsquo;s a trick&hellip;
+As you can see on the picture, the highlighted edge is linked to a script but also as soon as you enter the room another script is activated.</p>
+<p><img src="/images/doom/Toxic_room.png" alt="Image" title="Toxic room script"></p>
+<p>Once you pass the &ldquo;hidden door&rdquo; the script numbered 31 is executed and that&rsquo;s where a logic bug resides.</p>
+<p><img src="/images/doom/logic_bug.png" alt="Image" title="Logic bug"></p>
+<p>The script does a modulo 256 on the player&rsquo;s health and then decreases this value randomly until it is below 20.
+The script by the blue card (numbered 32) decreases the player&rsquo;s health by 200.</p>
+<p><img src="/images/doom/bluecard_script.png" alt="Image" title="Blue card script"></p>
+<p>The trick here is to go to the other hidden room.</p>
+<p><img src="/images/doom/hidden_room.png" alt="Image" title="Hidden room"></p>
+<p>This room contains a potion of 300 health points. The trick here is to have the health between 256 and 266 so that you don&rsquo;t lose health when you enter the room and then when getting the blue card you can lose 200 health points and still survive.</p>
+<h3 id="red-card">Red card</h3>
+<p>The red card can be obtained after unlocking a specific door. The scripts responsible for its opening are number 21 and 22. They both call the function func4.
+This function calls func6 which is collecting the different number or letters from the 6 switches and convert it to a base-10 number.
+All the different digits composing that number are put in an array.
+The verification code at the end of func4 can be converted to the following python code:</p>
+<p><img src="/images/doom/pseudocode.png" alt="Image" title="Python code"></p>
+<p>The code is pretty straightforward and actually pretty simple to translate it to an equation to give it to z3 (SMT solver).
+The following script will output the expected combination.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> z3 <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+<span style="color:#f92672">from</span> numpy <span style="color:#f92672">import</span> base_repr
+
+cmb <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">13</span>, <span style="color:#ae81ff">17</span>, <span style="color:#ae81ff">19</span>, <span style="color:#ae81ff">23</span>, <span style="color:#ae81ff">31</span>, <span style="color:#ae81ff">27</span>]
+
+solver <span style="color:#f92672">=</span> Solver()
+digits <span style="color:#f92672">=</span> [Int(<span style="color:#e6db74">&#34;c_</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>)]
+ 
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>):
+    solver<span style="color:#f92672">.</span>add(digits[i] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span>, digits[i] <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">10</span>)
+    solver<span style="color:#f92672">.</span>add(((digits[i] <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>) <span style="color:#f92672">+</span> (digits[(i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">10</span>) <span style="color:#f92672">+</span> digits[(i<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>]) <span style="color:#f92672">%</span> cmb[i] <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+    solver<span style="color:#f92672">.</span>add(((digits[i] <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>) <span style="color:#f92672">+</span> (digits[(i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>] <span style="color:#f92672">*</span> <span style="color:#ae81ff">10</span>) <span style="color:#f92672">+</span> digits[(i<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">%</span><span style="color:#ae81ff">10</span>]) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>)
+
+solution <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&#39;</span>
+<span style="color:#66d9ef">if</span> solver<span style="color:#f92672">.</span>check() <span style="color:#f92672">==</span> z3<span style="color:#f92672">.</span>sat:
+    model <span style="color:#f92672">=</span> solver<span style="color:#f92672">.</span>model()
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">10</span>):
+        solution <span style="color:#f92672">+=</span> model[digits[i]]<span style="color:#f92672">.</span>as_string()
+<span style="color:#66d9ef">print</span> base_repr(int(solution),<span style="color:#ae81ff">36</span>)
+</code></pre></div><p>Note that z3 takes a little less than 1 minute (at least on this old arse laptop).</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The challenge was very funny. I would not recommend doing VR if you only slept 8 hours during the whole weekend drinking Sabotage though&hellip;</p></content>
+  </entry>
+  <entry>
+    <title>NorthSec 2018 - Mars Analytica (Reverse) - Write-up</title><author>
+      <name>5Cl_lD</name>
+      <uri>https://twitter.com/5cl_ld</uri>
+    </author>
+    <id>https://re-dojo.github.io/write-ups/2018-10-28-nsec-2018-mars-analytica/</id>
+    <updated>2018-10-28T17:37:00Z</updated>
+    <published>2018-10-28T17:37:00Z</published>
+    <content type="html"><p>In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured.
+One of the reverse engineering challenges was a program called <strong>MarsAnalytica</strong>. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.</p>
+<p>This blogpost will discuss how i solved it.</p>
+<h2 id="probing-the-martian-executable">Probing the martian executable</h2>
+<p>Description:<br>
+&ldquo;The government has hired a specialized data brokerage, collection, and analysis firm known as Mars Analytica to assess the societal worth and risk of its citizens in preparations for the colonization of Mars. Publicly officials are denying this, but you got your hands on their analysis software. Find a way to log in with a cleared citizen id and expose the Mars Analytica firm&rsquo;s true purpose&rdquo;.</p>
+<p>Before attempting to reverse a binary, it is always good to take a look at the low-hanging fruits: the file format, the size, the strings&hellip;
+At first sight the binary didn&rsquo;t seem to be too big.
+Running the file utility against it indicated that it was compressed with UPX. The command output also indicated that it is a stripped ELF x86-64 binary.
+After having unpacked the ELF binary, the size grew to almost <strong>11M</strong> :O
+No useful strings are present in the binary.</p>
+<p><img src="/images/mars/MarsAnalytica_output.png" alt="Image" title="Running the executable"></p>
+<h2 id="alien-elf-is-a-thing">Alien elf is a thing</h2>
+<p>After having opened the binary in IDA and let the autoanalysis complete (which took some time), the navigation bar didn&rsquo;t look reassuring.</p>
+<p><img src="/images/mars/navigation_bar.png" alt="Image" title="Navigation bar"></p>
+<p>Looking at the main function revealed a lot of <em>weird</em> stuff are going on:</p>
+<ul>
+<li>a very large stack frame is created (0xBA4A8)</li>
+<li>the classic call combination time/srand is present but the rand function is not even imported</li>
+<li>5 different large arrays of bytes are copied to the stack</li>
+<li>some weird calculations based on the arrays copied is happening</li>
+<li>the function ends with a push/ret</li>
+</ul>
+<p>Just out of curiosity, I took a look at the disassembly following the main function. One could see that the same weird computation is present in the following (undefined) functions. Moreover, most of these functions either ends with a <code>push/ret</code> or a <code>jmp rax</code>.
+This code construct reminded me of a virtual machine where each handler computes the address of the next handler (like a distributed dispatch or <em>direct-threaded code</em>).
+This can be further verified by dynamic analysis using a debugger such as GDB but beforehand, once again: low-hanging fruits.
+A little bit of <code>strace</code> could give an overview of how the binary behaves.</p>
+<p><img src="/images/mars/strace_output.png" alt="Image" title="Strace output"></p>
+<p>I guessed that all the &ldquo;write(1,char,1)&rdquo; lines were in fact calls to the <code>putchar</code> function. A good thing to do also is looking at the cross-references. There are 861 calls to the <code>putchar</code> function which meant that there are probably some redundant handlers.</p>
+<p>Another interesting function to look at was the <code>malloc</code> function. The first cross-reference took me to a function which seemed to be a list insertion algorithm.</p>
+<p><img src="/images/mars/push_val.png" alt="Image" title="List insertion"></p>
+<p>Interestingly enough, there are 1178 cross-references to this function.
+A hunch told me to look at the <code>free</code> function. As expected the first cross-reference to the <code>free</code> function is a routine which implements a list removal algorithm. There are 1276 cross-references to that function.
+At first sight it looked like that virtual machine might be stack-based.</p>
+<p>Then I started debugging the binary with GDB but it didn&rsquo;t really helped me except to confirm that each handler was indeed in charge of computing the next handler address.</p>
+<p>At that moment I thought that I had enough information to start reversing.</p>
+<h2 id="getting-acquainted-with-the-alien">Getting acquainted with the alien</h2>
+<p>In order to implement a disassembler for the VM I had to focus on the weird computation first to be able to compute the next handler.
+The main function is the right entrypoint to gather information about the VM initialization. As mentioned earlier the 5 arrays are essential to the handler computation. After renaming some variables, following the computation dynamically, diffing with other handlers, it was possible to understand and reimplement the routine.</p>
+<pre><code>	mov	[rbp+var_65F40], 0
+	mov	rax, [rbp+var_65F40]
+	mov	edx, eax
+	lea	rax, [rbp+tab2]
+	mov	[rbp+ptr_cpy_e50140], rax
+	lea	rax, [rbp+tab1]
+	mov	[rbp+ptr_cpy_e4dc00], rax
+	mov	[rbp+var_908B0], edx
+	mov	rax, [rbp+ptr_cpy_e4dc00]
+	mov	[rbp+var_5DB68], rax
+	mov	eax, [rbp+var_908B0]
+	mov	[rbp+var_908AC], eax
+	mov	eax, [rbp+var_908AC]
+	imul	ecx, eax, 7AAh
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB68]
+	add	rax, rdx
+	mov	eax, [rax]
+	mov	rdx, [rbp+ptr_cpy_e50140]
+	mov	[rbp+var_5DB60], rdx
+	mov	[rbp+var_908A8], eax
+	mov	eax, [rbp+var_908A8]
+	imul	ecx, eax, 5A5h
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB60]
+	add	rax, rdx
+	mov	eax, [rax]
+	lea	rdx, [rbp+tab4]
+	mov	[rbp+var_5DB98], rdx
+	lea	rdx, [rbp+tab3]
+	mov	[rbp+var_5DB90], rdx
+	mov	[rbp+var_908BC], eax
+	mov	rax, [rbp+var_5DB90]
+	mov	[rbp+var_5DB88], rax
+	mov	eax, [rbp+var_908BC]
+	mov	[rbp+var_908B8], eax
+	mov	eax, [rbp+var_908B8]
+	imul	ecx, eax, 259h
+	mov	edx, 2F3BAFEDh
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 0AD7h
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB88]
+	add	rax, rdx
+	mov	eax, [rax]
+	mov	rdx, [rbp+var_5DB98]
+	mov	[rbp+var_5DB80], rdx
+	mov	[rbp+var_908B4], eax
+	mov	eax, [rbp+var_908B4]
+	imul	ecx, eax, 1D5h
+	mov	edx, 2F3BAFEDh
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 0AD7h
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB80]
+	add	rax, rdx
+	mov	esi, [rax]
+	mov	rax, [rbp+var_65F40]
+	lea	rdx, [rax+1]
+	mov	[rbp+var_65F40], rdx
+	mov	edx, eax
+	lea	rax, [rbp+tab2]
+	mov	[rbp+var_5DBB8], rax
+	lea	rax, [rbp+tab1]
+	mov	[rbp+var_5DBB0], rax
+	mov	dword ptr [rbp+var_908CC+4], edx
+	mov	rax, [rbp+var_5DBB0]
+	mov	[rbp+var_5DBA8], rax
+	mov	eax, dword ptr [rbp+var_908CC+4]
+	mov	[rbp+var_908C4], eax
+	mov	eax, [rbp+var_908C4]
+	imul	ecx, eax, 7AAh
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DBA8]
+	add	rax, rdx
+	mov	eax, [rax]
+	mov	rdx, [rbp+var_5DBB8]
+	mov	[rbp+var_5DBA0], rdx
+	mov	[rbp+var_908C0], eax
+	mov	eax, [rbp+var_908C0]
+	imul	ecx, eax, 5A5h
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DBA0]
+	add	rax, rdx
+	mov	eax, [rax]
+	cdqe
+	mov	rax, [rbp+rax*8+tab5]
+	mov	[rbp+var_5DBC0], rax
+	mov	dword ptr [rbp+var_908CC], esi
+	mov	eax, dword ptr [rbp+var_908CC]
+	movsxd	rdx, eax
+	mov	rax, [rbp+var_5DBC0]
+	add	rax, rdx
+	push	rax
+	jmp	short locret_401149 ; 0x402335
+locret_401149:
+	retn
+</code></pre><p>The stack variable <code>rbp-0x65f40</code> seemed to be the &ldquo;program counter&rdquo; because it is incremented everytime. Also its value is used as an index in the first array. The value fetched is then used as an index in the second array&hellip;<br>
+The following pseudocode might explain it better (using IDApython).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># get the arrays used by the dispatcher</span>
+tab1<span style="color:#f92672">=</span>[Dword(<span style="color:#ae81ff">0xE4DC00</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x253C</span>,<span style="color:#ae81ff">4</span>)]
+tab2<span style="color:#f92672">=</span>[Dword(<span style="color:#ae81ff">0xE50140</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x253C</span>,<span style="color:#ae81ff">4</span>)]
+tab3<span style="color:#f92672">=</span>[Dword(<span style="color:#ae81ff">0xE52680</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x2B5C</span>,<span style="color:#ae81ff">4</span>)]
+tab4<span style="color:#f92672">=</span>[Dword(<span style="color:#ae81ff">0xE551E0</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x2B5C</span>,<span style="color:#ae81ff">4</span>)]
+tab5<span style="color:#f92672">=</span>[Qword(<span style="color:#ae81ff">0xE57D40</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x56B8</span>,<span style="color:#ae81ff">8</span>)]
+
+<span style="color:#75715e"># dispatcher function</span>
+<span style="color:#75715e"># num is the value of VM.PC</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dispatcher</span>(num):
+    <span style="color:#66d9ef">global</span> tab1,tab2,tab3,tab4,tab5
+    eax <span style="color:#f92672">=</span> tab4[tab3[tab2[tab1[(num<span style="color:#f92672">*</span><span style="color:#ae81ff">1962</span>)<span style="color:#f92672">%</span>len(tab1)]<span style="color:#f92672">*</span><span style="color:#ae81ff">1445</span><span style="color:#f92672">%</span>len(tab2)]<span style="color:#f92672">*</span><span style="color:#ae81ff">601</span><span style="color:#f92672">%</span>len(tab3)]<span style="color:#f92672">*</span><span style="color:#ae81ff">469</span><span style="color:#f92672">%</span>len(tab4)]
+    edx <span style="color:#f92672">=</span> tab5[tab2[tab1[(num<span style="color:#f92672">*</span><span style="color:#ae81ff">1962</span>)<span style="color:#f92672">%</span>len(tab1)]<span style="color:#f92672">*</span><span style="color:#ae81ff">1445</span><span style="color:#f92672">%</span>len(tab2)]]
+    <span style="color:#66d9ef">return</span> eax<span style="color:#f92672">+</span>edx
+</code></pre></div><p>Looking at the first handler @ <strong>0x402335</strong>, it starts to compute a number in the same fashion as the dispatcher code. The number is then passed to the function which implements list insertion. Finally the next handler is computed. As seen in the list insertion code, a pointer to the head is passed and is updated after insertion. I infered that the variable <code>rbp-0x65f48</code> was the &ldquo;VM stack pointer&rdquo;. The start of the function fetches an immediate which is pushed. The handler @ <strong>0x402335</strong> is of the form &ldquo;PUSH Immediate&rdquo;.</p>
+<p>The next handler to look at was @ <strong>0x401b8f</strong>. It starts by popping (list removal function) one value off of the virtual stack, gets an immediate value and stores the popped value in a virtual stack variable indexed by the immediate value. For instance, at the beginning we have:<br>
+PUSH 0<br>
+PUSH 9<br>
+STORE SP[0]</p>
+<p>If we split and keep track of the states we have:<br>
+PUSH 0 =&gt; SP[0] = 0<br>
+PUSH 9 =&gt; SP[0] = 0, SP[1] = 9<br>
+STORE SP[0] =&gt; SP[0] = 9</p>
+<p>I concluded that this handler was of the following form:<br>
+STORE SP[Immediate Index]</p>
+<p>Since the machine implements a stack machine it is really important to understand how values and pushed and popped. The astute reader would have probably noticed that it is also possible to access stack variables by index.</p>
+<p><img src="/images/mars/list_store_at_index.png" alt="Image" title="Store in stack variable by index"></p>
+<p>After reversing some more handlers I eventually got stucked because there were too many handlers (remember the 10M size?&hellip; ) and I saw some redundant handlers not to mention that a lot of them were very obfuscated.</p>
+<h2 id="theres-also-water-on-mars">There&rsquo;s also water on Mars</h2>
+<p>At that moment I really thought about completely changing my way of solving the challenge because I would have needed to reverse too many handlers to implement a disassembler based on handlers start address.<br>
+Though reverse engineering really consists in finding/recognizing pattens, experiencing, repetition&hellip; so I went looking for patterns.
+At some point I started to see a correlation between the calls a handler makes and the behaviour of the handler.<br>
+For instance, I knew that if a handler calls the functions <code>pop_val</code>, <code>putchar</code> and <code>fflush</code> then the handler just implements a <code>putchar</code>.</p>
+<p>In order to take advantage of that, one need to gather the handler&rsquo;s &ldquo;cross-references from&rdquo; and compare that list. The following code describes the process:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">f_putchar<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;pop_val&#34;</span>,<span style="color:#e6db74">&#34;putchar&#34;</span>,<span style="color:#e6db74">&#34;fflush&#34;</span>]
+calls<span style="color:#f92672">=</span>[x <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> idautils<span style="color:#f92672">.</span>FuncItems(handler) <span style="color:#66d9ef">if</span> idaapi<span style="color:#f92672">.</span>is_call_insn(x)]
+targets<span style="color:#f92672">=</span>list(map(<span style="color:#66d9ef">lambda</span> x: GetOpnd(x,<span style="color:#ae81ff">0</span>),calls))
+<span style="color:#66d9ef">if</span> all(t <span style="color:#f92672">in</span> targets <span style="color:#66d9ef">for</span> t <span style="color:#f92672">in</span> f_putchar):
+    sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;putchar</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</code></pre></div><p>The next thing I noticed was the most important information.<br>
+Some handlers are very complicated to understand due to their obfuscation but as the VM is stack-based, the code needs to access the stack variables and it does so by calling the <code>pop_val</code> function for example. The following images show the overview of a XOR handler and then its relevant code.</p>
+<p><img src="/images/mars/xor_handler_view.png" alt="Image" title="XOR handler overview"></p>
+<p><img src="/images/mars/xor_handler.png" alt="Image" title="XOR handler relevant code"></p>
+<p>As one can see, that part is not obfuscated and it is pretty clear:</p>
+<ul>
+<li>two values are &ldquo;popped&rdquo; from the stack</li>
+<li>a XOR operation is made between the two values</li>
+<li>the result is pushed on the stack</li>
+</ul>
+<p>This is clearly a weakness in the binary obfuscation and I decided to take advantage of it.
+To that end, one need to:</p>
+<ul>
+<li>make sure that a handler calls 3 functions (&ldquo;pop_val&rdquo; twice and &ldquo;push_val&rdquo;)</li>
+<li>retrieve the operation right after the second &ldquo;pop_val&rdquo;</li>
+</ul>
+<p>The following code searches for the pattern:<br>
+0 call pop_val<br>
+&hellip;<br>
+17 call pop_val<br>
+22 operation</p>
+<p>or the following pattern (for the div instruction)<br>
+0 call pop_val<br>
+&hellip;<br>
+17 call pop_val<br>
+&hellip;<br>
+30 cdq<br>
+31 idiv</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">operations<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;xor&#34;</span>:<span style="color:#e6db74">&#34;xor&#34;</span>,<span style="color:#e6db74">&#34;sub&#34;</span>:<span style="color:#e6db74">&#34;sub&#34;</span>,<span style="color:#e6db74">&#34;imul&#34;</span>:<span style="color:#e6db74">&#34;mul&#34;</span>,<span style="color:#e6db74">&#34;lea&#34;</span>:<span style="color:#e6db74">&#34;add&#34;</span>}
+<span style="color:#f92672">...</span>
+<span style="color:#66d9ef">elif</span> len(targets) <span style="color:#f92672">==</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">and</span> targets<span style="color:#f92672">.</span>count(<span style="color:#e6db74">&#34;pop_val&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>:
+            operation<span style="color:#f92672">=</span>None
+            <span style="color:#66d9ef">for</span> caller <span style="color:#f92672">in</span> calls:
+                <span style="color:#66d9ef">if</span> GetOpnd(caller,<span style="color:#ae81ff">0</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;pop_val&#34;</span> <span style="color:#f92672">and</span> caller<span style="color:#f92672">+</span><span style="color:#ae81ff">17</span> <span style="color:#f92672">in</span> calls:
+                    mnem <span style="color:#f92672">=</span> GetMnem(caller<span style="color:#f92672">+</span><span style="color:#ae81ff">22</span>)
+                    <span style="color:#66d9ef">if</span> mnem <span style="color:#f92672">in</span> operations<span style="color:#f92672">.</span>keys():
+                        operation<span style="color:#f92672">=</span>operations[mnem]
+                    <span style="color:#66d9ef">elif</span> GetMnem(caller<span style="color:#f92672">+</span><span style="color:#ae81ff">30</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;cdq&#34;</span> <span style="color:#f92672">and</span> GetMnem(caller<span style="color:#f92672">+</span><span style="color:#ae81ff">31</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;idiv&#34;</span>:
+                        operation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;div&#34;</span>
+            sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(operation <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>) <span style="color:#66d9ef">if</span> operation <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None <span style="color:#66d9ef">else</span> unknown_handler(PC,targets)
+</code></pre></div><p>Once again here I made a big assumption regarding the patterns I saw and I didn&rsquo;t take into account false positives I could have had so I strongly advise against that technique.<br>
+Generally speaking, it is always better to come up with a more generic and a less pattern-based solution for reuse purposes but also to make the solution more resilient to broken patterns.</p>
+<p>Another big assumption I made was using a linear sweep for the disassembly.</p>
+<h2 id="mars-attack">Mars Attack</h2>
+<p>After putting the different techniques together and having crossed my fingers for the code not to break, I obtained the following assembly listing:</p>
+<pre><code>...
+0x6f2:	0x401f62:	load[0x00000009]
+0x6f3:	0x401f62:	load[0x0000001b]
+0x6f4:	0xbde28a:	mul
+0x6f5:	0x401f62:	load[0x00000017]
+0x6f6:	0x401f62:	load[0x00000012]
+0x6f7:	0x402ab2:	swap
+0x6f8:	0xbdf48d:	sub
+0x6f9:	0x401f62:	load[0x0000001d]
+0x6fa:	0x402ab2:	swap
+0x6fb:	0xbe059f:	xor
+0x6fc:	0xbe1957:	mul
+0x6fd:	0x402335:	push 0x00003fcf
+0x6fe:	0xbe2b48:	cmp
+...
+</code></pre><p>The code displays the banner character after character and then asks for a &ldquo;citizen id&rdquo;.
+The characters are put in the virtual stack but they are not next to each other. Instead the characters are kind of rearranged by the following list:<br>
+7,8,13,15,16,26,27,22,21,4,18,28,23,29,9,1,25,30,17<br>
+It means that the first character will be put in the 7th virtual stack variable, the 2nd character at the 8th position and so on.</p>
+<p>After that some computations between characters are made and the result is compared to hardcoded values. The verification algorithm is based on several equations.<br>
+For instance the first equation is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">(buf[<span style="color:#ae81ff">14</span>] <span style="color:#f92672">*</span> buf[<span style="color:#ae81ff">6</span>])<span style="color:#f92672">*</span>((buf[<span style="color:#ae81ff">12</span>]<span style="color:#f92672">-</span>buf[<span style="color:#ae81ff">10</span>])<span style="color:#f92672">^</span>buf[<span style="color:#ae81ff">13</span>]) <span style="color:#f92672">-</span> <span style="color:#ae81ff">0x3fcf</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>
+</code></pre></div><p>After having gathered all the different equations I used z3 to solve them. The code is pretty straightforward. First one need to declare all the characters, add a constraint to make sure the character is printable and then add the equations.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> z3 <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+solver <span style="color:#f92672">=</span> Solver()
+
+<span style="color:#75715e"># Flag order</span>
+order<span style="color:#f92672">=</span>[<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">13</span>,<span style="color:#ae81ff">15</span>,<span style="color:#ae81ff">16</span>,<span style="color:#ae81ff">26</span>,<span style="color:#ae81ff">27</span>,<span style="color:#ae81ff">22</span>,<span style="color:#ae81ff">21</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">18</span>,<span style="color:#ae81ff">28</span>,<span style="color:#ae81ff">23</span>,<span style="color:#ae81ff">29</span>,<span style="color:#ae81ff">9</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">25</span>,<span style="color:#ae81ff">30</span>,<span style="color:#ae81ff">17</span>]
+flag<span style="color:#f92672">=</span>{}
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> order:
+	flag[i] <span style="color:#f92672">=</span> BitVec(<span style="color:#e6db74">&#34;c_</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> i,<span style="color:#ae81ff">8</span>)
+
+<span style="color:#75715e">#char constraints</span>
+<span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> flag<span style="color:#f92672">.</span>keys():
+	solver<span style="color:#f92672">.</span>add(flag[k] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">32</span>, flag[k] <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">126</span>)
+	
+<span style="color:#75715e">#equations</span>
+solver<span style="color:#f92672">.</span>add((flag[<span style="color:#ae81ff">9</span>] <span style="color:#f92672">*</span> flag[<span style="color:#ae81ff">27</span>])<span style="color:#f92672">*</span>((flag[<span style="color:#ae81ff">23</span>]<span style="color:#f92672">-</span>flag[<span style="color:#ae81ff">18</span>])<span style="color:#f92672">^</span>flag[<span style="color:#ae81ff">29</span>]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0x3fcf</span>)
+<span style="color:#f92672">...</span>
+solution<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>
+<span style="color:#66d9ef">if</span> solver<span style="color:#f92672">.</span>check() <span style="color:#f92672">==</span> z3<span style="color:#f92672">.</span>sat:
+    model<span style="color:#f92672">=</span>solver<span style="color:#f92672">.</span>model()
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> order:
+        solution<span style="color:#f92672">+=</span>chr(model[flag[i]]<span style="color:#f92672">.</span>as_signed_long())
+<span style="color:#66d9ef">print</span> solution
+</code></pre></div><p>The scripts yields the following result:<br>
+<strong>q4Eo-eyMq-1dd0-leKx</strong></p>
+<p>The different scripts can be found <a href="https://github.com/0xSQUD/mars_analytica">here</a>.</p>
+<h2 id="it-got-stucked-in-the-sand-">It got stucked in the sand&hellip; :(</h2>
+<p>I first tried to use <code>Pin</code> which thanks to the instruction counter helped me to get the correct number of characters the challenge expects. I then wanted to use <code>Triton</code> but I had some memory problems with Pin also it was quite slow (not to mention that I was doing this in a VM).</p>
+<p>Also some handlers push a letter which is computed through obfuscated code. I took the decision to ignore that even if it makes the assembly kind of incomplete&hellip;</p>
+<h2 id="leaving-the-bloody-planet-to-come-back-stronger">Leaving the bloody planet to come back stronger</h2>
+<p>This binary was quite challenging as it features several obfuscation techniques such as code virtualization, dead code, bogus control flow, opaque predicates, direct-threaded code&hellip;
+I want to thank <a href="https://twitter.com/0xtowel?lang=en">Towel</a> for this incredible challenge and a shoutout to <a href="https://twitter.com/w4kfu?lang=en">Wakfu</a> for the few pointers he gave without spoiling all the fun.</p>
+<p>The solution is far from being the best but I think as it is a CTF challenge this IDA api-based solution is acceptable as I took advantage of the VM characterics.
+Different approaches could be taken here such as:</p>
+<ul>
+<li>using symbolic execution and the knowledge of the VM structure to resolve each handler</li>
+<li>using DSE</li>
+<li>using taint analysis</li>
+</ul>
+<p>Actually I plan to come back with a more elegant solution so stay tuned :)</p></content>
+  </entry>
+  <entry>
+    <title>ECW 2017 - Red Diamond (Reverse) - Write-up</title><author>
+      <name>Hugo Porcher (icecr4ck)</name>
+      <uri>https://twitter.com/icecr4ck</uri>
+    </author>
+    <id>https://re-dojo.github.io/write-ups/2018-09-28-ecw-2017-red-diamond/</id>
+    <updated>2018-09-28T17:37:00Z</updated>
+    <published>2018-09-28T17:37:00Z</published>
+    <content type="html"><p>Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le <a href="https://challenge-ecw.fr/">challenge ECW</a>. Tout comme l&rsquo;année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense.</p>
+<p>L&rsquo;épreuve qualificative de cette année reprenait les catégories classiques de CTF: Web, Forensics, Crypto et Reverse.</p>
+<p>Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de celui qui m&rsquo;a paru le plus intéressant mais également le plus compliqué à résoudre.</p>
+<h2 id="présentation-du-challenge">Présentation du challenge</h2>
+<p>Le binaire qui nous est donné pour ce challenge est un PE x86-64, sans plus tarder on l&rsquo;ouvre dans son désassembleur préféré pour voir un peu à quoi on a affaire.</p>
+<p>On constate rapidement un nombre élevé de fonctions (un binaire de 6 Mo tout de même), cependant l&rsquo;utilisation d&rsquo;IDA permet de récupérer la quasi totalité des noms de fonctions et variables, ce qui simplifie grandement le travail.</p>
+<p><img src="/images/ecw/functions.PNG" alt="Exemple de fonctions"></p>
+<p>Comme la plupart des fonctions commencent par <strong>mrb</strong>, on fait un peu de Google pour voir à quoi ça fait référence et on trouve rapidement qu&rsquo;il s&rsquo;agit de MRuby, une implémentation plus légère du langage Ruby pouvant être embarqué dans un binaire écrit en C (voir <a href="https://github.com/mruby/mruby">MRuby</a> pour plus d&rsquo;infos).</p>
+<p>Au point d&rsquo;entrée de notre exécutable, on peut voir que plusieurs fonctions relatives à <a href="https://www.cygwin.com/">Cygwin</a> sont appelées, signifiant que le binaire a été compilé avec ce dernier et qu&rsquo;il sera nécessaire d&rsquo;installer Cygwin si on veut pouvoir exécuter/débugger l&rsquo;exécutable.</p>
+<h2 id="bytecode-mruby">Bytecode MRuby</h2>
+<p>Ceci étant dit, on peut maintenant s&rsquo;intéresser davantage au code du programme, et particulièrement la fonction <strong>f</strong> qui est la première fonction intéressante à être appelée.</p>
+<p><img src="/images/ecw/bytecode.PNG" alt="Début de la fonction f"></p>
+<p>On peut voir sur la capture ci-dessus qu&rsquo;un segment de données commençant par <strong>RITE0004</strong> est copié en mémoire (dans la variable bin). Un peu de Google montre qu&rsquo;il s&rsquo;agit des premiers bytes d&rsquo;un bytecode MRuby. Il est en effet possible de compiler un script Ruby (valable également en Python par exemple) pour qu&rsquo;il puisse être exécuté plus rapidement. Cependant cela nécessite un programme tiers capable d&rsquo;exécuter ces opcodes spécifiques, autrement dit une VM MRuby.</p>
+<p>Afin de regarder plus précisément à quoi correspond ce bytecode MRuby, je l&rsquo;ai extrait en utilisant ce bout de code IDAPython.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> idaapi
+<span style="color:#f92672">import</span> struct
+
+sea <span style="color:#f92672">=</span> ScreenEA()
+mrb <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;reddiamond.mrb&#34;</span>,<span style="color:#e6db74">&#39;wb&#39;</span>)
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0x6be</span>):
+    mrb<span style="color:#f92672">.</span>write(struct<span style="color:#f92672">.</span>pack(<span style="color:#e6db74">&#39;B&#39;</span>,Byte(sea<span style="color:#f92672">+</span>i)))
+mrb<span style="color:#f92672">.</span>close()
+</code></pre></div><p>En ouvrant le fichier <em>reddiamond.mrb</em> avec un éditeur hexadécimal, on observe des strings qui nous intéressent pas mal comme &ldquo;Let me check if you deserve a flag &hellip;&rdquo; ou encore &ldquo;flag is:&quot;.</p>
+<p>Le challenge est donc de reverser ce petit bout de bytecode pour comprendre comment le flag est généré. Pour cela, il y a 2 écoles:</p>
+<ul>
+<li>analyse statique: on utilise l&rsquo;interpréteur MRuby (disponible <a href="https://github.com/mruby/mruby">ici</a>) pour obtenir une traduction des opcodes et reverser statiquement à partir de là</li>
+<li>analyse dynamique: on essaye de comprendre comment fonctionne la VM pour débugger le bytecode et breaker aux endroits opportuns</li>
+</ul>
+<p>Pour ma part, j&rsquo;ai fini par utiliser les 2 méthodes après avoir passé un bout de temps à reverser statiquement chaque opcode, je pense malgré tout qu&rsquo;il était possible de tout faire statiquement pour quelqu&rsquo;un de familier avec les opcodes MRuby.</p>
+<h2 id="analyse-statique">Analyse statique</h2>
+<p>Après avoir téléchargé l&rsquo;interpréteur MRuby (voir plus haut pour le lien), on peut l&rsquo;utiliser de la manière suivante pour récupérer tous les opcodes traduits.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ mruby --verbose -b reddiamond.mrb
+irep 0x7fba3c702fd0 nregs<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span> nlocals<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> pools<span style="color:#f92672">=</span><span style="color:#ae81ff">11</span> syms<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span> reps<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>
+      <span style="color:#ae81ff">000</span> OP_LOADSELF	R3
+      <span style="color:#ae81ff">001</span> OP_STRING	R4	L<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>	; <span style="color:#e6db74">&#34;CRACKME!&#34;</span>
+      <span style="color:#ae81ff">002</span> OP_SEND	R3	:puts	<span style="color:#ae81ff">1</span>
+      <span style="color:#ae81ff">003</span> OP_LOADSELF	R3
+      <span style="color:#ae81ff">004</span> OP_LOADSELF	R4
+      <span style="color:#ae81ff">005</span> OP_LOADL	R5	L<span style="color:#f92672">(</span>1<span style="color:#f92672">)</span>	; <span style="color:#ae81ff">400000</span>
+      <span style="color:#ae81ff">006</span> OP_SEND	R4	:rand	<span style="color:#ae81ff">1</span>
+      <span style="color:#ae81ff">007</span> OP_SEND	R3	:usleep	<span style="color:#ae81ff">1</span>
+      <span style="color:#ae81ff">008</span> OP_LOADSELF	R3
+      <span style="color:#ae81ff">009</span> OP_STRING	R4	L<span style="color:#f92672">(</span>2<span style="color:#f92672">)</span>	; <span style="color:#e6db74">&#34;Let me check if you deserve a flag ...&#34;</span>
+      <span style="color:#ae81ff">010</span> OP_SEND	R3	:puts	<span style="color:#ae81ff">1</span>
+<span style="color:#f92672">[</span>...<span style="color:#f92672">]</span>
+</code></pre></div><p>Chaque ligne commençant par <strong>irep</strong> représente une fonction et les lignes numérotées en dessous représentent le code de la fonction (chaque ligne = 1 opcode). On dénote ainsi 6 fonctions distinctes.</p>
+<pre><code>irep 0x7fba3c702fd0 nregs=7 nlocals=3 pools=11 syms=12 reps=2
+[...]
+irep 0x7fba3c7034b0 nregs=25 nlocals=5 pools=10 syms=19 reps=1
+[...]
+irep 0x7fba3c703a80 nregs=8 nlocals=3 pools=0 syms=6 reps=0
+[...]
+irep 0x7fba3c703b70 nregs=3 nlocals=1 pools=0 syms=2 reps=2
+[...]
+irep 0x7fba3c703c30 nregs=5 nlocals=2 pools=0 syms=1 reps=0
+[...]
+irep 0x7fba3c703ce0 nregs=5 nlocals=2 pools=0 syms=1 reps=0
+[...]
+</code></pre><p>Outre nous indiquer la présence d&rsquo;une fonction, cet en-tête donne également le nombre de registres (25 au max) utilisés dans la fonction ainsi que le nombre de variables locales et de symboles.</p>
+<p>Comme l&rsquo;entrypoint n&rsquo;est pas précisé dans un MRB, on sait que la première fonction (0x7fba3c702fd0) représente notre main, ce qui paraît logique en voyant les strings affichées.</p>
+<p>Sachant cela, on peut commencer à analyser chaque opcode pour voir un peu ce qui se passe dans cette fonction, pour cela 2 liens du repo Github de MRuby m&rsquo;ont beaucoup servi (voir <a href="https://github.com/mruby/mruby/blob/master/include/mruby/opcode.h">ici</a> et <a href="https://github.com/mruby/mruby/blob/master/src/vm.c">ici</a>)</p>
+<p>Les premiers opcodes du main vont afficher quelques strings qui ne nous intéressent pas trop et vont également exécuter plusieurs fois la fonction usleep (probablement pour éviter un bruteforce du flag).</p>
+<pre><code>000 OP_LOADSELF	R3
+001 OP_STRING	R4	L(0)	; &quot;CRACKME!&quot;
+002 OP_SEND	R3	:puts	1
+[...]
+007 OP_SEND	R3	:usleep	1
+008 OP_LOADSELF	R3
+009 OP_STRING	R4	L(2)	; &quot;Let me check if you deserve a flag ...&quot;
+010 OP_SEND	R3	:puts	1
+[...]
+017 OP_SEND	R3	:usleep	1
+[...]
+</code></pre><p>Ce qui nous intéresse davantage se situe à l&rsquo;opcode 27 où la fonction <em>found?</em> est appelée. Selon le résultat de cette fonction, 2 comportements sont possibles (OP_JMPNOT):</p>
+<ul>
+<li>soit le programme jump à l&rsquo;opcode 46, affiche la string &ldquo;NO :(&rdquo; et quitte le programme</li>
+<li>soit le programme continue à l&rsquo;opcode 29, afficher la string &ldquo;YES :)&rdquo; avec notre flag et quitte le programme</li>
+</ul>
+<pre><code>[...]
+027 OP_SEND	R3	:found?	0
+028 OP_JMPNOT	R3	046 
+// Good boy
+029 OP_LOADSELF	R3
+030 OP_STRING	R4	L(5)	; &quot;YES :)&quot;
+031 OP_SEND	R3	:puts	1
+032 OP_GETCONST	R3	:MD5
+033 OP_STRING	R4	L(6)	; &quot;\342\235\250\342\225\257\302\260\342\226\241\302\260\342\235\251\342\225\257\357\270\265\342\224\273\342\224\201\342\224\273&quot;
+034 OP_GETGLOBAL	R5	:$salt
+035 OP_ADD	R4	:+	1
+036 OP_SEND	R3	:md5_hex	1
+037 OP_MOVE	R1	R3		; R1:flag
+038 OP_LOADSELF	R3
+039 OP_STRING	R4	L(7)	; &quot;\tflag is: '&quot;
+040 OP_MOVE	R5	R1		; R1:flag
+041 OP_STRCAT	R4	R5
+042 OP_STRING	R5	L(8)	; &quot;'&quot;
+043 OP_STRCAT	R4	R5
+044 OP_SEND	R3	:puts	1
+045 OP_JMP	049
+// Bad boy
+046 OP_LOADSELF	R3
+047 OP_STRING	R4	L(9)	; &quot;NO :(&quot;
+048 OP_SEND	R3	:puts	1
+049 OP_JMP	069
+[...]
+</code></pre><p>Au premier abord, on pourrait se dire que la longue string est peut-être notre flag, cependant une rapide lecture des opcodes montre que cette string est en fait hashée (MD5) avec la variable globale <strong>salt</strong> pour donner le flag.</p>
+<pre><code>flag = md5($salt+&quot;\xE2\x9D\xA8\xE2\x95\xAF\xC2\xB0\xE2\x96\xA1\xC2\xB0\xE2\x9D\xA9\xE2\x95\xAF\xEF\xB8\xB5\xE2\x94\xBB\xE2\x94\x81\xE2\x94\xBB&quot;)
+</code></pre><p>Il faut donc aller regarder un peu du côté de la fonction <em>found?</em> pour voir où est-ce que cette variable globale est initialisée, c&rsquo;est aussi là que l&rsquo;analyse statique devient plus complexe&hellip;</p>
+<p>Le début de la fonction est assez compliqué pour pas grand chose au final, tout ce que fait ce petit bout de code est de générer un tableau comprenant les valeurs &ldquo;utf-0&rdquo; &ldquo;utf-1&rdquo;&hellip; jusqu&rsquo;à &ldquo;utf-30&rdquo; pour récupérer uniquement &ldquo;utf-8&rdquo; et &ldquo;utf-16&rdquo;.</p>
+<pre><code>[...]
+// Génération du tableau dans R2
+001 OP_STRING	R5	L(0)	; &quot;utf-0&quot;
+002 OP_STRING	R6	L(1)	; &quot;utf-9&quot;
+003 OP_RANGE	R5	R5	0
+004 OP_SEND	R5	:to_a	0
+005 OP_STRING	R6	L(2)	; &quot;utf-10&quot;
+006 OP_STRING	R7	L(3)	; &quot;utf-30&quot;
+007 OP_RANGE	R6	R6	0
+008 OP_SEND	R6	:to_a	0
+009 OP_ADD	R5	:+	1
+010 OP_MOVE	R2	R5		; R2:&quot;\302\265&quot;
+011 OP_LOADSELF	R5
+012 OP_GETCONST	R6	:Iconv
+013 OP_MOVE	R7	R2		; R2:&quot;\302\265&quot;
+// Stockage de &quot;utf-8&quot; dans R7
+014 OP_LOADI	R8	8
+015 OP_SEND	R7	:[]	1
+016 OP_MOVE	R8	R2		; R2:&quot;\302\265&quot;
+// Stockage de &quot;utf-16&quot; dans R8
+017 OP_LOADI	R9	16
+018 OP_SEND	R8	:[]	1
+[...]
+</code></pre><p>La suite du code montre que le programme extrait ces 2 strings pour convertir la string &ldquo;ARGV[2]&rdquo; de UTF-16 en UTF-8, en utilisant la fonction suivante.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#66d9ef">Iconv</span><span style="color:#f92672">.</span>conv(to, from, str)
+</code></pre></div><pre><code>[...]
+// Stocke la string &quot;ARGV[2]&quot; en UTF-16 dans les registres R11 à R24 
+021 OP_LOADI	R11	0
+022 OP_LOADI	R12	65
+023 OP_LOADI	R13	0
+024 OP_LOADI	R14	82
+[...]
+035 OP_ARRAY	R9	R9	16
+036 OP_STRING	R10	L(4)	; &quot;C*&quot;
+037 OP_SEND	R9	:pack	1
+// Appel de la fonction conv de la classe Iconv (voir opcode 12)
+038 OP_SEND	R6	:conv	3
+[...]
+</code></pre><p>La suite du programme consiste à récupérer la valeur contenue dans ARGV[2] qui <strong>ne correspond pas au premier mais bel et bien au second argument donné au programme</strong> (le premier argument n&rsquo;est donc pas utilisé par le programme).</p>
+<p>Le programme doit donc être exécuté de la manière suivante pour obtenir le flag.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</code></pre></div><p>Une fois que le programme a récupéré notre input, il va prendre uniquement les 8 premiers caractères de celui-ci et les stocker dans un tableau, puis vérifier chacun d&rsquo;entre eux de manière différente.</p>
+<pre><code>[...]
+051 OP_LOADI	R6	0
+052 OP_LOADI	R7	7
+// Range de 0 à 7 par pas de 1
+053 OP_RANGE	R6	R6	0
+// R5 contient notre input, le range est donc appliqué sur celui-ci pour ne récupérer que les 8 premiers caractères dans un tableau
+054 OP_SEND	R5	:[]	1
+// Le tableau contenant les 8 premiers caractères est stocké dans R3
+055 OP_MOVE	R3	R5
+[...]
+</code></pre><h3 id="premier-caractère-du-tableau">Premier caractère du tableau</h3>
+<pre><code>[...]
+058 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+059 OP_SEND	R5	:first	0
+060 OP_STRING	R6	L(5)	; &quot;W&quot;
+061 OP_EQ		R5	:==	1
+062 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+063 OP_JMPNOT	R5	068
+[...]
+</code></pre><p>Le premier caractère est très facile à comprendre, le programme va simplement utiliser la fonction <em>first</em> pour récupérer le premier caractère du tableau et le comparer à &ldquo;W&rdquo;, le retour de l&rsquo;égalité est placé dans R4 (qui correspond à la valeur de retour de la fonction) puis il jump à l&rsquo;opcode 68 si l&rsquo;égalité n&rsquo;est pas vérifiée. Ce dernier correspond au OP_JMPNOT du caractère suivant qu&rsquo;il va suivre également, et ainsi de suite jusqu&rsquo;à la fin de la fonction pour finalement retourner la valeur 0.</p>
+<h3 id="second-dernier-caractère-du-tableau">Second (dernier) caractère du tableau</h3>
+<pre><code>[...]
+064 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+065 OP_SEND	R5	:last	0
+066 OP_STRING	R6	L(6)	; &quot;a&quot;
+067 OP_EQ		R5	:==	1
+068 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+069 OP_JMPNOT	R5	077
+[...]
+</code></pre><p>Le second caractère est en réalité le dernier puisque le programme utilise la fonction <em>last</em>, celui-ci est comparé à &ldquo;a&rdquo;, puis la même routine est appliquée selon le résultat de l&rsquo;égalité.</p>
+<h3 id="troisième-caractère-du-tableau">Troisième caractère du tableau</h3>
+<pre><code>[...]
+070 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+071 OP_LOADI	R6	1
+072 OP_ADDI	R6	:+	1
+073 OP_SEND	R5	:[]	1
+074 OP_MOVE	R6	R3		; R3:&quot;\302\244&quot;
+075 OP_SEND	R6	:first	0
+076 OP_EQ		R5	:==	1
+077 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+078 OP_JMPNOT	R5	085
+[...]
+</code></pre><p>Celui-ci commence déjà à devenir plus compliqué, en convertissant les opcodes en quelque chose de plus compréhensible ça donne la séquence suivante:</p>
+<ul>
+<li>R6 = 1</li>
+<li>R6 += 1</li>
+<li>R5 = input[R6]</li>
+<li>R6 = first(input)</li>
+<li>R5 == R6 ?</li>
+</ul>
+<p>Cela revient finalement à comparer le troisième caractère de notre clé avec &ldquo;W&rdquo;.</p>
+<h3 id="quatrième-le-second-en-fait-caractère-du-tableau">Quatrième (le second en fait&hellip;) caractère du tableau</h3>
+<pre><code>[...]
+079 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+080 OP_LOADI	R6	1
+081 OP_SEND	R5	:[]	1
+082 OP_LOADI	R6	0
+083 OP_SEND	R6	:to_s	0
+084 OP_EQ		R5	:==	1
+085 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+086 OP_JMPNOT	R5	095
+[...]
+</code></pre><p>Les instructions ci-dessus peuvent facilement se traduire de la manière suivante:</p>
+<ul>
+<li>R6 = 1</li>
+<li>R5 = input[R6]</li>
+<li>R6 = to_s(0)</li>
+<li>R5 == R6 ?</li>
+</ul>
+<p>Un peu de google montre que la fonction to_s convertit simplement un integer en string, donc le deuxième caractère est &ldquo;0&rdquo;.</p>
+<h3 id="cinquième-eh-ben-non-le-quatrième-caractère-du-tableau">Cinquième (eh ben non le quatrième) caractère du tableau</h3>
+<pre><code>[...]
+087 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+088 OP_LOADI	R6	3
+089 OP_SEND	R5	:[]	1
+090 OP_SEND	R5	:to_i	0
+091 OP_SUBI	R5	:-	1
+092 OP_LOADI	R6	2
+093 OP_ADDI	R6	:+	2
+094 OP_EQ		R5	:==	1
+095 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+096 OP_JMPNOT	R5	103
+[...]
+</code></pre><p>Encore une fois on peut représenter le code de la manière suivante:</p>
+<ul>
+<li>R6 = 3</li>
+<li>R5 = input[R6]</li>
+<li>R5 = to_i(R5)</li>
+<li>R5 -= 1</li>
+<li>R6 = 2</li>
+<li>R6 += 2</li>
+<li>R5 == R6 ?</li>
+</ul>
+<p>À l&rsquo;inverse de la fonction to_s, la fonction to_i convertit une string en integer, le programme va donc chercher le quatrième caractère de notre input, le convertir en integer et lui soustraire 1 pour finalement le comparer à 4. Le quatrième caractère est donc &ldquo;5&rdquo;.</p>
+<h3 id="cinquième-cette-fois-cest-bon-caractère-du-tableau">Cinquième (cette fois c&rsquo;est bon) caractère du tableau</h3>
+<pre><code>[...]
+097 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+098 OP_STRING	R6	L(7)	; &quot;4&quot;
+099 OP_SEND	R6	:to_i	0
+100 OP_SEND	R5	:[]	1
+101 OP_STRING	R6	L(8)	; &quot;9&quot;
+102 OP_EQ		R5	:==	1
+103 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+104 OP_JMPNOT	R5	113
+[...]
+</code></pre><p>Toujours le même raisonnement, le cinquième caractère est donc &ldquo;9&rdquo;, voici une traduction sous forme de pseudo-code.</p>
+<pre><code>input[to_i(&quot;4&quot;)] == &quot;9&quot; ?
+</code></pre><h3 id="sixième-caractère-du-tableau">Sixième caractère du tableau</h3>
+<pre><code>[...]
+105 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+106 OP_LOADI	R6	5
+107 OP_LOADI	R7	-1
+108 OP_RANGE	R6	R6	0
+109 OP_SEND	R5	:[]	1
+110 OP_SEND	R5	:first	0
+111 OP_STRING	R6	L(9)	; &quot;(&quot;
+112 OP_EQ		R5	:==	1
+113 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+114 OP_JMPNOT	R5	122
+[...]
+</code></pre><p>Celui-ci se veut un peu plus tricky à comprendre, l&rsquo;idée derrière consiste à générer un range allant de 5 à 0 par pas de -1 (instructions 106 à 108), et d&rsquo;appliquer ce range à notre input pour obtenir un tableau inversé des 6 premiers caractères de notre clé.</p>
+<p>Une fois ce tableau obtenu, le premier élément de ce dernier (correspondant au 6e caractère de l&rsquo;input) est comparé au caractère &ldquo;(&quot;.</p>
+<h3 id="le-septième-et-dernier-ou-pas-caractère-du-tableau">Le septième et dernier (ou pas) caractère du tableau</h3>
+<pre><code>[...]
+115 OP_MOVE	R5	R3		; R3:&quot;\302\244&quot;
+116 OP_LOADSYM	R6	:[]
+117 OP_LOADI	R7	-2
+118 OP_SEND	R5	:send	2
+119 OP_SEND	R5	:to_f	0
+120 OP_LOADI	R6	8
+121 OP_EQ		R5	:==	1
+122 OP_MOVE	R4	R5 
+[...]
+</code></pre><p>Après avoir fait un peu de google pour comprendre que la fonction to_f convertit un integer/string en float et qu&rsquo;un tableau peut être indexé en sens inverse avec des indices négatifs, ce caractère ne présente aucune difficulté.</p>
+<pre><code>to_f(input[-2]) == 8 ?
+</code></pre><p>Le septième caractère est donc &ldquo;8&rdquo;, ce qui fait que nous avons pu récupérer les 8 premiers caractères de la clé,  c&rsquo;est à dire <strong>W0W59(8a</strong>.</p>
+<p>Cependant, la fonction ne s&rsquo;arrête pas là et c&rsquo;est ici que les problèmes commencent.</p>
+<h3 id="limites-de-lanalyse-statique">Limites de l&rsquo;analyse statique</h3>
+<p>L&rsquo;analyse des opcodes en statique commence à montrer ces limites lorsqu&rsquo;il faut comprendre la séquence d&rsquo;instructions suivantes.</p>
+<pre><code>[...]
+123 OP_LOADI	R5	8
+124 OP_LAMBDA	R6	I(+1)	block
+125 OP_SENDB	R5	:times	0
+126 OP_MOVE	R5	R4
+127 OP_JMPNOT	R5	132
+[...]
+</code></pre><p>On peut voir que la fonction <em>times</em> est appelée pour répéter un bloc de code 8 fois, le problème est que ne nous savons pas de quel bloc il s&rsquo;agit.</p>
+<pre><code>[...]
+132 OP_MOVE	R4	R5		; R4:&quot;\302\247&quot;
+133 OP_SETGLOBAL	:$salt	R3		; R3:&quot;\302\244&quot;
+134 OP_RETURN	R4	normal		; R4:&quot;\302\247&quot;
+</code></pre><p>Si ce bloc de code retourne 0, le programme jump à l&rsquo;instruction 132 qui stocke notre input dans la variable globale <strong>salt</strong> et termine la fonction en retournant 0.</p>
+<pre><code>[...]
+128 OP_MOVE	R5	R2		; R2:&quot;\302\265&quot;
+129 OP_SEND	R5	:size	0
+130 OP_LOADI	R6	16
+131 OP_EQ	R5	:==	1
+[...]
+</code></pre><p>Il faut donc que ce bloc retourne <em>Vrai</em> pour obtenir le flag, si c&rsquo;est le cas, la taille de notre input est comparée à 16 avant de poursuivre.</p>
+<p>Comme nous avons les 8 premiers caractères et que le bloc de code (qui nous est inconnu) est exécuté 8 fois, on peut supposer que cette routine doit vérifier un caractère à la fois à partir du 9e.</p>
+<p>Il nous faut juste savoir ce qui est exécuté et c&rsquo;est là que l&rsquo;analyse dynamique entre en jeu !</p>
+<h2 id="lanalyse-dynamique">L&rsquo;analyse dynamique</h2>
+<p>L&rsquo;analyse dynamique implique d&rsquo;exécuter le programme, il faut donc installer <em>cygwin</em> au préalable pour pouvoir lancer le challenge.</p>
+<p>Personnellement, j&rsquo;ai choisi d&rsquo;utiliser <em>gdb</em> pour debugger le binaire puisqu&rsquo;il est intégré dans <em>cygwin</em>.</p>
+<p>Comme précisé précedemment le binaire doit être exécuté de la manière suivante si on veut avoir une quelconque chance d&rsquo;obtenir le flag.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+<span style="color:#75715e"># ou dans gdb</span>
+$ gdb ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe
+<span style="color:#f92672">(</span>gdb<span style="color:#f92672">)</span> r &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</code></pre></div><p>Sachant cela, revenons dans IDA pour comprendre comment on va pouvoir breaker sur une instruction particulière de notre bytecode.</p>
+<p>Lorsqu&rsquo;on analyse un binaire protégé par une VM, une des premières choses à comprendre est de voir comment celle-ci va aller chercher une instruction en mémoire (le dispatcher), puis comment celle-ci va être décodée (pour récupérer l&rsquo;opcode et les opérandes) et enfin comment le bon handler (le code natif correspondant à l&rsquo;opcode, il y en a un pour chaque opcode) va être appelé. Une fois qu&rsquo;on est en possession de ces informations, on sait dans quelle variable le pointeur d&rsquo;instruction est stocké (ce qui nous permet de breaker sur n&rsquo;importe quelle instruction) et on sait où sont nos opérandes.</p>
+<p>En résumé une VM est une grosse boucle qui va effectuer les actions suivantes:</p>
+<ul>
+<li>prendre une instruction en mémoire (là où le bytecode a été mappé)</li>
+<li>décoder l&rsquo;instruction pour récupéré l&rsquo;opcode et les opérandes</li>
+<li>exécuter l&rsquo;handler correspondant à l&rsquo;opcode</li>
+<li>recommencer en prenant l&rsquo;instruction suivante</li>
+</ul>
+<p>Dans notre cas, il faut jeter un coup d&rsquo;oeil à la fonction <em>mrb_vm_exec</em> qui comporte notamment les différents handlers des opcodes. Comme IDA récupère tous les symboles, on peut voir qu&rsquo;au début de la fonction, la variable <em>pc</em> est initialisée avec le registre r9.</p>
+<p><img src="/images/ecw/init_pc.png" alt="Initialisation du program counter"></p>
+<p>Cette variable correspond au <em>Program Counter</em> qui est notre pointeur d&rsquo;instruction. Autrement dit, on peut se servir du contenu du registre r9 pour breaker au moment où le bytecode MRuby commence à être exécuté.</p>
+<p>Comme c&rsquo;est la variable pc qui contient notre pointeur d&rsquo;instruction, on peut regarder à quel moment elle est mise à jour pour passer à l&rsquo;instruction suivante. Il s&rsquo;agit d&rsquo;un point particulièrement important car il existe plusieurs manières de gérer ce point là:</p>
+<ul>
+<li>soit il existe un dispatcher qui gère la mise à jour du pointeur d&rsquo;instruction et dans ce cas chaque handler va jumper vers ce dispatcher une fois fini pour qu&rsquo;il puisse récupérer et décoder l&rsquo;instruction suivante</li>
+<li>soit chaque handler gère la mise à jour du pointeur d&rsquo;instruction et le décodage de l&rsquo;instruction et dans ce cas on passe directement de handler à handler</li>
+</ul>
+<p>Pour distinguer les 2, il suffit simplement de regarder les cross-références de la variable <em>pc</em> dans IDA. Dans notre cas, on constate rapidement qu&rsquo;elle est mise à jour dans chaque handler et qu&rsquo;on se trouve donc dans le second cas. Comme les instructions sont alignées sur 32-bits en MRuby, le pointeur d&rsquo;instruction est incrémenté de 4 à chaque instruction.</p>
+<p>Sachant cela, on peut désormais breaker à l&rsquo;instruction que l&rsquo;on souhaite en mettant un premier breakpoint conditionnel (voir <a href="https://sourceware.org/gdb/onlinedocs/gdb/Conditions.html">ici</a> pour la doc) pour breaker au début du bytecode, à partir de là on peut récupérer l&rsquo;adresse mémoire à laquelle on retrouve notre pointeur d&rsquo;instruction, puis mettre un watchpoint conditionnel (voir <a href="https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html">ici</a>) sur ce dernier pour breaker à l&rsquo;instruction que l&rsquo;on souhaite.</p>
+<p>Il y a toutefois un bémol à cette technique, il y a plusieurs instructions qui sont strictement identiques (que ce soit l&rsquo;opcode ou les opérandes). Dans ce cas, le seul moyen de savoir où l&rsquo;on se situe dans le flot d&rsquo;instructions est de regarder les instructions précédentes et suivantes pour se repérer. Sinon, une bonne solution est d&rsquo;avancer dans le code petit à petit pour être sur de s&rsquo;y retrouver.</p>
+<p>Un exemple pour illustrer tout ça. Mettons que je veuille breaker à la 3e instruction du main.</p>
+<p>La première étape va consister à breaker sur le début du programme en utilisant les commandes suivantes (l&rsquo;adresse 0x1004350EC correspond à l&rsquo;instruction initialisant le pointeur d&rsquo;instruction dans la fonction vm_mrb_exec et 0x01800006 correspond à la première instruction).</p>
+<pre><code>(gdb) b *0x1004350EC
+(gdb) condition 1 *$r9 == 0x01800006
+(gdb) r &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</code></pre><p>On peut alors récupérer l&rsquo;adresse mémoire où se trouve la variable <em>pc</em> (0xffffc298 dans mon cas) pour créer notre watchpoint conditionnel. Le pointeur d&rsquo;instruction est initialisé à 0x60009d170, donc notre 3e instruction à laquelle on veut breaker est à 0x60009d178.</p>
+<pre><code>(gdb) watch *0xffffc298
+(gdb) condition 2 *0xffffc298 == 0x9d178
+(gdb) c
+</code></pre><p>Et on se retrouve ainsi au moment où le pointeur d&rsquo;instruction est mis à jour à la fin du handler de la seconde instruction :-)</p>
+<p>Si on revient maintenant au blocage sur l&rsquo;analyse statique, il nous suffit d&rsquo;utiliser cette technique pour breaker sur l&rsquo;instruction 125 de la fonction <em>found?</em>. Puis de breaker sur l&rsquo;instruction suivante (en incrémentant de 4 la condition de notre watchpoint) pour voir quel handler est appelé.</p>
+<pre><code>[...]
+125 OP_SENDB    R5      :times  0
+[...]
+</code></pre><p>Finalement, on se rend compte que le bloc qui est appelé est en réalité la 3e fonction du bytecode (voir ci-dessous).</p>
+<pre><code>irep 0x7fd0a4d06620 nregs=8 nlocals=3 pools=0 syms=6 reps=0
+      000 OP_ENTER	1:0:0:0:0:0:0
+      001 OP_GETUPVAR	R3	4	0
+      002 OP_JMPNOT	R3	015
+      003 OP_GETUPVAR	R3	2	0
+      004 OP_MOVE	R4	R1		; R1:n
+      005 OP_SEND	R3	:[]	1
+      006 OP_GETUPVAR	R4	2	0
+      007 OP_MOVE	R5	R1		; R1:n
+      008 OP_SEND	R5	:-@	0
+      009 OP_SUBI	R5	:-	1
+      010 OP_SEND	R4	:[]	1
+      011 OP_MOVE	R5	R1		; R1:n
+      012 OP_ADDI	R5	:+	1
+      013 OP_SEND	R4	:^	1
+      014 OP_EQ		R3	:==	1
+      015 OP_SETUPVAR	R3	4	0
+      016 OP_RETURN	R3	normal
+</code></pre><p>Cette fonction va donc être appelée 8 fois d&rsquo;affilée (fonction <em>times</em> vu précédemment) pour tester les 8 caractères restants de notre clé.</p>
+<h2 id="retour-à-lanalyse-statique">Retour à l&rsquo;analyse statique</h2>
+<p>Maintenant qu&rsquo;on sait quelle fonction est appelée, il ne reste plus qu&rsquo;à l&rsquo;analyser pour voir ce qu&rsquo;elle fait.</p>
+<p>L&rsquo;opcode OP_GETUPVAR va aller chercher la valeur du registre de la fonction appelante selon l&rsquo;opérande qui est utilisé.</p>
+<p>Par exemple pour l&rsquo;instruction 1 de notre bloc, c&rsquo;est la valeur de R4 de la fonction <em>found?</em> qui va être stockée dans R3.</p>
+<pre><code>[...]
+001 OP_GETUPVAR   R3      4       0
+002 OP_JMPNOT     R3      015
+[...]
+</code></pre><p>Pour rappel, cette valeur correspond au résultat de l&rsquo;égalité du 8e caractère (le 7e en fait si vous vous souvenez bien) de notre input. Comme cette instruction est suivie du opcode OP_JMPNOT, si l&rsquo;égalité est fausse, le programme jump directement à l&rsquo;instruction 15 du bloc qui stocke la valeur de R3 dans le registre R4 de la fonction <em>found?</em> et termine l&rsquo;exécution de la fonction.</p>
+<p>Si notre caractère est bon, la fonction continue à l&rsquo;instruction 3.</p>
+<pre><code>[...]
+003 OP_GETUPVAR   R3      2       0
+004 OP_MOVE       R4      R1              ; R1:n
+005 OP_SEND       R3      :[]     1
+[...]
+</code></pre><p>Cette fois-ci OP_GETUPVAR permet de récupérer le R2 de <em>found?</em> qui correspond à notre input en entier (pas juste les 8 premiers caractères) défini à l&rsquo;instruction 49 de la fonction <em>found?</em>. Grâce aux symboles on peut voir que R1 représente <em>n</em>, c&rsquo;est-à-dire l&rsquo;itération de la fonction times, il va donc varier de 0 à 7 par pas de 1 à chaque exécution de la fonction. Comme il s&rsquo;agit de la première exécution, R1 est vide donc le premier caractère de notre input est stocké dans R3 (c&rsquo;est-à dire le caractère &ldquo;W&rdquo;).</p>
+<pre><code>[...]
+006 OP_GETUPVAR   R4      2       0
+007 OP_MOVE       R5      R1              ; R1:n
+008 OP_SEND       R5      :-@     0
+009 OP_SUBI       R5      :-      1
+010 OP_SEND       R4      :[]     1
+[...]
+</code></pre><p>Ensuite, notre clé est à nouveau récupérée pour être stockée dans R4 en utilisant à nouveau l&rsquo;opcode OP_GETUPVAR, puis R1 (qui vaut toujours 0) est stocké dans R5 et l&rsquo;instruction 8 converti la valeur de R5 en valeur négative (1 en -1 par exemple). Cependant, comme R5 vaut 0, il reste à 0. Finalement, on soustrait 1 à R5 (ce qui donne -1) pour récupérer le dernier caractère de notre input (le 16e donc) et le stocker dans R4.</p>
+<pre><code>[...]
+011 OP_MOVE       R5      R1              ; R1:n
+012 OP_ADDI       R5      :+      1
+013 OP_SEND       R4      :^      1
+014 OP_EQ         R3      :==     1
+[...]
+</code></pre><p>Finalement, l&rsquo;itérateur (R1) est à nouveau copié dans R5, auquel on ajoute 1, puis on XOR le tout avec R4 qui correspond au dernier caractère de notre clé. Cela a simplement pour effet d&rsquo;ajouter 1 à l&rsquo;ordinal de ce dernier. Le résultat est ensuite comparé à R3 correspondant au premier caractère de la clé. On peut ainsi rapidement en déduire que le dernier caractère de la clé est &ldquo;V&rdquo;.</p>
+<p>Comme R1 est incrémenté à chaque exécution de la fonction, on comprend que les caractères de la seconde partie de la clé sont vérifiés à partir de la première partie. Pour résumer tout ça, voici une implémentation du check des 8 derniers caractères en pseudo-code.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">is_equal <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#75715e"># on part du principe que le 8e caractère est bon</span>
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">8</span>):
+	<span style="color:#66d9ef">if</span> is_equal:
+		a <span style="color:#f92672">=</span> input[<span style="color:#f92672">-</span>i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">^</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">+</span>i)
+		<span style="color:#66d9ef">if</span> input[i] <span style="color:#f92672">!=</span> a:
+			is_equal <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+<span style="color:#66d9ef">return</span> is_equal
+</code></pre></div><p>Le déroulement de cette boucle nous permet enfin de récupérer la clé en entier, soit: <strong>W0W59(8ai?.&lt;1T2V</strong></p>
+<p>Il ne reste plus qu&rsquo;à valider pour voir si on arrive à obtenir le flag, en prenant le soin de escape les caractères spéciaux pour Bash avec des backslashes.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ /cygdrive/c/Users/john/Desktop/86288dbbdadbe4d7e04dc1a4c4603f5b.exe give_me_the_flag W0W59<span style="color:#ae81ff">\(</span>8ai?.<span style="color:#ae81ff">\&lt;</span>1T2V
+CRACKME!
+Let me check <span style="color:#66d9ef">if</span> you deserve a flag ...
+YES :<span style="color:#f92672">)</span>
+        flag is: <span style="color:#e6db74">&#39;983b428e721bcfceabf6c77d9e819d8d&#39;</span>
+</code></pre></div><p>Et miracle, ça marche !! :-)</p>
+<h2 id="conclusion-et-remerciements">Conclusion et remerciements</h2>
+<p>C&rsquo;est tout pour ce write-up (bien joué à tous ceux qui on eu le courage de tout lire), selon moi c&rsquo;était sans doute un des challenges les plus durs de ce CTF mais aussi l&rsquo;un des plus enrichissant !</p>
+<p>Je remercie les auteurs du chall qui ont dû se casser la tête pour le créer, mais également tous ceux qui ont organisé le CTF d&rsquo;une manière générale, j&rsquo;espère que c&rsquo;est un event qui pourra perdurer.</p>
+<p>Merci à scud pour l&rsquo;aide sur la compréhension de la VM MRuby, je n&rsquo;aurais sans doute pas réussi à finir sans ça.</p></content>
+  </entry>
+</feed>

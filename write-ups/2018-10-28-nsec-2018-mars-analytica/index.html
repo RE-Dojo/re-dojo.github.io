@@ -9,48 +9,49 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/brand/favicon.png">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/">
-  <link rel="canonical" href="https://re-dojo.github.io/categories/">
+  <link rel="canonical" href="https://re-dojo.github.io/write-ups/2018-10-28-nsec-2018-mars-analytica/">
   
 <link rel="preload" as="style" href="/bundle.css?v=1589750201" media="all">
 <link rel="stylesheet" href="/bundle.css?v=1589750201" media="all">
 
+<link rel="preload" as="image" href="/images/mars/nsec_ctf.png">
 
 
-<title>Categories : RE-Dojo</title>
+<title>NorthSec 2018 - Mars Analytica (Reverse) - Write-up : RE-Dojo</title>
 
-<meta property="og:title" content="Categories">
+<meta property="og:title" content="NorthSec 2018 - Mars Analytica (Reverse) - Write-up">
 <meta property="og:site_name" content="RE-Dojo">
-<meta property="og:url" content="https://re-dojo.github.io/categories/">
-<link rel="image_src" href="https://re-dojo.github.io/">
-<meta property="og:image" content="https://re-dojo.github.io/">
+<meta property="og:url" content="https://re-dojo.github.io/write-ups/2018-10-28-nsec-2018-mars-analytica/">
+<link rel="image_src" href="https://re-dojo.github.io/images/mars/nsec_ctf.png">
+<meta property="og:image" content="https://re-dojo.github.io/images/mars/nsec_ctf.png">
 <meta property="og:image:width" content="">
 <meta property="og:image:height" content="">
-<meta property="og:type" content="website">
+<meta property="og:type" content="article">
 <meta property="og:locale" content="en">
-<meta property="og:description" content="">
-<meta name="description" content="">
-<meta property="og:updated_time" content="0001-01-01T00:00:00Z">
+<meta property="og:description" content="In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured. One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.">
+<meta name="description" content="In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured. One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.">
+<meta property="og:updated_time" content="2018-10-28T17:37:00Z">
 <meta property="fb:app_id" content="">
-<meta name="author" content="">
-<meta property="article:author" content="https://re-dojo.github.io/">
-<meta property="article:published_time" content="0001-01-01T00:00:00Z">
-<meta property="article:modified_time" content="0001-01-01T00:00:00Z">
+<meta name="author" content="5Cl_lD">
+<meta property="article:author" content="https://twitter.com/5cl_ld">
+<meta property="article:published_time" content="2018-10-28T17:37:00Z">
+<meta property="article:modified_time" content="2018-10-28T17:37:00Z">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Categories",
-  "alternativeHeadline": "",
-  "url": "https://re-dojo.github.io/categories/",
-  "image": "https://re-dojo.github.io/",
+  "headline": "NorthSec 2018 - Mars Analytica (Reverse) - Write-up",
+  "alternativeHeadline": "Mars Analytica was one of the remained unsolved challenge at the end of NorthSec 2018 CTF. Here is one solution using static analysis and Z3 to find the flag.",
+  "url": "https://re-dojo.github.io/write-ups/2018-10-28-nsec-2018-mars-analytica/",
+  "image": "https://re-dojo.github.io/images/mars/nsec_ctf.png",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://re-dojo.github.io/categories/"
+    "@id": "https://re-dojo.github.io/write-ups/2018-10-28-nsec-2018-mars-analytica/"
   },
-  "description": "",
+  "description": "In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured. One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.",
   "author": {
     "@type": "Person",
-    "name":  null 
+    "name": "5Cl_lD"
   },
   "publisher": {
     "@type": "Organization",
@@ -60,9 +61,9 @@
       "url": "https://re-dojo.github.io/"
     }
   },
-  "datePublished": "0001-01-01T00:00:00Z",
-  "dateModified": "0001-01-01T00:00:00Z",
-  "articleBody": ""
+  "datePublished": "2018-10-28T17:37:00Z",
+  "dateModified": "2018-10-28T17:37:00Z",
+  "articleBody": "\u003cp\u003eIn May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured.\nOne of the reverse engineering challenges was a program called \u003cstrong\u003eMarsAnalytica\u003c/strong\u003e. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.\u003c/p\u003e\n\u003cp\u003eThis blogpost will discuss how i solved it.\u003c/p\u003e\n\u003ch2 id=\"probing-the-martian-executable\"\u003eProbing the martian executable\u003c/h2\u003e\n\u003cp\u003eDescription:\u003cbr\u003e\n\u0026ldquo;The government has hired a specialized data brokerage, collection, and analysis firm known as Mars Analytica to assess the societal worth and risk of its citizens in preparations for the colonization of Mars. Publicly officials are denying this, but you got your hands on their analysis software. Find a way to log in with a cleared citizen id and expose the Mars Analytica firm\u0026rsquo;s true purpose\u0026rdquo;.\u003c/p\u003e\n\u003cp\u003eBefore attempting to reverse a binary, it is always good to take a look at the low-hanging fruits: the file format, the size, the strings\u0026hellip;\nAt first sight the binary didn\u0026rsquo;t seem to be too big.\nRunning the file utility against it indicated that it was compressed with UPX. The command output also indicated that it is a stripped ELF x86-64 binary.\nAfter having unpacked the ELF binary, the size grew to almost \u003cstrong\u003e11M\u003c/strong\u003e :O\nNo useful strings are present in the binary.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/mars/MarsAnalytica_output.png\" alt=\"Image\" title=\"Running the executable\"\u003e\u003c/p\u003e\n\u003ch2 id=\"alien-elf-is-a-thing\"\u003eAlien elf is a thing\u003c/h2\u003e\n\u003cp\u003eAfter having opened the binary in IDA and let the autoanalysis complete (which took some time), the navigation bar didn\u0026rsquo;t look reassuring.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/mars/navigation_bar.png\" alt=\"Image\" title=\"Navigation bar\"\u003e\u003c/p\u003e\n\u003cp\u003eLooking at the main function revealed a lot of \u003cem\u003eweird\u003c/em\u003e stuff are going on:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ea very large stack frame is created (0xBA4A8)\u003c/li\u003e\n\u003cli\u003ethe classic call combination time/srand is present but the rand function is not even imported\u003c/li\u003e\n\u003cli\u003e5 different large arrays of bytes are copied to the stack\u003c/li\u003e\n\u003cli\u003esome weird calculations based on the arrays copied is happening\u003c/li\u003e\n\u003cli\u003ethe function ends with a push/ret\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eJust out of curiosity, I took a look at the disassembly following the main function. One could see that the same weird computation is present in the following (undefined) functions. Moreover, most of these functions either ends with a \u003ccode\u003epush/ret\u003c/code\u003e or a \u003ccode\u003ejmp rax\u003c/code\u003e.\nThis code construct reminded me of a virtual machine where each handler computes the address of the next handler (like a distributed dispatch or \u003cem\u003edirect-threaded code\u003c/em\u003e).\nThis can be further verified by dynamic analysis using a debugger such as GDB but beforehand, once again: low-hanging fruits.\nA little bit of \u003ccode\u003estrace\u003c/code\u003e could give an overview of how the binary behaves.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/mars/strace_output.png\" alt=\"Image\" title=\"Strace output\"\u003e\u003c/p\u003e\n\u003cp\u003eI guessed that all the \u0026ldquo;write(1,char,1)\u0026rdquo; lines were in fact calls to the \u003ccode\u003eputchar\u003c/code\u003e function. A good thing to do also is looking at the cross-references. There are 861 calls to the \u003ccode\u003eputchar\u003c/code\u003e function which meant that there are probably some redundant handlers.\u003c/p\u003e\n\u003cp\u003eAnother interesting function to look at was the \u003ccode\u003emalloc\u003c/code\u003e function. The first cross-reference took me to a function which seemed to be a list insertion algorithm.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/mars/push_val.png\" alt=\"Image\" title=\"List insertion\"\u003e\u003c/p\u003e\n\u003cp\u003eInterestingly enough, there are 1178 cross-references to this function.\nA hunch told me to look at the \u003ccode\u003efree\u003c/code\u003e function. As expected the first cross-reference to the \u003ccode\u003efree\u003c/code\u003e function is a routine which implements a list removal algorithm. There are 1276 cross-references to that function.\nAt first sight it looked like that virtual machine might be stack-based.\u003c/p\u003e\n\u003cp\u003eThen I started debugging the binary with GDB but it didn\u0026rsquo;t really helped me except to confirm that each handler was indeed in charge of computing the next handler address.\u003c/p\u003e\n\u003cp\u003eAt that moment I thought that I had enough information to start reversing.\u003c/p\u003e\n\u003ch2 id=\"getting-acquainted-with-the-alien\"\u003eGetting acquainted with the alien\u003c/h2\u003e\n\u003cp\u003eIn order to implement a disassembler for the VM I had to focus on the weird computation first to be able to compute the next handler.\nThe main function is the right entrypoint to gather information about the VM initialization. As mentioned earlier the 5 arrays are essential to the handler computation. After renaming some variables, following the computation dynamically, diffing with other handlers, it was possible to understand and reimplement the routine.\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e\tmov\t[rbp+var_65F40], 0\n\tmov\trax, [rbp+var_65F40]\n\tmov\tedx, eax\n\tlea\trax, [rbp+tab2]\n\tmov\t[rbp+ptr_cpy_e50140], rax\n\tlea\trax, [rbp+tab1]\n\tmov\t[rbp+ptr_cpy_e4dc00], rax\n\tmov\t[rbp+var_908B0], edx\n\tmov\trax, [rbp+ptr_cpy_e4dc00]\n\tmov\t[rbp+var_5DB68], rax\n\tmov\teax, [rbp+var_908B0]\n\tmov\t[rbp+var_908AC], eax\n\tmov\teax, [rbp+var_908AC]\n\timul\tecx, eax, 7AAh\n\tmov\tedx, 3700C083h\n\tmov\teax, ecx\n\timul\tedx\n\tsar\tedx, 9\n\tmov\teax, ecx\n\tsar\teax, 1Fh\n\tsub\tedx, eax\n\tmov\teax, edx\n\timul\teax, 94Fh\n\tsub\tecx, eax\n\tmov\teax, ecx\n\tcdqe\n\tlea\trdx, ds:0[rax*4]\n\tmov\trax, [rbp+var_5DB68]\n\tadd\trax, rdx\n\tmov\teax, [rax]\n\tmov\trdx, [rbp+ptr_cpy_e50140]\n\tmov\t[rbp+var_5DB60], rdx\n\tmov\t[rbp+var_908A8], eax\n\tmov\teax, [rbp+var_908A8]\n\timul\tecx, eax, 5A5h\n\tmov\tedx, 3700C083h\n\tmov\teax, ecx\n\timul\tedx\n\tsar\tedx, 9\n\tmov\teax, ecx\n\tsar\teax, 1Fh\n\tsub\tedx, eax\n\tmov\teax, edx\n\timul\teax, 94Fh\n\tsub\tecx, eax\n\tmov\teax, ecx\n\tcdqe\n\tlea\trdx, ds:0[rax*4]\n\tmov\trax, [rbp+var_5DB60]\n\tadd\trax, rdx\n\tmov\teax, [rax]\n\tlea\trdx, [rbp+tab4]\n\tmov\t[rbp+var_5DB98], rdx\n\tlea\trdx, [rbp+tab3]\n\tmov\t[rbp+var_5DB90], rdx\n\tmov\t[rbp+var_908BC], eax\n\tmov\trax, [rbp+var_5DB90]\n\tmov\t[rbp+var_5DB88], rax\n\tmov\teax, [rbp+var_908BC]\n\tmov\t[rbp+var_908B8], eax\n\tmov\teax, [rbp+var_908B8]\n\timul\tecx, eax, 259h\n\tmov\tedx, 2F3BAFEDh\n\tmov\teax, ecx\n\timul\tedx\n\tsar\tedx, 9\n\tmov\teax, ecx\n\tsar\teax, 1Fh\n\tsub\tedx, eax\n\tmov\teax, edx\n\timul\teax, 0AD7h\n\tsub\tecx, eax\n\tmov\teax, ecx\n\tcdqe\n\tlea\trdx, ds:0[rax*4]\n\tmov\trax, [rbp+var_5DB88]\n\tadd\trax, rdx\n\tmov\teax, [rax]\n\tmov\trdx, [rbp+var_5DB98]\n\tmov\t[rbp+var_5DB80], rdx\n\tmov\t[rbp+var_908B4], eax\n\tmov\teax, [rbp+var_908B4]\n\timul\tecx, eax, 1D5h\n\tmov\tedx, 2F3BAFEDh\n\tmov\teax, ecx\n\timul\tedx\n\tsar\tedx, 9\n\tmov\teax, ecx\n\tsar\teax, 1Fh\n\tsub\tedx, eax\n\tmov\teax, edx\n\timul\teax, 0AD7h\n\tsub\tecx, eax\n\tmov\teax, ecx\n\tcdqe\n\tlea\trdx, ds:0[rax*4]\n\tmov\trax, [rbp+var_5DB80]\n\tadd\trax, rdx\n\tmov\tesi, [rax]\n\tmov\trax, [rbp+var_65F40]\n\tlea\trdx, [rax+1]\n\tmov\t[rbp+var_65F40], rdx\n\tmov\tedx, eax\n\tlea\trax, [rbp+tab2]\n\tmov\t[rbp+var_5DBB8], rax\n\tlea\trax, [rbp+tab1]\n\tmov\t[rbp+var_5DBB0], rax\n\tmov\tdword ptr [rbp+var_908CC+4], edx\n\tmov\trax, [rbp+var_5DBB0]\n\tmov\t[rbp+var_5DBA8], rax\n\tmov\teax, dword ptr [rbp+var_908CC+4]\n\tmov\t[rbp+var_908C4], eax\n\tmov\teax, [rbp+var_908C4]\n\timul\tecx, eax, 7AAh\n\tmov\tedx, 3700C083h\n\tmov\teax, ecx\n\timul\tedx\n\tsar\tedx, 9\n\tmov\teax, ecx\n\tsar\teax, 1Fh\n\tsub\tedx, eax\n\tmov\teax, edx\n\timul\teax, 94Fh\n\tsub\tecx, eax\n\tmov\teax, ecx\n\tcdqe\n\tlea\trdx, ds:0[rax*4]\n\tmov\trax, [rbp+var_5DBA8]\n\tadd\trax, rdx\n\tmov\teax, [rax]\n\tmov\trdx, [rbp+var_5DBB8]\n\tmov\t[rbp+var_5DBA0], rdx\n\tmov\t[rbp+var_908C0], eax\n\tmov\teax, [rbp+var_908C0]\n\timul\tecx, eax, 5A5h\n\tmov\tedx, 3700C083h\n\tmov\teax, ecx\n\timul\tedx\n\tsar\tedx, 9\n\tmov\teax, ecx\n\tsar\teax, 1Fh\n\tsub\tedx, eax\n\tmov\teax, edx\n\timul\teax, 94Fh\n\tsub\tecx, eax\n\tmov\teax, ecx\n\tcdqe\n\tlea\trdx, ds:0[rax*4]\n\tmov\trax, [rbp+var_5DBA0]\n\tadd\trax, rdx\n\tmov\teax, [rax]\n\tcdqe\n\tmov\trax, [rbp+rax*8+tab5]\n\tmov\t[rbp+var_5DBC0], rax\n\tmov\tdword ptr [rbp+var_908CC], esi\n\tmov\teax, dword ptr [rbp+var_908CC]\n\tmovsxd\trdx, eax\n\tmov\trax, [rbp+var_5DBC0]\n\tadd\trax, rdx\n\tpush\trax\n\tjmp\tshort locret_401149 ; 0x402335\nlocret_401149:\n\tretn\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eThe stack variable \u003ccode\u003erbp-0x65f40\u003c/code\u003e seemed to be the \u0026ldquo;program counter\u0026rdquo; because it is incremented everytime. Also its value is used as an index in the first array. The value fetched is then used as an index in the second array\u0026hellip;\u003cbr\u003e\nThe following pseudocode might explain it better (using IDApython).\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-python\" data-lang=\"python\"\u003e\u003cspan style=\"color:#75715e\"\u003e# get the arrays used by the dispatcher\u003c/span\u003e\ntab1\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e[Dword(\u003cspan style=\"color:#ae81ff\"\u003e0xE4DC00\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003ei) \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e0x253C\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e4\u003c/span\u003e)]\ntab2\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e[Dword(\u003cspan style=\"color:#ae81ff\"\u003e0xE50140\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003ei) \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e0x253C\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e4\u003c/span\u003e)]\ntab3\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e[Dword(\u003cspan style=\"color:#ae81ff\"\u003e0xE52680\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003ei) \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e0x2B5C\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e4\u003c/span\u003e)]\ntab4\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e[Dword(\u003cspan style=\"color:#ae81ff\"\u003e0xE551E0\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003ei) \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e0x2B5C\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e4\u003c/span\u003e)]\ntab5\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e[Qword(\u003cspan style=\"color:#ae81ff\"\u003e0xE57D40\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003ei) \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e range(\u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e0x56B8\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e8\u003c/span\u003e)]\n\n\u003cspan style=\"color:#75715e\"\u003e# dispatcher function\u003c/span\u003e\n\u003cspan style=\"color:#75715e\"\u003e# num is the value of VM.PC\u003c/span\u003e\n\u003cspan style=\"color:#66d9ef\"\u003edef\u003c/span\u003e \u003cspan style=\"color:#a6e22e\"\u003edispatcher\u003c/span\u003e(num):\n    \u003cspan style=\"color:#66d9ef\"\u003eglobal\u003c/span\u003e tab1,tab2,tab3,tab4,tab5\n    eax \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e tab4[tab3[tab2[tab1[(num\u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e1962\u003c/span\u003e)\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003elen(tab1)]\u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e1445\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003elen(tab2)]\u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e601\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003elen(tab3)]\u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e469\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003elen(tab4)]\n    edx \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e tab5[tab2[tab1[(num\u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e1962\u003c/span\u003e)\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003elen(tab1)]\u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e1445\u003c/span\u003e\u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003elen(tab2)]]\n    \u003cspan style=\"color:#66d9ef\"\u003ereturn\u003c/span\u003e eax\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003eedx\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eLooking at the first handler @ \u003cstrong\u003e0x402335\u003c/strong\u003e, it starts to compute a number in the same fashion as the dispatcher code. The number is then passed to the function which implements list insertion. Finally the next handler is computed. As seen in the list insertion code, a pointer to the head is passed and is updated after insertion. I infered that the variable \u003ccode\u003erbp-0x65f48\u003c/code\u003e was the \u0026ldquo;VM stack pointer\u0026rdquo;. The start of the function fetches an immediate which is pushed. The handler @ \u003cstrong\u003e0x402335\u003c/strong\u003e is of the form \u0026ldquo;PUSH Immediate\u0026rdquo;.\u003c/p\u003e\n\u003cp\u003eThe next handler to look at was @ \u003cstrong\u003e0x401b8f\u003c/strong\u003e. It starts by popping (list removal function) one value off of the virtual stack, gets an immediate value and stores the popped value in a virtual stack variable indexed by the immediate value. For instance, at the beginning we have:\u003cbr\u003e\nPUSH 0\u003cbr\u003e\nPUSH 9\u003cbr\u003e\nSTORE SP[0]\u003c/p\u003e\n\u003cp\u003eIf we split and keep track of the states we have:\u003cbr\u003e\nPUSH 0 =\u0026gt; SP[0] = 0\u003cbr\u003e\nPUSH 9 =\u0026gt; SP[0] = 0, SP[1] = 9\u003cbr\u003e\nSTORE SP[0] =\u0026gt; SP[0] = 9\u003c/p\u003e\n\u003cp\u003eI concluded that this handler was of the following form:\u003cbr\u003e\nSTORE SP[Immediate Index]\u003c/p\u003e\n\u003cp\u003eSince the machine implements a stack machine it is really important to understand how values and pushed and popped. The astute reader would have probably noticed that it is also possible to access stack variables by index.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/mars/list_store_at_index.png\" alt=\"Image\" title=\"Store in stack variable by index\"\u003e\u003c/p\u003e\n\u003cp\u003eAfter reversing some more handlers I eventually got stucked because there were too many handlers (remember the 10M size?\u0026hellip; ) and I saw some redundant handlers not to mention that a lot of them were very obfuscated.\u003c/p\u003e\n\u003ch2 id=\"theres-also-water-on-mars\"\u003eThere\u0026rsquo;s also water on Mars\u003c/h2\u003e\n\u003cp\u003eAt that moment I really thought about completely changing my way of solving the challenge because I would have needed to reverse too many handlers to implement a disassembler based on handlers start address.\u003cbr\u003e\nThough reverse engineering really consists in finding/recognizing pattens, experiencing, repetition\u0026hellip; so I went looking for patterns.\nAt some point I started to see a correlation between the calls a handler makes and the behaviour of the handler.\u003cbr\u003e\nFor instance, I knew that if a handler calls the functions \u003ccode\u003epop_val\u003c/code\u003e, \u003ccode\u003eputchar\u003c/code\u003e and \u003ccode\u003efflush\u003c/code\u003e then the handler just implements a \u003ccode\u003eputchar\u003c/code\u003e.\u003c/p\u003e\n\u003cp\u003eIn order to take advantage of that, one need to gather the handler\u0026rsquo;s \u0026ldquo;cross-references from\u0026rdquo; and compare that list. The following code describes the process:\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-python\" data-lang=\"python\"\u003ef_putchar\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e[\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;pop_val\u0026#34;\u003c/span\u003e,\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;putchar\u0026#34;\u003c/span\u003e,\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;fflush\u0026#34;\u003c/span\u003e]\ncalls\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e[x \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e x \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e idautils\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eFuncItems(handler) \u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e idaapi\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eis_call_insn(x)]\ntargets\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003elist(map(\u003cspan style=\"color:#66d9ef\"\u003elambda\u003c/span\u003e x: GetOpnd(x,\u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e),calls))\n\u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e all(t \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e targets \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e t \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e f_putchar):\n    sys\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003estdout\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003ewrite(\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;putchar\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e\\n\u003c/span\u003e\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;\u003c/span\u003e)\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eThe next thing I noticed was the most important information.\u003cbr\u003e\nSome handlers are very complicated to understand due to their obfuscation but as the VM is stack-based, the code needs to access the stack variables and it does so by calling the \u003ccode\u003epop_val\u003c/code\u003e function for example. The following images show the overview of a XOR handler and then its relevant code.\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/mars/xor_handler_view.png\" alt=\"Image\" title=\"XOR handler overview\"\u003e\u003c/p\u003e\n\u003cp\u003e\u003cimg src=\"/images/mars/xor_handler.png\" alt=\"Image\" title=\"XOR handler relevant code\"\u003e\u003c/p\u003e\n\u003cp\u003eAs one can see, that part is not obfuscated and it is pretty clear:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003etwo values are \u0026ldquo;popped\u0026rdquo; from the stack\u003c/li\u003e\n\u003cli\u003ea XOR operation is made between the two values\u003c/li\u003e\n\u003cli\u003ethe result is pushed on the stack\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eThis is clearly a weakness in the binary obfuscation and I decided to take advantage of it.\nTo that end, one need to:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003emake sure that a handler calls 3 functions (\u0026ldquo;pop_val\u0026rdquo; twice and \u0026ldquo;push_val\u0026rdquo;)\u003c/li\u003e\n\u003cli\u003eretrieve the operation right after the second \u0026ldquo;pop_val\u0026rdquo;\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eThe following code searches for the pattern:\u003cbr\u003e\n0 call pop_val\u003cbr\u003e\n\u0026hellip;\u003cbr\u003e\n17 call pop_val\u003cbr\u003e\n22 operation\u003c/p\u003e\n\u003cp\u003eor the following pattern (for the div instruction)\u003cbr\u003e\n0 call pop_val\u003cbr\u003e\n\u0026hellip;\u003cbr\u003e\n17 call pop_val\u003cbr\u003e\n\u0026hellip;\u003cbr\u003e\n30 cdq\u003cbr\u003e\n31 idiv\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-python\" data-lang=\"python\"\u003eoperations\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e{\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;xor\u0026#34;\u003c/span\u003e:\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;xor\u0026#34;\u003c/span\u003e,\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;sub\u0026#34;\u003c/span\u003e:\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;sub\u0026#34;\u003c/span\u003e,\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;imul\u0026#34;\u003c/span\u003e:\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;mul\u0026#34;\u003c/span\u003e,\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;lea\u0026#34;\u003c/span\u003e:\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;add\u0026#34;\u003c/span\u003e}\n\u003cspan style=\"color:#f92672\"\u003e...\u003c/span\u003e\n\u003cspan style=\"color:#66d9ef\"\u003eelif\u003c/span\u003e len(targets) \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e3\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003eand\u003c/span\u003e targets\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003ecount(\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;pop_val\u0026#34;\u003c/span\u003e) \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e2\u003c/span\u003e:\n            operation\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003eNone\n            \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e caller \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e calls:\n                \u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e GetOpnd(caller,\u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e) \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e \u003cspan style=\"color:#e6db74\"\u003e\u0026#34;pop_val\u0026#34;\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003eand\u003c/span\u003e caller\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e17\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e calls:\n                    mnem \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e GetMnem(caller\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e22\u003c/span\u003e)\n                    \u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e mnem \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e operations\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003ekeys():\n                        operation\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003eoperations[mnem]\n                    \u003cspan style=\"color:#66d9ef\"\u003eelif\u003c/span\u003e GetMnem(caller\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e30\u003c/span\u003e) \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e \u003cspan style=\"color:#e6db74\"\u003e\u0026#34;cdq\u0026#34;\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003eand\u003c/span\u003e GetMnem(caller\u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e31\u003c/span\u003e) \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e \u003cspan style=\"color:#e6db74\"\u003e\u0026#34;idiv\u0026#34;\u003c/span\u003e:\n                        operation\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;div\u0026#34;\u003c/span\u003e\n            sys\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003estdout\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003ewrite(operation \u003cspan style=\"color:#f92672\"\u003e+\u003c/span\u003e \u003cspan style=\"color:#e6db74\"\u003e\u0026#34;\u003c/span\u003e\u003cspan style=\"color:#ae81ff\"\u003e\\n\u003c/span\u003e\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;\u003c/span\u003e) \u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e operation \u003cspan style=\"color:#f92672\"\u003eis\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003enot\u003c/span\u003e None \u003cspan style=\"color:#66d9ef\"\u003eelse\u003c/span\u003e unknown_handler(PC,targets)\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eOnce again here I made a big assumption regarding the patterns I saw and I didn\u0026rsquo;t take into account false positives I could have had so I strongly advise against that technique.\u003cbr\u003e\nGenerally speaking, it is always better to come up with a more generic and a less pattern-based solution for reuse purposes but also to make the solution more resilient to broken patterns.\u003c/p\u003e\n\u003cp\u003eAnother big assumption I made was using a linear sweep for the disassembly.\u003c/p\u003e\n\u003ch2 id=\"mars-attack\"\u003eMars Attack\u003c/h2\u003e\n\u003cp\u003eAfter putting the different techniques together and having crossed my fingers for the code not to break, I obtained the following assembly listing:\u003c/p\u003e\n\u003cpre\u003e\u003ccode\u003e...\n0x6f2:\t0x401f62:\tload[0x00000009]\n0x6f3:\t0x401f62:\tload[0x0000001b]\n0x6f4:\t0xbde28a:\tmul\n0x6f5:\t0x401f62:\tload[0x00000017]\n0x6f6:\t0x401f62:\tload[0x00000012]\n0x6f7:\t0x402ab2:\tswap\n0x6f8:\t0xbdf48d:\tsub\n0x6f9:\t0x401f62:\tload[0x0000001d]\n0x6fa:\t0x402ab2:\tswap\n0x6fb:\t0xbe059f:\txor\n0x6fc:\t0xbe1957:\tmul\n0x6fd:\t0x402335:\tpush 0x00003fcf\n0x6fe:\t0xbe2b48:\tcmp\n...\n\u003c/code\u003e\u003c/pre\u003e\u003cp\u003eThe code displays the banner character after character and then asks for a \u0026ldquo;citizen id\u0026rdquo;.\nThe characters are put in the virtual stack but they are not next to each other. Instead the characters are kind of rearranged by the following list:\u003cbr\u003e\n7,8,13,15,16,26,27,22,21,4,18,28,23,29,9,1,25,30,17\u003cbr\u003e\nIt means that the first character will be put in the 7th virtual stack variable, the 2nd character at the 8th position and so on.\u003c/p\u003e\n\u003cp\u003eAfter that some computations between characters are made and the result is compared to hardcoded values. The verification algorithm is based on several equations.\u003cbr\u003e\nFor instance the first equation is:\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-python\" data-lang=\"python\"\u003e(buf[\u003cspan style=\"color:#ae81ff\"\u003e14\u003c/span\u003e] \u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e buf[\u003cspan style=\"color:#ae81ff\"\u003e6\u003c/span\u003e])\u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e((buf[\u003cspan style=\"color:#ae81ff\"\u003e12\u003c/span\u003e]\u003cspan style=\"color:#f92672\"\u003e-\u003c/span\u003ebuf[\u003cspan style=\"color:#ae81ff\"\u003e10\u003c/span\u003e])\u003cspan style=\"color:#f92672\"\u003e^\u003c/span\u003ebuf[\u003cspan style=\"color:#ae81ff\"\u003e13\u003c/span\u003e]) \u003cspan style=\"color:#f92672\"\u003e-\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e0x3fcf\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e0\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eAfter having gathered all the different equations I used z3 to solve them. The code is pretty straightforward. First one need to declare all the characters, add a constraint to make sure the character is printable and then add the equations.\u003c/p\u003e\n\u003cdiv class=\"highlight\"\u003e\u003cpre style=\"color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4\"\u003e\u003ccode class=\"language-python\" data-lang=\"python\"\u003e\u003cspan style=\"color:#f92672\"\u003efrom\u003c/span\u003e z3 \u003cspan style=\"color:#f92672\"\u003eimport\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e\n\nsolver \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e Solver()\n\n\u003cspan style=\"color:#75715e\"\u003e# Flag order\u003c/span\u003e\norder\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e[\u003cspan style=\"color:#ae81ff\"\u003e7\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e8\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e13\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e15\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e16\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e26\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e27\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e22\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e21\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e4\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e18\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e28\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e23\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e29\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e9\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e1\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e25\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e30\u003c/span\u003e,\u003cspan style=\"color:#ae81ff\"\u003e17\u003c/span\u003e]\nflag\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e{}\n\u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e order:\n\tflag[i] \u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e BitVec(\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;c_\u003c/span\u003e\u003cspan style=\"color:#e6db74\"\u003e%d\u003c/span\u003e\u003cspan style=\"color:#e6db74\"\u003e\u0026#34;\u003c/span\u003e \u003cspan style=\"color:#f92672\"\u003e%\u003c/span\u003e i,\u003cspan style=\"color:#ae81ff\"\u003e8\u003c/span\u003e)\n\n\u003cspan style=\"color:#75715e\"\u003e#char constraints\u003c/span\u003e\n\u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e k \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e flag\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003ekeys():\n\tsolver\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eadd(flag[k] \u003cspan style=\"color:#f92672\"\u003e\u0026gt;=\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e32\u003c/span\u003e, flag[k] \u003cspan style=\"color:#f92672\"\u003e\u0026lt;=\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e126\u003c/span\u003e)\n\t\n\u003cspan style=\"color:#75715e\"\u003e#equations\u003c/span\u003e\nsolver\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eadd((flag[\u003cspan style=\"color:#ae81ff\"\u003e9\u003c/span\u003e] \u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e flag[\u003cspan style=\"color:#ae81ff\"\u003e27\u003c/span\u003e])\u003cspan style=\"color:#f92672\"\u003e*\u003c/span\u003e((flag[\u003cspan style=\"color:#ae81ff\"\u003e23\u003c/span\u003e]\u003cspan style=\"color:#f92672\"\u003e-\u003c/span\u003eflag[\u003cspan style=\"color:#ae81ff\"\u003e18\u003c/span\u003e])\u003cspan style=\"color:#f92672\"\u003e^\u003c/span\u003eflag[\u003cspan style=\"color:#ae81ff\"\u003e29\u003c/span\u003e]) \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e \u003cspan style=\"color:#ae81ff\"\u003e0x3fcf\u003c/span\u003e)\n\u003cspan style=\"color:#f92672\"\u003e...\u003c/span\u003e\nsolution\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003e\u003cspan style=\"color:#e6db74\"\u003e\u0026#39;\u0026#39;\u003c/span\u003e\n\u003cspan style=\"color:#66d9ef\"\u003eif\u003c/span\u003e solver\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003echeck() \u003cspan style=\"color:#f92672\"\u003e==\u003c/span\u003e z3\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003esat:\n    model\u003cspan style=\"color:#f92672\"\u003e=\u003c/span\u003esolver\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003emodel()\n    \u003cspan style=\"color:#66d9ef\"\u003efor\u003c/span\u003e i \u003cspan style=\"color:#f92672\"\u003ein\u003c/span\u003e order:\n        solution\u003cspan style=\"color:#f92672\"\u003e+=\u003c/span\u003echr(model[flag[i]]\u003cspan style=\"color:#f92672\"\u003e.\u003c/span\u003eas_signed_long())\n\u003cspan style=\"color:#66d9ef\"\u003eprint\u003c/span\u003e solution\n\u003c/code\u003e\u003c/pre\u003e\u003c/div\u003e\u003cp\u003eThe scripts yields the following result:\u003cbr\u003e\n\u003cstrong\u003eq4Eo-eyMq-1dd0-leKx\u003c/strong\u003e\u003c/p\u003e\n\u003cp\u003eThe different scripts can be found \u003ca href=\"https://github.com/0xSQUD/mars_analytica\"\u003ehere\u003c/a\u003e.\u003c/p\u003e\n\u003ch2 id=\"it-got-stucked-in-the-sand-\"\u003eIt got stucked in the sand\u0026hellip; :(\u003c/h2\u003e\n\u003cp\u003eI first tried to use \u003ccode\u003ePin\u003c/code\u003e which thanks to the instruction counter helped me to get the correct number of characters the challenge expects. I then wanted to use \u003ccode\u003eTriton\u003c/code\u003e but I had some memory problems with Pin also it was quite slow (not to mention that I was doing this in a VM).\u003c/p\u003e\n\u003cp\u003eAlso some handlers push a letter which is computed through obfuscated code. I took the decision to ignore that even if it makes the assembly kind of incomplete\u0026hellip;\u003c/p\u003e\n\u003ch2 id=\"leaving-the-bloody-planet-to-come-back-stronger\"\u003eLeaving the bloody planet to come back stronger\u003c/h2\u003e\n\u003cp\u003eThis binary was quite challenging as it features several obfuscation techniques such as code virtualization, dead code, bogus control flow, opaque predicates, direct-threaded code\u0026hellip;\nI want to thank \u003ca href=\"https://twitter.com/0xtowel?lang=en\"\u003eTowel\u003c/a\u003e for this incredible challenge and a shoutout to \u003ca href=\"https://twitter.com/w4kfu?lang=en\"\u003eWakfu\u003c/a\u003e for the few pointers he gave without spoiling all the fun.\u003c/p\u003e\n\u003cp\u003eThe solution is far from being the best but I think as it is a CTF challenge this IDA api-based solution is acceptable as I took advantage of the VM characterics.\nDifferent approaches could be taken here such as:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eusing symbolic execution and the knowledge of the VM structure to resolve each handler\u003c/li\u003e\n\u003cli\u003eusing DSE\u003c/li\u003e\n\u003cli\u003eusing taint analysis\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eActually I plan to come back with a more elegant solution so stay tuned :)\u003c/p\u003e"
 }
 </script>
 
@@ -93,16 +94,409 @@
 </header>
 
   <main>
-<div class="default-terms">
-  <div class="ax-content ax-l-o">
+<div class="default-single">
+  <div class="ax-header ax-l-o">
     <div class="ax-l-i">
-      <h1 class="section-title font-content-sans font-semibold uppercase tracking-wide text-2xl text-raven-800">Categories</h1>
+      <h1 class="post-title font-content-title font-normal leading-tight tracking-default text-40">NorthSec 2018 - Mars Analytica (Reverse) - Write-up</h1>
+      <p class="post-subtitle font-content-sans font-light text-xl text-raven-500 mt-3">Mars Analytica was one of the remained unsolved challenge at the end of NorthSec 2018 CTF. Here is one solution using static analysis and Z3 to find the flag.</p>
 
-      <div class="mt-8">
-        <div class="flex flex-wrap justify-center">
+      <div class="ax-meta flex items-center mt-5">
+        <div class="flex-grow min-w-0">
+          <div class="flex items-center">
+  <div class="flex-shrink-0">
+    <img
+    class="w-12 h-12 sm:w-14 sm:h-14 object-cover p-05 rounded-full border border-blue-300"
+    src="/images/author/scud.png"
+    alt="5Cl_lD">
+  </div>
+  <div class="flex-shrink-0 ml-2 leading-tight font-content-sans">
+    <a class="block text-sm text-raven-800 hover:text-raven-900 hover:underline focus:underline" target="_blank" rel="noopener nofollow" title="5Cl_lD" href="https://twitter.com/5cl_ld">5Cl_lD</a>
+    <time class="text-sm text-raven-500" datetime="2018-10-28T17:37:00Z">Oct 28, 2018 6:37PM</time>
+  </div>
 </div>
 
+        </div>
+        <div>
+          <div class="flex items-center">
+  <a class="flex-shrink-0 block text-raven-800 hover:text-raven-900" target="_blank" rel="noopener nofollow" title="" href="https://twitter.com/intent/tweet?text=NorthSec%202018%20-%20Mars%20Analytica%20%28Reverse%29%20-%20Write-up%20by%20%405Cl_lD%20https%3a%2f%2fre-dojo.github.io%2fwrite-ups%2f2018-10-28-nsec-2018-mars-analytica%2f"><svg class="w-6 h-6 fill-current" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M32 6.078c-1.2.522-2.458.868-3.78 1.036 1.36-.812 2.398-2.088 2.886-3.626a13.11 13.11 0 0 1-4.16 1.588C25.742 3.794 24.026 3 22.154 3a6.56 6.56 0 0 0-6.556 6.562c0 .52.044 1.02.152 1.496-5.454-.266-10.28-2.88-13.522-6.862-.566.982-.898 2.106-.898 3.316a6.57 6.57 0 0 0 2.914 5.452 6.48 6.48 0 0 1-2.964-.808v.072c0 3.188 2.274 5.836 5.256 6.446-.534.146-1.116.216-1.72.216-.42 0-.844-.024-1.242-.112.85 2.598 3.262 4.508 6.13 4.57a13.18 13.18 0 0 1-8.134 2.798c-.538 0-1.054-.024-1.57-.1C2.906 27.93 6.35 29 10.064 29c12.072 0 18.672-10 18.672-18.668 0-.3-.01-.57-.024-.848C30.014 8.56 31.108 7.406 32 6.078z"/></svg>
+</a>
+  <a class="ml-3 flex-shrink-0 block text-raven-800 hover:text-raven-900" target="_blank" rel="noopener nofollow" title="" href="https://www.facebook.com/dialog/share?app_id=&display=page&href=https%3a%2f%2fre-dojo.github.io%2fwrite-ups%2f2018-10-28-nsec-2018-mars-analytica%2f"><svg class="w-6 h-6 fill-current" viewBox="-7 -3.5 39 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M30.234 0H1.765C.8.001 0 .79 0 1.766v28.47C.001 31.2.79 32 1.766 32h15.328V19.625h-4.156V14.78h4.156v-3.564c0-4.134 2.523-6.384 6.21-6.384 1.766 0 3.284.13 3.726.2v4.32h-2.543c-2.006 0-2.394.953-2.394 2.352v3.085h4.797l-.625 4.844h-4.172V32h8.14C31.21 32 32 31.2 32 30.234V1.765C32 .8 31.21 0 30.234 0z"/></svg>
+</a>
+</div>
+
+        </div>
       </div>
+    </div>
+  </div>
+  <div class="ax-feature ax-l-o">
+    <div class="ax-l-i">
+
+<figure>
+<img
+class="mb-2 mx-auto leading-none shadow-xl"
+src="/images/mars/nsec_ctf.png"
+alt="NorthSec 2018 - Mars Analytica (Reverse) - Write-up">
+</figure>
+
+    </div>
+  </div><div class="ax-content ax-l-o">
+    <div class="ax-l-i">
+      <article class="cdata">
+<p>In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured.
+One of the reverse engineering challenges was a program called <strong>MarsAnalytica</strong>. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.</p>
+<p>This blogpost will discuss how i solved it.</p>
+<h2 id="probing-the-martian-executable">Probing the martian executable</h2>
+<p>Description:<br>
+&ldquo;The government has hired a specialized data brokerage, collection, and analysis firm known as Mars Analytica to assess the societal worth and risk of its citizens in preparations for the colonization of Mars. Publicly officials are denying this, but you got your hands on their analysis software. Find a way to log in with a cleared citizen id and expose the Mars Analytica firm&rsquo;s true purpose&rdquo;.</p>
+<p>Before attempting to reverse a binary, it is always good to take a look at the low-hanging fruits: the file format, the size, the strings&hellip;
+At first sight the binary didn&rsquo;t seem to be too big.
+Running the file utility against it indicated that it was compressed with UPX. The command output also indicated that it is a stripped ELF x86-64 binary.
+After having unpacked the ELF binary, the size grew to almost <strong>11M</strong> :O
+No useful strings are present in the binary.</p>
+<p><img src="/images/mars/MarsAnalytica_output.png" alt="Image" title="Running the executable"></p>
+<h2 id="alien-elf-is-a-thing">Alien elf is a thing</h2>
+<p>After having opened the binary in IDA and let the autoanalysis complete (which took some time), the navigation bar didn&rsquo;t look reassuring.</p>
+<p><img src="/images/mars/navigation_bar.png" alt="Image" title="Navigation bar"></p>
+<p>Looking at the main function revealed a lot of <em>weird</em> stuff are going on:</p>
+<ul>
+<li>a very large stack frame is created (0xBA4A8)</li>
+<li>the classic call combination time/srand is present but the rand function is not even imported</li>
+<li>5 different large arrays of bytes are copied to the stack</li>
+<li>some weird calculations based on the arrays copied is happening</li>
+<li>the function ends with a push/ret</li>
+</ul>
+<p>Just out of curiosity, I took a look at the disassembly following the main function. One could see that the same weird computation is present in the following (undefined) functions. Moreover, most of these functions either ends with a <code>push/ret</code> or a <code>jmp rax</code>.
+This code construct reminded me of a virtual machine where each handler computes the address of the next handler (like a distributed dispatch or <em>direct-threaded code</em>).
+This can be further verified by dynamic analysis using a debugger such as GDB but beforehand, once again: low-hanging fruits.
+A little bit of <code>strace</code> could give an overview of how the binary behaves.</p>
+<p><img src="/images/mars/strace_output.png" alt="Image" title="Strace output"></p>
+<p>I guessed that all the &ldquo;write(1,char,1)&rdquo; lines were in fact calls to the <code>putchar</code> function. A good thing to do also is looking at the cross-references. There are 861 calls to the <code>putchar</code> function which meant that there are probably some redundant handlers.</p>
+<p>Another interesting function to look at was the <code>malloc</code> function. The first cross-reference took me to a function which seemed to be a list insertion algorithm.</p>
+<p><img src="/images/mars/push_val.png" alt="Image" title="List insertion"></p>
+<p>Interestingly enough, there are 1178 cross-references to this function.
+A hunch told me to look at the <code>free</code> function. As expected the first cross-reference to the <code>free</code> function is a routine which implements a list removal algorithm. There are 1276 cross-references to that function.
+At first sight it looked like that virtual machine might be stack-based.</p>
+<p>Then I started debugging the binary with GDB but it didn&rsquo;t really helped me except to confirm that each handler was indeed in charge of computing the next handler address.</p>
+<p>At that moment I thought that I had enough information to start reversing.</p>
+<h2 id="getting-acquainted-with-the-alien">Getting acquainted with the alien</h2>
+<p>In order to implement a disassembler for the VM I had to focus on the weird computation first to be able to compute the next handler.
+The main function is the right entrypoint to gather information about the VM initialization. As mentioned earlier the 5 arrays are essential to the handler computation. After renaming some variables, following the computation dynamically, diffing with other handlers, it was possible to understand and reimplement the routine.</p>
+<pre><code>	mov	[rbp+var_65F40], 0
+	mov	rax, [rbp+var_65F40]
+	mov	edx, eax
+	lea	rax, [rbp+tab2]
+	mov	[rbp+ptr_cpy_e50140], rax
+	lea	rax, [rbp+tab1]
+	mov	[rbp+ptr_cpy_e4dc00], rax
+	mov	[rbp+var_908B0], edx
+	mov	rax, [rbp+ptr_cpy_e4dc00]
+	mov	[rbp+var_5DB68], rax
+	mov	eax, [rbp+var_908B0]
+	mov	[rbp+var_908AC], eax
+	mov	eax, [rbp+var_908AC]
+	imul	ecx, eax, 7AAh
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB68]
+	add	rax, rdx
+	mov	eax, [rax]
+	mov	rdx, [rbp+ptr_cpy_e50140]
+	mov	[rbp+var_5DB60], rdx
+	mov	[rbp+var_908A8], eax
+	mov	eax, [rbp+var_908A8]
+	imul	ecx, eax, 5A5h
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB60]
+	add	rax, rdx
+	mov	eax, [rax]
+	lea	rdx, [rbp+tab4]
+	mov	[rbp+var_5DB98], rdx
+	lea	rdx, [rbp+tab3]
+	mov	[rbp+var_5DB90], rdx
+	mov	[rbp+var_908BC], eax
+	mov	rax, [rbp+var_5DB90]
+	mov	[rbp+var_5DB88], rax
+	mov	eax, [rbp+var_908BC]
+	mov	[rbp+var_908B8], eax
+	mov	eax, [rbp+var_908B8]
+	imul	ecx, eax, 259h
+	mov	edx, 2F3BAFEDh
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 0AD7h
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB88]
+	add	rax, rdx
+	mov	eax, [rax]
+	mov	rdx, [rbp+var_5DB98]
+	mov	[rbp+var_5DB80], rdx
+	mov	[rbp+var_908B4], eax
+	mov	eax, [rbp+var_908B4]
+	imul	ecx, eax, 1D5h
+	mov	edx, 2F3BAFEDh
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 0AD7h
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB80]
+	add	rax, rdx
+	mov	esi, [rax]
+	mov	rax, [rbp+var_65F40]
+	lea	rdx, [rax+1]
+	mov	[rbp+var_65F40], rdx
+	mov	edx, eax
+	lea	rax, [rbp+tab2]
+	mov	[rbp+var_5DBB8], rax
+	lea	rax, [rbp+tab1]
+	mov	[rbp+var_5DBB0], rax
+	mov	dword ptr [rbp+var_908CC+4], edx
+	mov	rax, [rbp+var_5DBB0]
+	mov	[rbp+var_5DBA8], rax
+	mov	eax, dword ptr [rbp+var_908CC+4]
+	mov	[rbp+var_908C4], eax
+	mov	eax, [rbp+var_908C4]
+	imul	ecx, eax, 7AAh
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DBA8]
+	add	rax, rdx
+	mov	eax, [rax]
+	mov	rdx, [rbp+var_5DBB8]
+	mov	[rbp+var_5DBA0], rdx
+	mov	[rbp+var_908C0], eax
+	mov	eax, [rbp+var_908C0]
+	imul	ecx, eax, 5A5h
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DBA0]
+	add	rax, rdx
+	mov	eax, [rax]
+	cdqe
+	mov	rax, [rbp+rax*8+tab5]
+	mov	[rbp+var_5DBC0], rax
+	mov	dword ptr [rbp+var_908CC], esi
+	mov	eax, dword ptr [rbp+var_908CC]
+	movsxd	rdx, eax
+	mov	rax, [rbp+var_5DBC0]
+	add	rax, rdx
+	push	rax
+	jmp	short locret_401149 ; 0x402335
+locret_401149:
+	retn
+</code></pre><p>The stack variable <code>rbp-0x65f40</code> seemed to be the &ldquo;program counter&rdquo; because it is incremented everytime. Also its value is used as an index in the first array. The value fetched is then used as an index in the second array&hellip;<br>
+The following pseudocode might explain it better (using IDApython).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># get the arrays used by the dispatcher</span>
+tab1<span style="color:#f92672">=</span>[Dword(<span style="color:#ae81ff">0xE4DC00</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x253C</span>,<span style="color:#ae81ff">4</span>)]
+tab2<span style="color:#f92672">=</span>[Dword(<span style="color:#ae81ff">0xE50140</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x253C</span>,<span style="color:#ae81ff">4</span>)]
+tab3<span style="color:#f92672">=</span>[Dword(<span style="color:#ae81ff">0xE52680</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x2B5C</span>,<span style="color:#ae81ff">4</span>)]
+tab4<span style="color:#f92672">=</span>[Dword(<span style="color:#ae81ff">0xE551E0</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x2B5C</span>,<span style="color:#ae81ff">4</span>)]
+tab5<span style="color:#f92672">=</span>[Qword(<span style="color:#ae81ff">0xE57D40</span><span style="color:#f92672">+</span>i) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0x56B8</span>,<span style="color:#ae81ff">8</span>)]
+
+<span style="color:#75715e"># dispatcher function</span>
+<span style="color:#75715e"># num is the value of VM.PC</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dispatcher</span>(num):
+    <span style="color:#66d9ef">global</span> tab1,tab2,tab3,tab4,tab5
+    eax <span style="color:#f92672">=</span> tab4[tab3[tab2[tab1[(num<span style="color:#f92672">*</span><span style="color:#ae81ff">1962</span>)<span style="color:#f92672">%</span>len(tab1)]<span style="color:#f92672">*</span><span style="color:#ae81ff">1445</span><span style="color:#f92672">%</span>len(tab2)]<span style="color:#f92672">*</span><span style="color:#ae81ff">601</span><span style="color:#f92672">%</span>len(tab3)]<span style="color:#f92672">*</span><span style="color:#ae81ff">469</span><span style="color:#f92672">%</span>len(tab4)]
+    edx <span style="color:#f92672">=</span> tab5[tab2[tab1[(num<span style="color:#f92672">*</span><span style="color:#ae81ff">1962</span>)<span style="color:#f92672">%</span>len(tab1)]<span style="color:#f92672">*</span><span style="color:#ae81ff">1445</span><span style="color:#f92672">%</span>len(tab2)]]
+    <span style="color:#66d9ef">return</span> eax<span style="color:#f92672">+</span>edx
+</code></pre></div><p>Looking at the first handler @ <strong>0x402335</strong>, it starts to compute a number in the same fashion as the dispatcher code. The number is then passed to the function which implements list insertion. Finally the next handler is computed. As seen in the list insertion code, a pointer to the head is passed and is updated after insertion. I infered that the variable <code>rbp-0x65f48</code> was the &ldquo;VM stack pointer&rdquo;. The start of the function fetches an immediate which is pushed. The handler @ <strong>0x402335</strong> is of the form &ldquo;PUSH Immediate&rdquo;.</p>
+<p>The next handler to look at was @ <strong>0x401b8f</strong>. It starts by popping (list removal function) one value off of the virtual stack, gets an immediate value and stores the popped value in a virtual stack variable indexed by the immediate value. For instance, at the beginning we have:<br>
+PUSH 0<br>
+PUSH 9<br>
+STORE SP[0]</p>
+<p>If we split and keep track of the states we have:<br>
+PUSH 0 =&gt; SP[0] = 0<br>
+PUSH 9 =&gt; SP[0] = 0, SP[1] = 9<br>
+STORE SP[0] =&gt; SP[0] = 9</p>
+<p>I concluded that this handler was of the following form:<br>
+STORE SP[Immediate Index]</p>
+<p>Since the machine implements a stack machine it is really important to understand how values and pushed and popped. The astute reader would have probably noticed that it is also possible to access stack variables by index.</p>
+<p><img src="/images/mars/list_store_at_index.png" alt="Image" title="Store in stack variable by index"></p>
+<p>After reversing some more handlers I eventually got stucked because there were too many handlers (remember the 10M size?&hellip; ) and I saw some redundant handlers not to mention that a lot of them were very obfuscated.</p>
+<h2 id="theres-also-water-on-mars">There&rsquo;s also water on Mars</h2>
+<p>At that moment I really thought about completely changing my way of solving the challenge because I would have needed to reverse too many handlers to implement a disassembler based on handlers start address.<br>
+Though reverse engineering really consists in finding/recognizing pattens, experiencing, repetition&hellip; so I went looking for patterns.
+At some point I started to see a correlation between the calls a handler makes and the behaviour of the handler.<br>
+For instance, I knew that if a handler calls the functions <code>pop_val</code>, <code>putchar</code> and <code>fflush</code> then the handler just implements a <code>putchar</code>.</p>
+<p>In order to take advantage of that, one need to gather the handler&rsquo;s &ldquo;cross-references from&rdquo; and compare that list. The following code describes the process:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">f_putchar<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;pop_val&#34;</span>,<span style="color:#e6db74">&#34;putchar&#34;</span>,<span style="color:#e6db74">&#34;fflush&#34;</span>]
+calls<span style="color:#f92672">=</span>[x <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> idautils<span style="color:#f92672">.</span>FuncItems(handler) <span style="color:#66d9ef">if</span> idaapi<span style="color:#f92672">.</span>is_call_insn(x)]
+targets<span style="color:#f92672">=</span>list(map(<span style="color:#66d9ef">lambda</span> x: GetOpnd(x,<span style="color:#ae81ff">0</span>),calls))
+<span style="color:#66d9ef">if</span> all(t <span style="color:#f92672">in</span> targets <span style="color:#66d9ef">for</span> t <span style="color:#f92672">in</span> f_putchar):
+    sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#34;putchar</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+</code></pre></div><p>The next thing I noticed was the most important information.<br>
+Some handlers are very complicated to understand due to their obfuscation but as the VM is stack-based, the code needs to access the stack variables and it does so by calling the <code>pop_val</code> function for example. The following images show the overview of a XOR handler and then its relevant code.</p>
+<p><img src="/images/mars/xor_handler_view.png" alt="Image" title="XOR handler overview"></p>
+<p><img src="/images/mars/xor_handler.png" alt="Image" title="XOR handler relevant code"></p>
+<p>As one can see, that part is not obfuscated and it is pretty clear:</p>
+<ul>
+<li>two values are &ldquo;popped&rdquo; from the stack</li>
+<li>a XOR operation is made between the two values</li>
+<li>the result is pushed on the stack</li>
+</ul>
+<p>This is clearly a weakness in the binary obfuscation and I decided to take advantage of it.
+To that end, one need to:</p>
+<ul>
+<li>make sure that a handler calls 3 functions (&ldquo;pop_val&rdquo; twice and &ldquo;push_val&rdquo;)</li>
+<li>retrieve the operation right after the second &ldquo;pop_val&rdquo;</li>
+</ul>
+<p>The following code searches for the pattern:<br>
+0 call pop_val<br>
+&hellip;<br>
+17 call pop_val<br>
+22 operation</p>
+<p>or the following pattern (for the div instruction)<br>
+0 call pop_val<br>
+&hellip;<br>
+17 call pop_val<br>
+&hellip;<br>
+30 cdq<br>
+31 idiv</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">operations<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;xor&#34;</span>:<span style="color:#e6db74">&#34;xor&#34;</span>,<span style="color:#e6db74">&#34;sub&#34;</span>:<span style="color:#e6db74">&#34;sub&#34;</span>,<span style="color:#e6db74">&#34;imul&#34;</span>:<span style="color:#e6db74">&#34;mul&#34;</span>,<span style="color:#e6db74">&#34;lea&#34;</span>:<span style="color:#e6db74">&#34;add&#34;</span>}
+<span style="color:#f92672">...</span>
+<span style="color:#66d9ef">elif</span> len(targets) <span style="color:#f92672">==</span> <span style="color:#ae81ff">3</span> <span style="color:#f92672">and</span> targets<span style="color:#f92672">.</span>count(<span style="color:#e6db74">&#34;pop_val&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>:
+            operation<span style="color:#f92672">=</span>None
+            <span style="color:#66d9ef">for</span> caller <span style="color:#f92672">in</span> calls:
+                <span style="color:#66d9ef">if</span> GetOpnd(caller,<span style="color:#ae81ff">0</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;pop_val&#34;</span> <span style="color:#f92672">and</span> caller<span style="color:#f92672">+</span><span style="color:#ae81ff">17</span> <span style="color:#f92672">in</span> calls:
+                    mnem <span style="color:#f92672">=</span> GetMnem(caller<span style="color:#f92672">+</span><span style="color:#ae81ff">22</span>)
+                    <span style="color:#66d9ef">if</span> mnem <span style="color:#f92672">in</span> operations<span style="color:#f92672">.</span>keys():
+                        operation<span style="color:#f92672">=</span>operations[mnem]
+                    <span style="color:#66d9ef">elif</span> GetMnem(caller<span style="color:#f92672">+</span><span style="color:#ae81ff">30</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;cdq&#34;</span> <span style="color:#f92672">and</span> GetMnem(caller<span style="color:#f92672">+</span><span style="color:#ae81ff">31</span>) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;idiv&#34;</span>:
+                        operation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;div&#34;</span>
+            sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(operation <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>) <span style="color:#66d9ef">if</span> operation <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None <span style="color:#66d9ef">else</span> unknown_handler(PC,targets)
+</code></pre></div><p>Once again here I made a big assumption regarding the patterns I saw and I didn&rsquo;t take into account false positives I could have had so I strongly advise against that technique.<br>
+Generally speaking, it is always better to come up with a more generic and a less pattern-based solution for reuse purposes but also to make the solution more resilient to broken patterns.</p>
+<p>Another big assumption I made was using a linear sweep for the disassembly.</p>
+<h2 id="mars-attack">Mars Attack</h2>
+<p>After putting the different techniques together and having crossed my fingers for the code not to break, I obtained the following assembly listing:</p>
+<pre><code>...
+0x6f2:	0x401f62:	load[0x00000009]
+0x6f3:	0x401f62:	load[0x0000001b]
+0x6f4:	0xbde28a:	mul
+0x6f5:	0x401f62:	load[0x00000017]
+0x6f6:	0x401f62:	load[0x00000012]
+0x6f7:	0x402ab2:	swap
+0x6f8:	0xbdf48d:	sub
+0x6f9:	0x401f62:	load[0x0000001d]
+0x6fa:	0x402ab2:	swap
+0x6fb:	0xbe059f:	xor
+0x6fc:	0xbe1957:	mul
+0x6fd:	0x402335:	push 0x00003fcf
+0x6fe:	0xbe2b48:	cmp
+...
+</code></pre><p>The code displays the banner character after character and then asks for a &ldquo;citizen id&rdquo;.
+The characters are put in the virtual stack but they are not next to each other. Instead the characters are kind of rearranged by the following list:<br>
+7,8,13,15,16,26,27,22,21,4,18,28,23,29,9,1,25,30,17<br>
+It means that the first character will be put in the 7th virtual stack variable, the 2nd character at the 8th position and so on.</p>
+<p>After that some computations between characters are made and the result is compared to hardcoded values. The verification algorithm is based on several equations.<br>
+For instance the first equation is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">(buf[<span style="color:#ae81ff">14</span>] <span style="color:#f92672">*</span> buf[<span style="color:#ae81ff">6</span>])<span style="color:#f92672">*</span>((buf[<span style="color:#ae81ff">12</span>]<span style="color:#f92672">-</span>buf[<span style="color:#ae81ff">10</span>])<span style="color:#f92672">^</span>buf[<span style="color:#ae81ff">13</span>]) <span style="color:#f92672">-</span> <span style="color:#ae81ff">0x3fcf</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>
+</code></pre></div><p>After having gathered all the different equations I used z3 to solve them. The code is pretty straightforward. First one need to declare all the characters, add a constraint to make sure the character is printable and then add the equations.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> z3 <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+
+solver <span style="color:#f92672">=</span> Solver()
+
+<span style="color:#75715e"># Flag order</span>
+order<span style="color:#f92672">=</span>[<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">13</span>,<span style="color:#ae81ff">15</span>,<span style="color:#ae81ff">16</span>,<span style="color:#ae81ff">26</span>,<span style="color:#ae81ff">27</span>,<span style="color:#ae81ff">22</span>,<span style="color:#ae81ff">21</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">18</span>,<span style="color:#ae81ff">28</span>,<span style="color:#ae81ff">23</span>,<span style="color:#ae81ff">29</span>,<span style="color:#ae81ff">9</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">25</span>,<span style="color:#ae81ff">30</span>,<span style="color:#ae81ff">17</span>]
+flag<span style="color:#f92672">=</span>{}
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> order:
+	flag[i] <span style="color:#f92672">=</span> BitVec(<span style="color:#e6db74">&#34;c_</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> i,<span style="color:#ae81ff">8</span>)
+
+<span style="color:#75715e">#char constraints</span>
+<span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> flag<span style="color:#f92672">.</span>keys():
+	solver<span style="color:#f92672">.</span>add(flag[k] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">32</span>, flag[k] <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">126</span>)
+	
+<span style="color:#75715e">#equations</span>
+solver<span style="color:#f92672">.</span>add((flag[<span style="color:#ae81ff">9</span>] <span style="color:#f92672">*</span> flag[<span style="color:#ae81ff">27</span>])<span style="color:#f92672">*</span>((flag[<span style="color:#ae81ff">23</span>]<span style="color:#f92672">-</span>flag[<span style="color:#ae81ff">18</span>])<span style="color:#f92672">^</span>flag[<span style="color:#ae81ff">29</span>]) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0x3fcf</span>)
+<span style="color:#f92672">...</span>
+solution<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>
+<span style="color:#66d9ef">if</span> solver<span style="color:#f92672">.</span>check() <span style="color:#f92672">==</span> z3<span style="color:#f92672">.</span>sat:
+    model<span style="color:#f92672">=</span>solver<span style="color:#f92672">.</span>model()
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> order:
+        solution<span style="color:#f92672">+=</span>chr(model[flag[i]]<span style="color:#f92672">.</span>as_signed_long())
+<span style="color:#66d9ef">print</span> solution
+</code></pre></div><p>The scripts yields the following result:<br>
+<strong>q4Eo-eyMq-1dd0-leKx</strong></p>
+<p>The different scripts can be found <a href="https://github.com/0xSQUD/mars_analytica">here</a>.</p>
+<h2 id="it-got-stucked-in-the-sand-">It got stucked in the sand&hellip; :(</h2>
+<p>I first tried to use <code>Pin</code> which thanks to the instruction counter helped me to get the correct number of characters the challenge expects. I then wanted to use <code>Triton</code> but I had some memory problems with Pin also it was quite slow (not to mention that I was doing this in a VM).</p>
+<p>Also some handlers push a letter which is computed through obfuscated code. I took the decision to ignore that even if it makes the assembly kind of incomplete&hellip;</p>
+<h2 id="leaving-the-bloody-planet-to-come-back-stronger">Leaving the bloody planet to come back stronger</h2>
+<p>This binary was quite challenging as it features several obfuscation techniques such as code virtualization, dead code, bogus control flow, opaque predicates, direct-threaded code&hellip;
+I want to thank <a href="https://twitter.com/0xtowel?lang=en">Towel</a> for this incredible challenge and a shoutout to <a href="https://twitter.com/w4kfu?lang=en">Wakfu</a> for the few pointers he gave without spoiling all the fun.</p>
+<p>The solution is far from being the best but I think as it is a CTF challenge this IDA api-based solution is acceptable as I took advantage of the VM characterics.
+Different approaches could be taken here such as:</p>
+<ul>
+<li>using symbolic execution and the knowledge of the VM structure to resolve each handler</li>
+<li>using DSE</li>
+<li>using taint analysis</li>
+</ul>
+<p>Actually I plan to come back with a more elegant solution so stay tuned :)</p>
+
+      </article>
+      
+
     </div>
   </div>
 </div>
