@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="en"
+  class="color-toggle-hidden"
+>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="referrer" content="no-referrer" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content="Hugo 0.93.3" />
+  <meta name="description" content="In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured. One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it." />
+    <meta name="author" content="scud" />
+
+    <title>NorthSec 2018 - Mars Analytica | RE-Dojo</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+<link
+  rel="icon"
+  type="image/png"
+  sizes="48x48"
+  href="/favicon/favicon-32x32.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="/favicon/favicon-32x32.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="/favicon/favicon-16x16.png"
+/>
+
+    
+
+    
+  <meta
+    property="og:title"
+    content="NorthSec 2018 - Mars Analytica"
+  />
+  <meta property="og:site_name" content="RE-Dojo" />
+  <meta property="og:description" content="In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured. One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/" />
+
+<meta property="article:section" content="Post" />
+    <meta
+      property="article:published_time"
+      content="2018-10-28T00:00:00+00:00"
+    />
+    <meta
+      property="article:modified_time"
+      content="2018-10-28T00:00:00+00:00"
+    />
+
+
+  <meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="NorthSec 2018 - Mars Analytica" />
+  <meta name="twitter:description" content="In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured. One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it." />
+
+<script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "BlogPosting",
+      "articleSection": "Post",
+      "name": "NorthSec 2018 - Mars Analytica",
+      "url" : "https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/",
+      "headline": "NorthSec 2018 - Mars Analytica",
+      "description": "In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured. One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.",
+      "wordCount" : "2478",
+      "license": "CC BY-SA 4.0",
+      "inLanguage": "en",
+      "isFamilyFriendly": "true",
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/"
+      },
+      "keywords" : [ "Challenge" , "Reverse" ],
+      "author" : [
+          {
+              "@type": "Person",
+              "name": "scud"
+          }
+      ],
+      "copyrightHolder" : "RE-Dojo",
+      "copyrightYear" : "2018",
+      "dateCreated": "2018-10-28T00:00:00.00Z",
+      "datePublished": "2018-10-28T00:00:00.00Z",
+      "dateModified": "2018-10-28T00:00:00.00Z",
+      "publisher":{
+          "@type":"Organization",
+          "name": "RE-Dojo",
+          "url": "https://re-dojo.github.io/",
+          "logo": {
+              "@type": "ImageObject",
+              "url": "https://re-dojo.github.io/images/brand/logo.svg",
+              "width":"32",
+              "height":"32"
+          }
+      }
+  }
+  </script>
+
+
+    <script src="/js/main-8d4fb56f.bundle.min.js"></script>
+
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/Metropolis.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/LiberationSans.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/GeekblogIcons.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+
+<link
+  rel="preload"
+  href="/main-67545b00.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/main-67545b00.min.css"
+  media="all"
+/>
+
+<link
+  rel="preload"
+  href="/mobile-3888ed2b.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/mobile-3888ed2b.min.css"
+  media="screen and (max-width: 45rem)"
+/>
+
+<link
+  rel="preload"
+  href="/print-8a905a2e.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/print-8a905a2e.min.css"
+  media="print"
+/>
+
+<link
+  rel="preload"
+  href="/custom.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/custom.css"
+  media="all"
+/>
+  <link href="https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/" rel="canonical" type="text/html" />
+    <link href="https://re-dojo.github.io/index.xml" rel="alternate" type="application/rss+xml" title="RE-Dojo RSS Feed" />
+
+<!-- Made with Geekblog theme https://github.com/thegeeklab/hugo-geekblog -->
+
+    
+
+  </head>
+
+  <body>
+    
+  <!-- geekblog include: sprites/geekblog.svg -->
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_back" xmlns="http://www.w3.org/2000/svg"><path d="M31.999 14.035v3.93H7.673l11.134 11.228L16 32 .001 16.001 16 .002l2.807 2.807L7.673 14.037h24.326z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M7.954 17.965v5.988L.001 16l7.953-7.953v5.988H32v3.93H7.954z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M24.046 14.035V8.047L31.999 16l-7.953 7.953v-5.988H0v-3.93h24.046z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_bitbucket" xmlns="http://www.w3.org/2000/svg"><path d="M15.905 13.355c.189 1.444-1.564 2.578-2.784 1.839-1.375-.602-1.375-2.784-.034-3.403 1.151-.705 2.818.223 2.818 1.564zm1.907-.361c-.309-2.44-3.076-4.056-5.328-3.042-1.426.636-2.389 2.148-2.32 3.747.086 2.097 2.08 3.815 4.176 3.626s3.729-2.234 3.472-4.331zm4.108-9.315c-.756-.997-2.045-1.169-3.179-1.358-3.214-.516-6.513-.533-9.727.034-1.066.172-2.269.361-2.939 1.323 1.1 1.031 2.664 1.186 4.073 1.358 2.544.327 5.156.344 7.699.017 1.426-.172 3.008-.309 4.073-1.375zm.979 17.788c-.481 1.684-.206 3.953-1.994 4.932-3.076 1.701-6.806 1.89-10.191 1.289-1.787-.327-3.884-.894-4.864-2.578-.43-1.65-.705-3.334-.98-5.018l.103-.275.309-.155c5.121 3.386 12.288 3.386 17.427 0 .808.241.206 1.22.189 1.805zM26.01 4.951c-.584 3.764-1.255 7.51-1.908 11.257-.189 1.1-1.255 1.719-2.148 2.183-3.214 1.615-6.96 1.89-10.483 1.512-2.389-.258-4.829-.894-6.771-2.389-.911-.705-.911-1.908-1.083-2.922-.602-3.523-1.289-7.046-1.719-10.604.206-1.547 1.942-2.217 3.231-2.698C6.848.654 8.686.362 10.508.19c3.884-.378 7.854-.241 11.618.859 1.341.395 2.784.945 3.695 2.097.412.533.275 1.203.189 1.805z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_bookmark" xmlns="http://www.w3.org/2000/svg"><path d="M20.357 5.856q1.157 0 2.043.851t.885 2.008v23.284l-10.212-4.357-10.144 4.357V8.715q0-1.157.885-2.008t2.042-.851h14.502zm5.787 18.859V5.856q0-1.157-.851-2.042t-2.008-.885H8.715q0-1.157.885-2.042t2.043-.885h14.502q1.157 0 2.043.885t.885 2.042v23.216z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_auto" xmlns="http://www.w3.org/2000/svg"><path d="M16.846 18.938h2.382L15.22 7.785h-2.44L8.772 18.938h2.382l.871-2.44h3.95zm7.087-9.062L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809zm-11.385 4.937L14 10.282l1.452 4.531h-2.904z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_dark" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565q-1.51 0-3.079.697 1.917.871 3.108 2.701T15.22 14t-1.191 4.037-3.108 2.701q1.568.697 3.079.697zm9.933-11.559L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_light" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565 8.743 8.743 6.565 14t2.178 5.257T14 21.435zm9.933-3.311v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809L27.999 14z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_check" xmlns="http://www.w3.org/2000/svg"><path d="M8.885 20.197L25.759 3.323l2.24 2.24L8.885 24.677 0 15.792l2.24-2.24z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_clear" xmlns="http://www.w3.org/2000/svg"><path d="M32 3.222L19.222 16 32 28.778l-3.221 3.221-12.778-12.778L3.223 31.999.002 28.778 12.78 16 .002 3.222 3.223.001l12.778 12.778L28.779.001z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_cloud_off" xmlns="http://www.w3.org/2000/svg"><path d="M9.023 10.5H7q-1.914 0-3.281 1.395t-1.367 3.309 1.367 3.281T7 19.852h11.375zM3.5 4.976l1.477-1.477L24.5 23.022l-1.477 1.477-2.352-2.297H6.999q-2.898 0-4.949-2.051t-2.051-4.949q0-2.844 1.969-4.867t4.758-2.133zm19.086 5.578q2.242.164 3.828 1.832T28 16.351q0 3.008-2.461 4.758l-1.695-1.695q1.805-.984 1.805-3.063 0-1.422-1.039-2.461t-2.461-1.039h-1.75v-.602q0-2.68-1.859-4.539t-4.539-1.859q-1.531 0-2.953.711l-1.75-1.695Q11.431 3.5 14.001 3.5q2.953 0 5.496 2.078t3.09 4.977z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_code" xmlns="http://www.w3.org/2000/svg"><path d="M9.917 24.5a1.75 1.75 0 10-3.501.001 1.75 1.75 0 003.501-.001zm0-21a1.75 1.75 0 10-3.501.001A1.75 1.75 0 009.917 3.5zm11.666 2.333a1.75 1.75 0 10-3.501.001 1.75 1.75 0 003.501-.001zm1.75 0a3.502 3.502 0 01-1.75 3.026c-.055 6.581-4.721 8.039-7.82 9.023-2.898.911-3.846 1.349-3.846 3.117v.474a3.502 3.502 0 011.75 3.026c0 1.932-1.568 3.5-3.5 3.5s-3.5-1.568-3.5-3.5c0-1.294.711-2.424 1.75-3.026V6.526A3.502 3.502 0 014.667 3.5c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5a3.502 3.502 0 01-1.75 3.026v9.06c.93-.456 1.914-.766 2.807-1.039 3.391-1.075 5.323-1.878 5.359-5.687a3.502 3.502 0 01-1.75-3.026c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_contacts" xmlns="http://www.w3.org/2000/svg"><path d="M22.688 22.688v-2q0-1.5-2.281-2.438t-4.406-.938-4.406.938-2.281 2.438v2h13.375zM16 9q-1.25 0-2.125.875T13 12t.875 2.125T16 15t2.125-.875T19 12t-.875-2.125T16 9zm10.688-3.687q1.063 0 1.844.813t.781 1.875v16q0 1.063-.781 1.875t-1.844.813H5.313q-1.063 0-1.844-.813t-.781-1.875v-16q0-1.063.781-1.875t1.844-.813h21.375zM5.313 32v-2.688h21.375V32H5.313zM26.688 0v2.688H5.313V0h21.375z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_copy" xmlns="http://www.w3.org/2000/svg"><path d="M23.502 25.438V7.626H9.562v17.812h13.94zm0-20.315q1.013 0 1.787.745t.774 1.757v17.812q0 1.013-.774 1.787t-1.787.774H9.562q-1.013 0-1.787-.774t-.774-1.787V7.625q0-1.013.774-1.757t1.787-.745h13.94zM19.689 0v2.562H4.438v17.812H1.936V2.562q0-1.013.745-1.787T4.438.001h15.251z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_create" xmlns="http://www.w3.org/2000/svg"><path d="M31.499 7.167l-3.25 3.25-6.666-6.666 3.25-3.25q.5-.5 1.25-.5t1.25.5l4.166 4.166q.5.5.5 1.25t-.5 1.25zM.001 25.333L19.667 5.667l6.666 6.666L6.667 31.999H.001v-6.666z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_date" xmlns="http://www.w3.org/2000/svg"><path d="M27.192 28.844V11.192H4.808v17.652h22.384zm0-25.689q1.277 0 2.253.976t.976 2.253v22.459q0 1.277-.976 2.216t-2.253.939H4.808q-1.352 0-2.291-.901t-.939-2.253V6.385q0-1.277.939-2.253t2.291-.976h1.577V.001h3.23v3.155h12.769V.001h3.23v3.155h1.577zm-3.155 11.267v3.155h-3.23v-3.155h3.23zm-6.46 0v3.155h-3.155v-3.155h3.155zm-6.384 0v3.155h-3.23v-3.155h3.23z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_download" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 28.209h26.269v3.79H2.866v-3.79zm26.268-16.925L16 24.418 2.866 11.284h7.493V.001h11.283v11.283h7.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_email" xmlns="http://www.w3.org/2000/svg"><path d="M28.845 9.615v-3.23L16 14.422 3.155 6.385v3.23L16 17.577zm0-6.46q1.277 0 2.216.977T32 6.385v19.23q0 1.277-.939 2.253t-2.216.977H3.155q-1.277 0-2.216-.977T0 25.615V6.385q0-1.277.939-2.253t2.216-.977h25.69z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_git" xmlns="http://www.w3.org/2000/svg"><path d="M27.472 12.753L15.247.529a1.803 1.803 0 00-2.55 0l-2.84 2.84 2.137 2.137a2.625 2.625 0 013.501 3.501l3.499 3.499a2.625 2.625 0 11-1.237 1.237l-3.499-3.499c-.083.04-.169.075-.257.106v7.3a2.626 2.626 0 11-1.75 0v-7.3a2.626 2.626 0 01-1.494-3.607L8.62 4.606l-8.09 8.09a1.805 1.805 0 000 2.551l12.225 12.224a1.803 1.803 0 002.55 0l12.168-12.168a1.805 1.805 0 000-2.551z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_github" xmlns="http://www.w3.org/2000/svg"><path d="M16 .394c8.833 0 15.999 7.166 15.999 15.999 0 7.062-4.583 13.062-10.937 15.187-.813.146-1.104-.354-1.104-.771 0-.521.021-2.25.021-4.396 0-1.5-.5-2.458-1.083-2.958 3.562-.396 7.312-1.75 7.312-7.896 0-1.75-.625-3.167-1.646-4.291.167-.417.708-2.042-.167-4.25-1.333-.417-4.396 1.646-4.396 1.646a15.032 15.032 0 00-8 0S8.937 6.602 7.603 7.018c-.875 2.208-.333 3.833-.167 4.25-1.021 1.125-1.646 2.542-1.646 4.291 0 6.125 3.729 7.5 7.291 7.896-.458.417-.875 1.125-1.021 2.146-.917.417-3.25 1.125-4.646-1.333-.875-1.521-2.458-1.646-2.458-1.646-1.562-.021-.104.979-.104.979 1.042.479 1.771 2.333 1.771 2.333.938 2.854 5.396 1.896 5.396 1.896 0 1.333.021 2.583.021 2.979 0 .417-.292.917-1.104.771C4.582 29.455-.001 23.455-.001 16.393-.001 7.56 7.165.394 15.998.394zM6.063 23.372c.042-.083-.021-.187-.146-.25-.125-.042-.229-.021-.271.042-.042.083.021.187.146.25.104.062.229.042.271-.042zm.646.709c.083-.062.062-.208-.042-.333-.104-.104-.25-.146-.333-.062-.083.062-.062.208.042.333.104.104.25.146.333.062zm.625.937c.104-.083.104-.25 0-.396-.083-.146-.25-.208-.354-.125-.104.062-.104.229 0 .375s.271.208.354.146zm.875.875c.083-.083.042-.271-.083-.396-.146-.146-.333-.167-.417-.062-.104.083-.062.271.083.396.146.146.333.167.417.062zm1.187.521c.042-.125-.083-.271-.271-.333-.167-.042-.354.021-.396.146s.083.271.271.312c.167.062.354 0 .396-.125zm1.313.104c0-.146-.167-.25-.354-.229-.187 0-.333.104-.333.229 0 .146.146.25.354.229.187 0 .333-.104.333-.229zm1.208-.208c-.021-.125-.187-.208-.375-.187-.187.042-.312.167-.292.312.021.125.187.208.375.167s.312-.167.292-.292z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_gitlab" xmlns="http://www.w3.org/2000/svg"><path d="M1.629 11.034L14 26.888.442 17.048a1.09 1.09 0 01-.39-1.203l1.578-4.811zm7.217 0h10.309l-5.154 15.854zM5.753 1.475l3.093 9.559H1.63l3.093-9.559a.548.548 0 011.031 0zm20.618 9.559l1.578 4.811c.141.437-.016.922-.39 1.203l-13.558 9.84 12.371-15.854zm0 0h-7.216l3.093-9.559a.548.548 0 011.031 0z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_heart" xmlns="http://www.w3.org/2000/svg"><path d="M16 29.714a1.11 1.11 0 01-.786-.321L4.072 18.643c-.143-.125-4.071-3.714-4.071-8 0-5.232 3.196-8.357 8.535-8.357 3.125 0 6.053 2.464 7.464 3.857 1.411-1.393 4.339-3.857 7.464-3.857 5.339 0 8.535 3.125 8.535 8.357 0 4.286-3.928 7.875-4.089 8.035L16.785 29.392c-.214.214-.5.321-.786.321z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_down" xmlns="http://www.w3.org/2000/svg"><path d="M3.281 5.36L14 16.079 24.719 5.36 28 8.641l-14 14-14-14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M25.875 28.25L22.125 32 6.126 16.001 22.125.002l3.75 3.75-12.25 12.25z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M6.125 28.25L18.375 16 6.125 3.75 9.875 0l15.999 15.999L9.875 31.998z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_up" xmlns="http://www.w3.org/2000/svg"><path d="M24.719 22.64L14 11.921 3.281 22.64 0 19.359l14-14 14 14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_link" xmlns="http://www.w3.org/2000/svg"><path d="M24.037 7.963q3.305 0 5.634 2.366T32 16t-2.329 5.671-5.634 2.366h-6.46v-3.08h6.46q2.028 0 3.493-1.465t1.465-3.493-1.465-3.493-3.493-1.465h-6.46v-3.08h6.46zM9.615 17.578v-3.155h12.77v3.155H9.615zM3.005 16q0 2.028 1.465 3.493t3.493 1.465h6.46v3.08h-6.46q-3.305 0-5.634-2.366T0 16.001t2.329-5.671 5.634-2.366h6.46v3.08h-6.46q-2.028 0-3.493 1.465t-1.465 3.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_menu" xmlns="http://www.w3.org/2000/svg"><path d="M.001 5.334h31.998v3.583H.001V5.334zm0 12.416v-3.5h31.998v3.5H.001zm0 8.916v-3.583h31.998v3.583H.001z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_notifications" xmlns="http://www.w3.org/2000/svg"><path d="M25.846 22.154l3.308 3.308v1.615H2.847v-1.615l3.308-3.308V14q0-3.846 1.961-6.692t5.423-3.692V2.462q0-1 .692-1.731T16 0t1.769.731.692 1.731v1.154q3.461.846 5.423 3.692T25.846 14v8.154zM16 32q-1.385 0-2.346-.923t-.962-2.308h6.615q0 1.308-1 2.269T15.999 32z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_person" xmlns="http://www.w3.org/2000/svg"><path d="M16 20.023q5.052 0 10.526 2.199t5.473 5.754v4.023H0v-4.023q0-3.555 5.473-5.754t10.526-2.199zM16 16q-3.275 0-5.614-2.339T8.047 8.047t2.339-5.661T16 0t5.614 2.386 2.339 5.661-2.339 5.614T16 16z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_pin" xmlns="http://www.w3.org/2000/svg"><path d="M17.6 19.2h9.6v-1.6L22.4 16V3.2l4.8-1.6V0H4.8v1.6l4.8 1.6V16l-4.8 1.6v1.6h9.6v11.2L16 32l1.6-1.6V19.2z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_rss_feed" xmlns="http://www.w3.org/2000/svg"><path d="M-.481 12.048q8.482 0 14.457 5.976t5.976 14.457h-5.879q0-5.976-4.289-10.264T-.48 17.928v-5.879zm0-11.565q13.204 0 22.601 9.397t9.397 22.601h-5.783q0-10.891-7.662-18.553T-.481 6.266V.483zm0 27.468q0-1.831 1.301-3.132t3.229-1.301 3.181 1.253 1.253 3.181-1.301 3.229-3.132 1.301q-1.928 0-3.229-1.301T-.48 27.952z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_search" xmlns="http://www.w3.org/2000/svg"><path d="M11.925 20.161q3.432 0 5.834-2.402t2.402-5.834-2.402-5.834-5.834-2.402-5.834 2.402-2.402 5.834 2.402 5.834 5.834 2.402zm10.981 0L32 29.255 29.255 32l-9.094-9.094v-1.458l-.515-.515q-3.26 2.831-7.721 2.831-4.976 0-8.45-3.432T.001 11.925t3.474-8.45 8.45-3.474 8.407 3.474 3.432 8.45q0 1.802-.858 4.075t-1.973 3.646l.515.515h1.458z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_security" xmlns="http://www.w3.org/2000/svg"><path d="M16 0l13.072 5.855v8.715q0 6.059-3.745 11.063T16 31.999q-5.583-1.362-9.327-6.366T2.928 14.57V5.855zm0 16v13.004q4.017-1.294 6.808-4.868T26.144 16H16zm0 0V3.2L5.856 7.693v8.306H16z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_star" xmlns="http://www.w3.org/2000/svg"><path d="M14 22.052L5.324 27.31l2.3-9.859L0 10.813l10.056-.854L14 .692l3.944 9.267L28 10.813l-7.624 6.638 2.3 9.859z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_tag" xmlns="http://www.w3.org/2000/svg"><path d="M17.52 17.52v-7.041h-7.041v7.041h7.041zM28 10.479h-7.041v7.041H28v3.439h-7.041V28H17.52v-7.041h-7.041V28H7.04v-7.041H-.001V17.52H7.04v-7.041H-.001V7.04H7.04V-.001h3.439V7.04h7.041V-.001h3.439V7.04H28v3.439z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_timer" xmlns="http://www.w3.org/2000/svg"><path d="M16 29q4.428 0 7.536-3.143t3.107-7.571-3.107-7.536T16 7.643 8.464 10.75t-3.107 7.536 3.107 7.571T16 29zM26.714 9.786q1.214 1.571 2.107 4.036t.893 4.464q0 5.643-4 9.678T16 32t-9.714-4.036-4-9.678 4-9.678T16 4.572q1.929 0 4.464.929t4.107 2.143l2.143-2.214q1.143.929 2.143 2.143zM14.5 19.857v-9.143h3v9.143h-3zM20.571.001v3.071h-9.143V.001h9.143z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_tree" xmlns="http://www.w3.org/2000/svg"><path d="M32 14.423H20.808V9.616h-3.23v12.77h3.23v-4.807H32v12.845H20.808v-4.807h-6.385v-16h-3.23v4.807H.001V1.579h11.192v4.807h9.615V1.579H32v12.845z"/></svg></defs></svg>
+
+
+
+
+    <div
+      class="wrapper "
+    >
+      <header class="gblog-header">
+  <div class="container flex flex-wrap">
+    <div class="gblog-header__col-1 flex justify-start hidden-mobile"></div>
+    <div class="gblog-header__col-2 flex align-center justify-center ">
+      <a class="gblog-header__link" rel="me" href="https://re-dojo.github.io/">
+        <span class="gblog-brand flex align-center justify-center">
+          <img
+            class="gblog-brand__img"
+            src="/images/brand/logo.svg"
+            alt=""
+          />
+          <span class="gblog-brand__title">RE-Dojo</span>
+        </span>
+        
+          <span class="gblog-brand__subtitle flex align-center justify-center">Blog about reverse engineering and program analysis</span>
+        
+      </a>
+    </div>
+    <div class="gblog-header__col-3 flex justify-end">
+      <span id="gblog-dark-mode">
+        <svg class="icon gblog_brightness_dark">
+          <title></title>
+          <use xlink:href="#gblog_brightness_dark"></use>
+        </svg>
+        <svg class="icon gblog_brightness_light">
+          <title></title>
+          <use xlink:href="#gblog_brightness_light"></use>
+        </svg>
+        <svg class="icon gblog_brightness_auto">
+          <title></title>
+          <use xlink:href="#gblog_brightness_auto"></use>
+        </svg>
+      </span>
+    </div>
+  </div>
+</header>
+<nav class="gblog-nav">
+  <input type="checkbox" id="menu-control" class="hidden" />
+  <div class="gblog-nav__control">
+    <label for="menu-control" class="flex align-center justify-center">
+      <svg class="icon gblog_menu"><use xlink:href="#gblog_menu"></use></svg>
+      <svg class="icon gblog_clear"><use xlink:href="#gblog_clear"></use></svg>
+      <span>Navigation</span>
+    </label>
+  </div>
+  <ul class="gblog-nav__list container flex flex-wrap justify-center menu-content">
+    
+    
+      
+        
+          <li>
+            <a
+              class="gblog-nav__entry"
+              href="/tags/Challenge/"
+            >
+              Challenge
+            </a>
+          </li>
+        
+      
+        
+          <li>
+            <a
+              class="gblog-nav__entry"
+              href="/tags/Reverse/"
+            >
+              Reverse
+            </a>
+          </li>
+        
+      
+    
+    
+  </ul>
+</nav>
+
+
+
+      <main class="gblog-page container">
+        
+  <article class="gblog-post">
+    <header class="gblog-post__header">
+      
+      
+
+
+      <h1 class="gblog-post__title">NorthSec 2018 - Mars Analytica</h1>
+
+      
+        <div class="flex flex-wrap align-center gblog-post__meta gblog-post__meta--head">
+          <span class="flex align-center no-wrap">
+  <svg class="icon gblog_date"><use xlink:href="#gblog_date"></use></svg>
+  <span class="gblog-post__tag">
+    <time datetime="2018-10-28T00:00:00Z">
+      
+      Oct 28, 2018
+    </time>
+  </span>
+</span>
+
+<span class="flex align-center no-wrap">
+  <svg class="icon gblog_timer"><use xlink:href="#gblog_timer"></use></svg>
+  <span class="gblog-post__tag">12 min read</span>
+</span>
+
+
+
+
+
+  
+    
+    
+      
+        <span class="flex align-center no-wrap">
+          <svg class="icon gblog_person"><use xlink:href="#gblog_person"></use></svg>
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a class="gblog-button__link" href="/authors/scud/" title="All posts of this author">
+      scud
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+
+
+
+
+  
+    
+    
+      
+        <span class="flex align-center no-wrap">
+          <svg class="icon gblog_bookmark"><use xlink:href="#gblog_bookmark"></use></svg>
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a
+      class="gblog-button__link"
+      href="/tags/Challenge/"
+      title="All posts tagged with 'Challenge'"
+    >
+      Challenge
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+    
+    
+      
+        <span class="flex align-center">
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a
+      class="gblog-button__link"
+      href="/tags/Reverse/"
+      title="All posts tagged with 'Reverse'"
+    >
+      Reverse
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+
+
+
+
+
+
+        </div>
+      
+    </header>
+    <section class="gblog-markdown">
+      <p>In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured.
+One of the reverse engineering challenges was a program called <strong>MarsAnalytica</strong>. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.</p>
+<p>This blogpost will discuss how i solved it.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="probing-the-martian-executable">
+        Probing the martian executable
+        <a data-clipboard-text="https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/#probing-the-martian-executable" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Probing the martian executable" href="#probing-the-martian-executable">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>Description:<br>
+&ldquo;The government has hired a specialized data brokerage, collection, and analysis firm known as Mars Analytica to assess the societal worth and risk of its citizens in preparations for the colonization of Mars. Publicly officials are denying this, but you got your hands on their analysis software. Find a way to log in with a cleared citizen id and expose the Mars Analytica firm&rsquo;s true purpose&rdquo;.</p>
+<p>Before attempting to reverse a binary, it is always good to take a look at the low-hanging fruits: the file format, the size, the strings&hellip;
+At first sight the binary didn&rsquo;t seem to be too big.
+Running the file utility against it indicated that it was compressed with UPX. The command output also indicated that it is a stripped ELF x86-64 binary.
+After having unpacked the ELF binary, the size grew to almost <strong>11M</strong> :O
+No useful strings are present in the binary.</p>
+<p><img
+  src="/images/mars/MarsAnalytica_output.png"
+  alt="Image"
+  title="Running the executable"
+/></p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="alien-elf-is-a-thing">
+        Alien elf is a thing
+        <a data-clipboard-text="https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/#alien-elf-is-a-thing" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Alien elf is a thing" href="#alien-elf-is-a-thing">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>After having opened the binary in IDA and let the autoanalysis complete (which took some time), the navigation bar didn&rsquo;t look reassuring.</p>
+<p><img
+  src="/images/mars/navigation_bar.png"
+  alt="Image"
+  title="Navigation bar"
+/></p>
+<p>Looking at the main function revealed a lot of <em>weird</em> stuff are going on:</p>
+<ul>
+<li>a very large stack frame is created (0xBA4A8)</li>
+<li>the classic call combination time/srand is present but the rand function is not even imported</li>
+<li>5 different large arrays of bytes are copied to the stack</li>
+<li>some weird calculations based on the arrays copied is happening</li>
+<li>the function ends with a push/ret</li>
+</ul>
+<p>Just out of curiosity, I took a look at the disassembly following the main function. One could see that the same weird computation is present in the following (undefined) functions. Moreover, most of these functions either ends with a <code>push/ret</code> or a <code>jmp rax</code>.
+This code construct reminded me of a virtual machine where each handler computes the address of the next handler (like a distributed dispatch or <em>direct-threaded code</em>).
+This can be further verified by dynamic analysis using a debugger such as GDB but beforehand, once again: low-hanging fruits.
+A little bit of <code>strace</code> could give an overview of how the binary behaves.</p>
+<p><img
+  src="/images/mars/strace_output.png"
+  alt="Image"
+  title="Strace output"
+/></p>
+<p>I guessed that all the &ldquo;write(1,char,1)&rdquo; lines were in fact calls to the <code>putchar</code> function. A good thing to do also is looking at the cross-references. There are 861 calls to the <code>putchar</code> function which meant that there are probably some redundant handlers.</p>
+<p>Another interesting function to look at was the <code>malloc</code> function. The first cross-reference took me to a function which seemed to be a list insertion algorithm.</p>
+<p><img
+  src="/images/mars/push_val.png"
+  alt="Image"
+  title="List insertion"
+/></p>
+<p>Interestingly enough, there are 1178 cross-references to this function.
+A hunch told me to look at the <code>free</code> function. As expected the first cross-reference to the <code>free</code> function is a routine which implements a list removal algorithm. There are 1276 cross-references to that function.
+At first sight it looked like that virtual machine might be stack-based.</p>
+<p>Then I started debugging the binary with GDB but it didn&rsquo;t really helped me except to confirm that each handler was indeed in charge of computing the next handler address.</p>
+<p>At that moment I thought that I had enough information to start reversing.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="getting-acquainted-with-the-alien">
+        Getting acquainted with the alien
+        <a data-clipboard-text="https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/#getting-acquainted-with-the-alien" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Getting acquainted with the alien" href="#getting-acquainted-with-the-alien">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>In order to implement a disassembler for the VM I had to focus on the weird computation first to be able to compute the next handler.
+The main function is the right entrypoint to gather information about the VM initialization. As mentioned earlier the 5 arrays are essential to the handler computation. After renaming some variables, following the computation dynamically, diffing with other handlers, it was possible to understand and reimplement the routine.</p>
+<pre tabindex="0"><code>	mov	[rbp+var_65F40], 0
+	mov	rax, [rbp+var_65F40]
+	mov	edx, eax
+	lea	rax, [rbp+tab2]
+	mov	[rbp+ptr_cpy_e50140], rax
+	lea	rax, [rbp+tab1]
+	mov	[rbp+ptr_cpy_e4dc00], rax
+	mov	[rbp+var_908B0], edx
+	mov	rax, [rbp+ptr_cpy_e4dc00]
+	mov	[rbp+var_5DB68], rax
+	mov	eax, [rbp+var_908B0]
+	mov	[rbp+var_908AC], eax
+	mov	eax, [rbp+var_908AC]
+	imul	ecx, eax, 7AAh
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB68]
+	add	rax, rdx
+	mov	eax, [rax]
+	mov	rdx, [rbp+ptr_cpy_e50140]
+	mov	[rbp+var_5DB60], rdx
+	mov	[rbp+var_908A8], eax
+	mov	eax, [rbp+var_908A8]
+	imul	ecx, eax, 5A5h
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB60]
+	add	rax, rdx
+	mov	eax, [rax]
+	lea	rdx, [rbp+tab4]
+	mov	[rbp+var_5DB98], rdx
+	lea	rdx, [rbp+tab3]
+	mov	[rbp+var_5DB90], rdx
+	mov	[rbp+var_908BC], eax
+	mov	rax, [rbp+var_5DB90]
+	mov	[rbp+var_5DB88], rax
+	mov	eax, [rbp+var_908BC]
+	mov	[rbp+var_908B8], eax
+	mov	eax, [rbp+var_908B8]
+	imul	ecx, eax, 259h
+	mov	edx, 2F3BAFEDh
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 0AD7h
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB88]
+	add	rax, rdx
+	mov	eax, [rax]
+	mov	rdx, [rbp+var_5DB98]
+	mov	[rbp+var_5DB80], rdx
+	mov	[rbp+var_908B4], eax
+	mov	eax, [rbp+var_908B4]
+	imul	ecx, eax, 1D5h
+	mov	edx, 2F3BAFEDh
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 0AD7h
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DB80]
+	add	rax, rdx
+	mov	esi, [rax]
+	mov	rax, [rbp+var_65F40]
+	lea	rdx, [rax+1]
+	mov	[rbp+var_65F40], rdx
+	mov	edx, eax
+	lea	rax, [rbp+tab2]
+	mov	[rbp+var_5DBB8], rax
+	lea	rax, [rbp+tab1]
+	mov	[rbp+var_5DBB0], rax
+	mov	dword ptr [rbp+var_908CC+4], edx
+	mov	rax, [rbp+var_5DBB0]
+	mov	[rbp+var_5DBA8], rax
+	mov	eax, dword ptr [rbp+var_908CC+4]
+	mov	[rbp+var_908C4], eax
+	mov	eax, [rbp+var_908C4]
+	imul	ecx, eax, 7AAh
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DBA8]
+	add	rax, rdx
+	mov	eax, [rax]
+	mov	rdx, [rbp+var_5DBB8]
+	mov	[rbp+var_5DBA0], rdx
+	mov	[rbp+var_908C0], eax
+	mov	eax, [rbp+var_908C0]
+	imul	ecx, eax, 5A5h
+	mov	edx, 3700C083h
+	mov	eax, ecx
+	imul	edx
+	sar	edx, 9
+	mov	eax, ecx
+	sar	eax, 1Fh
+	sub	edx, eax
+	mov	eax, edx
+	imul	eax, 94Fh
+	sub	ecx, eax
+	mov	eax, ecx
+	cdqe
+	lea	rdx, ds:0[rax*4]
+	mov	rax, [rbp+var_5DBA0]
+	add	rax, rdx
+	mov	eax, [rax]
+	cdqe
+	mov	rax, [rbp+rax*8+tab5]
+	mov	[rbp+var_5DBC0], rax
+	mov	dword ptr [rbp+var_908CC], esi
+	mov	eax, dword ptr [rbp+var_908CC]
+	movsxd	rdx, eax
+	mov	rax, [rbp+var_5DBC0]
+	add	rax, rdx
+	push	rax
+	jmp	short locret_401149 ; 0x402335
+locret_401149:
+	retn
+</code></pre><p>The stack variable <code>rbp-0x65f40</code> seemed to be the &ldquo;program counter&rdquo; because it is incremented everytime. Also its value is used as an index in the first array. The value fetched is then used as an index in the second array&hellip;<br>
+The following pseudocode might explain it better (using IDApython).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># get the arrays used by the dispatcher</span>
+</span></span><span class="line"><span class="cl"><span class="n">tab1</span><span class="o">=</span><span class="p">[</span><span class="n">Dword</span><span class="p">(</span><span class="mh">0xE4DC00</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x253C</span><span class="p">,</span><span class="mi">4</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl"><span class="n">tab2</span><span class="o">=</span><span class="p">[</span><span class="n">Dword</span><span class="p">(</span><span class="mh">0xE50140</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x253C</span><span class="p">,</span><span class="mi">4</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl"><span class="n">tab3</span><span class="o">=</span><span class="p">[</span><span class="n">Dword</span><span class="p">(</span><span class="mh">0xE52680</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x2B5C</span><span class="p">,</span><span class="mi">4</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl"><span class="n">tab4</span><span class="o">=</span><span class="p">[</span><span class="n">Dword</span><span class="p">(</span><span class="mh">0xE551E0</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x2B5C</span><span class="p">,</span><span class="mi">4</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl"><span class="n">tab5</span><span class="o">=</span><span class="p">[</span><span class="n">Qword</span><span class="p">(</span><span class="mh">0xE57D40</span><span class="o">+</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x56B8</span><span class="p">,</span><span class="mi">8</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># dispatcher function</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># num is the value of VM.PC</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">dispatcher</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">global</span> <span class="n">tab1</span><span class="p">,</span><span class="n">tab2</span><span class="p">,</span><span class="n">tab3</span><span class="p">,</span><span class="n">tab4</span><span class="p">,</span><span class="n">tab5</span>
+</span></span><span class="line"><span class="cl">    <span class="n">eax</span> <span class="o">=</span> <span class="n">tab4</span><span class="p">[</span><span class="n">tab3</span><span class="p">[</span><span class="n">tab2</span><span class="p">[</span><span class="n">tab1</span><span class="p">[(</span><span class="n">num</span><span class="o">*</span><span class="mi">1962</span><span class="p">)</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">tab1</span><span class="p">)]</span><span class="o">*</span><span class="mi">1445</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">tab2</span><span class="p">)]</span><span class="o">*</span><span class="mi">601</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">tab3</span><span class="p">)]</span><span class="o">*</span><span class="mi">469</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">tab4</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">edx</span> <span class="o">=</span> <span class="n">tab5</span><span class="p">[</span><span class="n">tab2</span><span class="p">[</span><span class="n">tab1</span><span class="p">[(</span><span class="n">num</span><span class="o">*</span><span class="mi">1962</span><span class="p">)</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">tab1</span><span class="p">)]</span><span class="o">*</span><span class="mi">1445</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">tab2</span><span class="p">)]]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">eax</span><span class="o">+</span><span class="n">edx</span>
+</span></span></code></pre></div><p>Looking at the first handler @ <strong>0x402335</strong>, it starts to compute a number in the same fashion as the dispatcher code. The number is then passed to the function which implements list insertion. Finally the next handler is computed. As seen in the list insertion code, a pointer to the head is passed and is updated after insertion. I infered that the variable <code>rbp-0x65f48</code> was the &ldquo;VM stack pointer&rdquo;. The start of the function fetches an immediate which is pushed. The handler @ <strong>0x402335</strong> is of the form &ldquo;PUSH Immediate&rdquo;.</p>
+<p>The next handler to look at was @ <strong>0x401b8f</strong>. It starts by popping (list removal function) one value off of the virtual stack, gets an immediate value and stores the popped value in a virtual stack variable indexed by the immediate value. For instance, at the beginning we have:<br>
+PUSH 0<br>
+PUSH 9<br>
+STORE SP[0]</p>
+<p>If we split and keep track of the states we have:<br>
+PUSH 0 =&gt; SP[0] = 0<br>
+PUSH 9 =&gt; SP[0] = 0, SP[1] = 9<br>
+STORE SP[0] =&gt; SP[0] = 9</p>
+<p>I concluded that this handler was of the following form:<br>
+STORE SP[Immediate Index]</p>
+<p>Since the machine implements a stack machine it is really important to understand how values and pushed and popped. The astute reader would have probably noticed that it is also possible to access stack variables by index.</p>
+<p><img
+  src="/images/mars/list_store_at_index.png"
+  alt="Image"
+  title="Store in stack variable by index"
+/></p>
+<p>After reversing some more handlers I eventually got stucked because there were too many handlers (remember the 10M size?&hellip; ) and I saw some redundant handlers not to mention that a lot of them were very obfuscated.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="theres-also-water-on-mars">
+        There&rsquo;s also water on Mars
+        <a data-clipboard-text="https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/#theres-also-water-on-mars" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor There&rsquo;s also water on Mars" href="#theres-also-water-on-mars">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>At that moment I really thought about completely changing my way of solving the challenge because I would have needed to reverse too many handlers to implement a disassembler based on handlers start address.<br>
+Though reverse engineering really consists in finding/recognizing pattens, experiencing, repetition&hellip; so I went looking for patterns.
+At some point I started to see a correlation between the calls a handler makes and the behaviour of the handler.<br>
+For instance, I knew that if a handler calls the functions <code>pop_val</code>, <code>putchar</code> and <code>fflush</code> then the handler just implements a <code>putchar</code>.</p>
+<p>In order to take advantage of that, one need to gather the handler&rsquo;s &ldquo;cross-references from&rdquo; and compare that list. The following code describes the process:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">f_putchar</span><span class="o">=</span><span class="p">[</span><span class="s2">&#34;pop_val&#34;</span><span class="p">,</span><span class="s2">&#34;putchar&#34;</span><span class="p">,</span><span class="s2">&#34;fflush&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">calls</span><span class="o">=</span><span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">idautils</span><span class="o">.</span><span class="n">FuncItems</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span> <span class="k">if</span> <span class="n">idaapi</span><span class="o">.</span><span class="n">is_call_insn</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl"><span class="n">targets</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">GetOpnd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">calls</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">f_putchar</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;putchar</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>The next thing I noticed was the most important information.<br>
+Some handlers are very complicated to understand due to their obfuscation but as the VM is stack-based, the code needs to access the stack variables and it does so by calling the <code>pop_val</code> function for example. The following images show the overview of a XOR handler and then its relevant code.</p>
+<p><img
+  src="/images/mars/xor_handler_view.png"
+  alt="Image"
+  title="XOR handler overview"
+/></p>
+<p><img
+  src="/images/mars/xor_handler.png"
+  alt="Image"
+  title="XOR handler relevant code"
+/></p>
+<p>As one can see, that part is not obfuscated and it is pretty clear:</p>
+<ul>
+<li>two values are &ldquo;popped&rdquo; from the stack</li>
+<li>a XOR operation is made between the two values</li>
+<li>the result is pushed on the stack</li>
+</ul>
+<p>This is clearly a weakness in the binary obfuscation and I decided to take advantage of it.
+To that end, one need to:</p>
+<ul>
+<li>make sure that a handler calls 3 functions (&ldquo;pop_val&rdquo; twice and &ldquo;push_val&rdquo;)</li>
+<li>retrieve the operation right after the second &ldquo;pop_val&rdquo;</li>
+</ul>
+<p>The following code searches for the pattern:<br>
+0 call pop_val<br>
+&hellip;<br>
+17 call pop_val<br>
+22 operation</p>
+<p>or the following pattern (for the div instruction)<br>
+0 call pop_val<br>
+&hellip;<br>
+17 call pop_val<br>
+&hellip;<br>
+30 cdq<br>
+31 idiv</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">operations</span><span class="o">=</span><span class="p">{</span><span class="s2">&#34;xor&#34;</span><span class="p">:</span><span class="s2">&#34;xor&#34;</span><span class="p">,</span><span class="s2">&#34;sub&#34;</span><span class="p">:</span><span class="s2">&#34;sub&#34;</span><span class="p">,</span><span class="s2">&#34;imul&#34;</span><span class="p">:</span><span class="s2">&#34;mul&#34;</span><span class="p">,</span><span class="s2">&#34;lea&#34;</span><span class="p">:</span><span class="s2">&#34;add&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">targets</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&#34;pop_val&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">operation</span><span class="o">=</span><span class="kc">None</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">caller</span> <span class="ow">in</span> <span class="n">calls</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">GetOpnd</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&#34;pop_val&#34;</span> <span class="ow">and</span> <span class="n">caller</span><span class="o">+</span><span class="mi">17</span> <span class="ow">in</span> <span class="n">calls</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">mnem</span> <span class="o">=</span> <span class="n">GetMnem</span><span class="p">(</span><span class="n">caller</span><span class="o">+</span><span class="mi">22</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="n">mnem</span> <span class="ow">in</span> <span class="n">operations</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">operation</span><span class="o">=</span><span class="n">operations</span><span class="p">[</span><span class="n">mnem</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">elif</span> <span class="n">GetMnem</span><span class="p">(</span><span class="n">caller</span><span class="o">+</span><span class="mi">30</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&#34;cdq&#34;</span> <span class="ow">and</span> <span class="n">GetMnem</span><span class="p">(</span><span class="n">caller</span><span class="o">+</span><span class="mi">31</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&#34;idiv&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">operation</span><span class="o">=</span><span class="s2">&#34;div&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">operation</span> <span class="o">+</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span> <span class="k">if</span> <span class="n">operation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">unknown_handler</span><span class="p">(</span><span class="n">PC</span><span class="p">,</span><span class="n">targets</span><span class="p">)</span>
+</span></span></code></pre></div><p>Once again here I made a big assumption regarding the patterns I saw and I didn&rsquo;t take into account false positives I could have had so I strongly advise against that technique.<br>
+Generally speaking, it is always better to come up with a more generic and a less pattern-based solution for reuse purposes but also to make the solution more resilient to broken patterns.</p>
+<p>Another big assumption I made was using a linear sweep for the disassembly.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="mars-attack">
+        Mars Attack
+        <a data-clipboard-text="https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/#mars-attack" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Mars Attack" href="#mars-attack">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>After putting the different techniques together and having crossed my fingers for the code not to break, I obtained the following assembly listing:</p>
+<pre tabindex="0"><code>...
+0x6f2:	0x401f62:	load[0x00000009]
+0x6f3:	0x401f62:	load[0x0000001b]
+0x6f4:	0xbde28a:	mul
+0x6f5:	0x401f62:	load[0x00000017]
+0x6f6:	0x401f62:	load[0x00000012]
+0x6f7:	0x402ab2:	swap
+0x6f8:	0xbdf48d:	sub
+0x6f9:	0x401f62:	load[0x0000001d]
+0x6fa:	0x402ab2:	swap
+0x6fb:	0xbe059f:	xor
+0x6fc:	0xbe1957:	mul
+0x6fd:	0x402335:	push 0x00003fcf
+0x6fe:	0xbe2b48:	cmp
+...
+</code></pre><p>The code displays the banner character after character and then asks for a &ldquo;citizen id&rdquo;.
+The characters are put in the virtual stack but they are not next to each other. Instead the characters are kind of rearranged by the following list:<br>
+7,8,13,15,16,26,27,22,21,4,18,28,23,29,9,1,25,30,17<br>
+It means that the first character will be put in the 7th virtual stack variable, the 2nd character at the 8th position and so on.</p>
+<p>After that some computations between characters are made and the result is compared to hardcoded values. The verification algorithm is based on several equations.<br>
+For instance the first equation is:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">*</span> <span class="n">buf</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span><span class="o">*</span><span class="p">((</span><span class="n">buf</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">-</span><span class="n">buf</span><span class="p">[</span><span class="mi">10</span><span class="p">])</span><span class="o">^</span><span class="n">buf</span><span class="p">[</span><span class="mi">13</span><span class="p">])</span> <span class="o">-</span> <span class="mh">0x3fcf</span> <span class="o">==</span> <span class="mi">0</span>
+</span></span></code></pre></div><p>After having gathered all the different equations I used z3 to solve them. The code is pretty straightforward. First one need to declare all the characters, add a constraint to make sure the character is printable and then add the equations.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">z3</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Flag order</span>
+</span></span><span class="line"><span class="cl"><span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">17</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span><span class="o">=</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">	<span class="n">flag</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">BitVec</span><span class="p">(</span><span class="s2">&#34;c_</span><span class="si">%d</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#char constraints</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">flag</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">	<span class="n">solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">32</span><span class="p">,</span> <span class="n">flag</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">126</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	
+</span></span><span class="line"><span class="cl"><span class="c1">#equations</span>
+</span></span><span class="line"><span class="cl"><span class="n">solver</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">flag</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">*</span> <span class="n">flag</span><span class="p">[</span><span class="mi">27</span><span class="p">])</span><span class="o">*</span><span class="p">((</span><span class="n">flag</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span><span class="o">-</span><span class="n">flag</span><span class="p">[</span><span class="mi">18</span><span class="p">])</span><span class="o">^</span><span class="n">flag</span><span class="p">[</span><span class="mi">29</span><span class="p">])</span> <span class="o">==</span> <span class="mh">0x3fcf</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">solution</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">sat</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">model</span><span class="o">=</span><span class="n">solver</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">solution</span><span class="o">+=</span><span class="nb">chr</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="n">flag</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">as_signed_long</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span> <span class="n">solution</span>
+</span></span></code></pre></div><p>The scripts yields the following result:<br>
+<strong>q4Eo-eyMq-1dd0-leKx</strong></p>
+<p>The different scripts can be found <a
+  class="gblog-markdown__link"
+  href="https://github.com/0xSQUD/mars_analytica"
+  
+>here</a>.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="it-got-stucked-in-the-sand-">
+        It got stucked in the sand&hellip; :(
+        <a data-clipboard-text="https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/#it-got-stucked-in-the-sand-" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor It got stucked in the sand&hellip; :(" href="#it-got-stucked-in-the-sand-">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>I first tried to use <code>Pin</code> which thanks to the instruction counter helped me to get the correct number of characters the challenge expects. I then wanted to use <code>Triton</code> but I had some memory problems with Pin also it was quite slow (not to mention that I was doing this in a VM).</p>
+<p>Also some handlers push a letter which is computed through obfuscated code. I took the decision to ignore that even if it makes the assembly kind of incomplete&hellip;</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="leaving-the-bloody-planet-to-come-back-stronger">
+        Leaving the bloody planet to come back stronger
+        <a data-clipboard-text="https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/#leaving-the-bloody-planet-to-come-back-stronger" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Leaving the bloody planet to come back stronger" href="#leaving-the-bloody-planet-to-come-back-stronger">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>This binary was quite challenging as it features several obfuscation techniques such as code virtualization, dead code, bogus control flow, opaque predicates, direct-threaded code&hellip;
+I want to thank <a
+  class="gblog-markdown__link"
+  href="https://twitter.com/0xtowel?lang=en"
+  
+>Towel</a> for this incredible challenge and a shoutout to <a
+  class="gblog-markdown__link"
+  href="https://twitter.com/w4kfu?lang=en"
+  
+>Wakfu</a> for the few pointers he gave without spoiling all the fun.</p>
+<p>The solution is far from being the best but I think as it is a CTF challenge this IDA api-based solution is acceptable as I took advantage of the VM characterics.
+Different approaches could be taken here such as:</p>
+<ul>
+<li>using symbolic execution and the knowledge of the VM structure to resolve each handler</li>
+<li>using DSE</li>
+<li>using taint analysis</li>
+</ul>
+<p>Actually I plan to come back with a more elegant solution so stay tuned :)</p>
+
+    </section>
+  </article>
+
+      </main>
+
+      <footer class="gblog-footer">
+  <nav class="container flex">
+    <div>
+      <section class="flex flex-wrap align-center">
+        
+        
+        
+        
+      </section>
+      <section class="flex flex-wrap align-center">
+        <span class="gblog-footer__item">
+          Built with <a href="https://gohugo.io/" class="gblog-footer__link">Hugo</a> and
+          <svg class="icon gblog_heart"><use xlink:href="#gblog_heart"></use></svg>
+        </span>
+      </section>
+      
+      
+        <section class="flex flex-wrap align-center">
+          <span class="gblog-footer__item">
+            Content licensed under
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="gblog-footer__link no-wrap">CC BY-SA 4.0</a>
+          </span>
+        </section>
+      
+    </div>
+    
+      <div class="flex flex-25 justify-end">
+        <span class="gblog-footer__item text-right">
+          <a class="gblog-footer__link fake-link" href="#" aria-label="Back to top">
+            <svg class="icon gblog_keyboard_arrow_up">
+              <use xlink:href="#gblog_keyboard_arrow_up"></use>
+            </svg>
+            <span class="hidden-mobile">Back to top</span>
+          </a>
+        </span>
+      </div>
+    
+  </nav>
+</footer>
+
+    </div>
+  </body>
+</html>

@@ -1,14 +1,74 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>RE-Dojo</title>
+    <title>icecr4ck on RE-Dojo</title>
     <link>https://re-dojo.github.io/authors/icecr4ck/</link>
-    <description>Recent content on RE-Dojo</description>
+    <description>Recent content in icecr4ck on RE-Dojo</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <language>en</language>
+    <lastBuildDate>Sun, 13 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://re-dojo.github.io/authors/icecr4ck/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flare-On 9 solutions (part 1)</title>
+      <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-1/</link>
+      <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-1/</guid>
+      <description>This year, I participated in the Flare-On challenge organized by the FLARE team from FireEye.
+In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.
+ I want to thank all the challenge authors, especially the one that made the eight challenge as it was reallly the hardest but also the one that I learned the most from.</description>
+    </item>
     
-	<atom:link href="https://re-dojo.github.io/authors/icecr4ck/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flare-On 9 solutions (part 2)</title>
+      <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-2/</link>
+      <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-2/</guid>
+      <description>This blog post details the solutions of the challenges 5 to 7 of the Flare-On 9.
+   Challenge 5 - T8  Description Solution   Challenge 6 - à la mode  Description Solution   Challenge 7 - anode  Description Extracting and analyzing the JS script Dealing with the math module Extracting the equations Solving the equations        Here are the links to the other solutions:</description>
+    </item>
     
+    <item>
+      <title>Flare-On 9 solutions (part 3)</title>
+      <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-3/</link>
+      <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-3/</guid>
+      <description>This blog post details the solution of the challenge 8 of the Flare-On 9.
+   Challenge 8 - backdoor  Description First look Understanding the first layer of obfuscation Recovering the first layer methods Understanding the second layer of obfuscation Recovering the second layer methods Analyzing the backdoor  Initialization Communication protocol Command execution   Decrypting the final stage        Here are the links to the other solutions:</description>
+    </item>
+    
+    <item>
+      <title>Flare-On 9 solutions (part 4)</title>
+      <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-4/</link>
+      <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-4/</guid>
+      <description>This blog post details the solution of the challenges 9 to 11 of the Flare-On 9.
+   Challenge 9 - encryptor  Description First look Static analysis  Overview Analysis of the function at 0x4021d0   Decrypting the suspicious file   Challenge 10 - Nur geträumt  Description Mounting the image Analysis of the application  Static analysis Dynamic analysis   Getting the flag   Challenge 11 - The challenge that shall not be named.</description>
+    </item>
+    
+    <item>
+      <title>FCSC 2020 - Keykoolol</title>
+      <link>https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/</link>
+      <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/</guid>
+      <description>A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.
+Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.
+The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it.</description>
+    </item>
+    
+    <item>
+      <title>ECW 2017 - Red Diamond</title>
+      <link>https://re-dojo.github.io/post/2018-09-28-ECW-2017-red-diamond/</link>
+      <pubDate>Fri, 28 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/post/2018-09-28-ECW-2017-red-diamond/</guid>
+      <description>Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l&amp;rsquo;année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense.
+L&amp;rsquo;épreuve qualificative de cette année reprenait les catégories classiques de CTF: Web, Forensics, Crypto et Reverse.
+Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de celui qui m&amp;rsquo;a paru le plus intéressant mais également le plus compliqué à résoudre.</description>
+    </item>
     
   </channel>
 </rss>

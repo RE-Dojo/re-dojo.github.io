@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="en"
+  class="color-toggle-hidden"
+>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="referrer" content="no-referrer" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content="Hugo 0.93.3" />
+  <meta name="description" content="A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.
+Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.
+The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it." />
+    <meta name="author" content="icecr4ck" />
+
+    <title>FCSC 2020 - Keykoolol | RE-Dojo</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+<link
+  rel="icon"
+  type="image/png"
+  sizes="48x48"
+  href="/favicon/favicon-32x32.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="/favicon/favicon-32x32.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="/favicon/favicon-16x16.png"
+/>
+
+    
+
+    
+  <meta
+    property="og:title"
+    content="FCSC 2020 - Keykoolol"
+  />
+  <meta property="og:site_name" content="RE-Dojo" />
+  <meta property="og:description" content="A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.
+Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.
+The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/" />
+
+<meta property="article:section" content="Post" />
+    <meta
+      property="article:published_time"
+      content="2020-05-09T00:00:00+00:00"
+    />
+    <meta
+      property="article:modified_time"
+      content="2020-05-09T00:00:00+00:00"
+    />
+
+
+  <meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="FCSC 2020 - Keykoolol" />
+  <meta name="twitter:description" content="A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.
+Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.
+The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it." />
+
+<script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "BlogPosting",
+      "articleSection": "Post",
+      "name": "FCSC 2020 - Keykoolol",
+      "url" : "https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/",
+      "headline": "FCSC 2020 - Keykoolol",
+      "description": "A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.\nAmong the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.\nThe purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it.",
+      "wordCount" : "3204",
+      "license": "CC BY-SA 4.0",
+      "inLanguage": "en",
+      "isFamilyFriendly": "true",
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/"
+      },
+      "keywords" : [ "Challenge" , "Reverse" ],
+      "author" : [
+          {
+              "@type": "Person",
+              "name": "icecr4ck"
+          }
+      ],
+      "copyrightHolder" : "RE-Dojo",
+      "copyrightYear" : "2020",
+      "dateCreated": "2020-05-09T00:00:00.00Z",
+      "datePublished": "2020-05-09T00:00:00.00Z",
+      "dateModified": "2020-05-09T00:00:00.00Z",
+      "publisher":{
+          "@type":"Organization",
+          "name": "RE-Dojo",
+          "url": "https://re-dojo.github.io/",
+          "logo": {
+              "@type": "ImageObject",
+              "url": "https://re-dojo.github.io/images/brand/logo.svg",
+              "width":"32",
+              "height":"32"
+          }
+      }
+  }
+  </script>
+
+
+    <script src="/js/main-8d4fb56f.bundle.min.js"></script>
+
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/Metropolis.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/LiberationSans.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/GeekblogIcons.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+
+<link
+  rel="preload"
+  href="/main-67545b00.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/main-67545b00.min.css"
+  media="all"
+/>
+
+<link
+  rel="preload"
+  href="/mobile-3888ed2b.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/mobile-3888ed2b.min.css"
+  media="screen and (max-width: 45rem)"
+/>
+
+<link
+  rel="preload"
+  href="/print-8a905a2e.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/print-8a905a2e.min.css"
+  media="print"
+/>
+
+<link
+  rel="preload"
+  href="/custom.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/custom.css"
+  media="all"
+/>
+  <link href="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/" rel="canonical" type="text/html" />
+    <link href="https://re-dojo.github.io/index.xml" rel="alternate" type="application/rss+xml" title="RE-Dojo RSS Feed" />
+
+<!-- Made with Geekblog theme https://github.com/thegeeklab/hugo-geekblog -->
+
+    
+
+  </head>
+
+  <body>
+    
+  <!-- geekblog include: sprites/geekblog.svg -->
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_back" xmlns="http://www.w3.org/2000/svg"><path d="M31.999 14.035v3.93H7.673l11.134 11.228L16 32 .001 16.001 16 .002l2.807 2.807L7.673 14.037h24.326z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M7.954 17.965v5.988L.001 16l7.953-7.953v5.988H32v3.93H7.954z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M24.046 14.035V8.047L31.999 16l-7.953 7.953v-5.988H0v-3.93h24.046z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_bitbucket" xmlns="http://www.w3.org/2000/svg"><path d="M15.905 13.355c.189 1.444-1.564 2.578-2.784 1.839-1.375-.602-1.375-2.784-.034-3.403 1.151-.705 2.818.223 2.818 1.564zm1.907-.361c-.309-2.44-3.076-4.056-5.328-3.042-1.426.636-2.389 2.148-2.32 3.747.086 2.097 2.08 3.815 4.176 3.626s3.729-2.234 3.472-4.331zm4.108-9.315c-.756-.997-2.045-1.169-3.179-1.358-3.214-.516-6.513-.533-9.727.034-1.066.172-2.269.361-2.939 1.323 1.1 1.031 2.664 1.186 4.073 1.358 2.544.327 5.156.344 7.699.017 1.426-.172 3.008-.309 4.073-1.375zm.979 17.788c-.481 1.684-.206 3.953-1.994 4.932-3.076 1.701-6.806 1.89-10.191 1.289-1.787-.327-3.884-.894-4.864-2.578-.43-1.65-.705-3.334-.98-5.018l.103-.275.309-.155c5.121 3.386 12.288 3.386 17.427 0 .808.241.206 1.22.189 1.805zM26.01 4.951c-.584 3.764-1.255 7.51-1.908 11.257-.189 1.1-1.255 1.719-2.148 2.183-3.214 1.615-6.96 1.89-10.483 1.512-2.389-.258-4.829-.894-6.771-2.389-.911-.705-.911-1.908-1.083-2.922-.602-3.523-1.289-7.046-1.719-10.604.206-1.547 1.942-2.217 3.231-2.698C6.848.654 8.686.362 10.508.19c3.884-.378 7.854-.241 11.618.859 1.341.395 2.784.945 3.695 2.097.412.533.275 1.203.189 1.805z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_bookmark" xmlns="http://www.w3.org/2000/svg"><path d="M20.357 5.856q1.157 0 2.043.851t.885 2.008v23.284l-10.212-4.357-10.144 4.357V8.715q0-1.157.885-2.008t2.042-.851h14.502zm5.787 18.859V5.856q0-1.157-.851-2.042t-2.008-.885H8.715q0-1.157.885-2.042t2.043-.885h14.502q1.157 0 2.043.885t.885 2.042v23.216z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_auto" xmlns="http://www.w3.org/2000/svg"><path d="M16.846 18.938h2.382L15.22 7.785h-2.44L8.772 18.938h2.382l.871-2.44h3.95zm7.087-9.062L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809zm-11.385 4.937L14 10.282l1.452 4.531h-2.904z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_dark" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565q-1.51 0-3.079.697 1.917.871 3.108 2.701T15.22 14t-1.191 4.037-3.108 2.701q1.568.697 3.079.697zm9.933-11.559L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_light" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565 8.743 8.743 6.565 14t2.178 5.257T14 21.435zm9.933-3.311v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809L27.999 14z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_check" xmlns="http://www.w3.org/2000/svg"><path d="M8.885 20.197L25.759 3.323l2.24 2.24L8.885 24.677 0 15.792l2.24-2.24z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_clear" xmlns="http://www.w3.org/2000/svg"><path d="M32 3.222L19.222 16 32 28.778l-3.221 3.221-12.778-12.778L3.223 31.999.002 28.778 12.78 16 .002 3.222 3.223.001l12.778 12.778L28.779.001z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_cloud_off" xmlns="http://www.w3.org/2000/svg"><path d="M9.023 10.5H7q-1.914 0-3.281 1.395t-1.367 3.309 1.367 3.281T7 19.852h11.375zM3.5 4.976l1.477-1.477L24.5 23.022l-1.477 1.477-2.352-2.297H6.999q-2.898 0-4.949-2.051t-2.051-4.949q0-2.844 1.969-4.867t4.758-2.133zm19.086 5.578q2.242.164 3.828 1.832T28 16.351q0 3.008-2.461 4.758l-1.695-1.695q1.805-.984 1.805-3.063 0-1.422-1.039-2.461t-2.461-1.039h-1.75v-.602q0-2.68-1.859-4.539t-4.539-1.859q-1.531 0-2.953.711l-1.75-1.695Q11.431 3.5 14.001 3.5q2.953 0 5.496 2.078t3.09 4.977z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_code" xmlns="http://www.w3.org/2000/svg"><path d="M9.917 24.5a1.75 1.75 0 10-3.501.001 1.75 1.75 0 003.501-.001zm0-21a1.75 1.75 0 10-3.501.001A1.75 1.75 0 009.917 3.5zm11.666 2.333a1.75 1.75 0 10-3.501.001 1.75 1.75 0 003.501-.001zm1.75 0a3.502 3.502 0 01-1.75 3.026c-.055 6.581-4.721 8.039-7.82 9.023-2.898.911-3.846 1.349-3.846 3.117v.474a3.502 3.502 0 011.75 3.026c0 1.932-1.568 3.5-3.5 3.5s-3.5-1.568-3.5-3.5c0-1.294.711-2.424 1.75-3.026V6.526A3.502 3.502 0 014.667 3.5c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5a3.502 3.502 0 01-1.75 3.026v9.06c.93-.456 1.914-.766 2.807-1.039 3.391-1.075 5.323-1.878 5.359-5.687a3.502 3.502 0 01-1.75-3.026c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_contacts" xmlns="http://www.w3.org/2000/svg"><path d="M22.688 22.688v-2q0-1.5-2.281-2.438t-4.406-.938-4.406.938-2.281 2.438v2h13.375zM16 9q-1.25 0-2.125.875T13 12t.875 2.125T16 15t2.125-.875T19 12t-.875-2.125T16 9zm10.688-3.687q1.063 0 1.844.813t.781 1.875v16q0 1.063-.781 1.875t-1.844.813H5.313q-1.063 0-1.844-.813t-.781-1.875v-16q0-1.063.781-1.875t1.844-.813h21.375zM5.313 32v-2.688h21.375V32H5.313zM26.688 0v2.688H5.313V0h21.375z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_copy" xmlns="http://www.w3.org/2000/svg"><path d="M23.502 25.438V7.626H9.562v17.812h13.94zm0-20.315q1.013 0 1.787.745t.774 1.757v17.812q0 1.013-.774 1.787t-1.787.774H9.562q-1.013 0-1.787-.774t-.774-1.787V7.625q0-1.013.774-1.757t1.787-.745h13.94zM19.689 0v2.562H4.438v17.812H1.936V2.562q0-1.013.745-1.787T4.438.001h15.251z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_create" xmlns="http://www.w3.org/2000/svg"><path d="M31.499 7.167l-3.25 3.25-6.666-6.666 3.25-3.25q.5-.5 1.25-.5t1.25.5l4.166 4.166q.5.5.5 1.25t-.5 1.25zM.001 25.333L19.667 5.667l6.666 6.666L6.667 31.999H.001v-6.666z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_date" xmlns="http://www.w3.org/2000/svg"><path d="M27.192 28.844V11.192H4.808v17.652h22.384zm0-25.689q1.277 0 2.253.976t.976 2.253v22.459q0 1.277-.976 2.216t-2.253.939H4.808q-1.352 0-2.291-.901t-.939-2.253V6.385q0-1.277.939-2.253t2.291-.976h1.577V.001h3.23v3.155h12.769V.001h3.23v3.155h1.577zm-3.155 11.267v3.155h-3.23v-3.155h3.23zm-6.46 0v3.155h-3.155v-3.155h3.155zm-6.384 0v3.155h-3.23v-3.155h3.23z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_download" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 28.209h26.269v3.79H2.866v-3.79zm26.268-16.925L16 24.418 2.866 11.284h7.493V.001h11.283v11.283h7.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_email" xmlns="http://www.w3.org/2000/svg"><path d="M28.845 9.615v-3.23L16 14.422 3.155 6.385v3.23L16 17.577zm0-6.46q1.277 0 2.216.977T32 6.385v19.23q0 1.277-.939 2.253t-2.216.977H3.155q-1.277 0-2.216-.977T0 25.615V6.385q0-1.277.939-2.253t2.216-.977h25.69z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_git" xmlns="http://www.w3.org/2000/svg"><path d="M27.472 12.753L15.247.529a1.803 1.803 0 00-2.55 0l-2.84 2.84 2.137 2.137a2.625 2.625 0 013.501 3.501l3.499 3.499a2.625 2.625 0 11-1.237 1.237l-3.499-3.499c-.083.04-.169.075-.257.106v7.3a2.626 2.626 0 11-1.75 0v-7.3a2.626 2.626 0 01-1.494-3.607L8.62 4.606l-8.09 8.09a1.805 1.805 0 000 2.551l12.225 12.224a1.803 1.803 0 002.55 0l12.168-12.168a1.805 1.805 0 000-2.551z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_github" xmlns="http://www.w3.org/2000/svg"><path d="M16 .394c8.833 0 15.999 7.166 15.999 15.999 0 7.062-4.583 13.062-10.937 15.187-.813.146-1.104-.354-1.104-.771 0-.521.021-2.25.021-4.396 0-1.5-.5-2.458-1.083-2.958 3.562-.396 7.312-1.75 7.312-7.896 0-1.75-.625-3.167-1.646-4.291.167-.417.708-2.042-.167-4.25-1.333-.417-4.396 1.646-4.396 1.646a15.032 15.032 0 00-8 0S8.937 6.602 7.603 7.018c-.875 2.208-.333 3.833-.167 4.25-1.021 1.125-1.646 2.542-1.646 4.291 0 6.125 3.729 7.5 7.291 7.896-.458.417-.875 1.125-1.021 2.146-.917.417-3.25 1.125-4.646-1.333-.875-1.521-2.458-1.646-2.458-1.646-1.562-.021-.104.979-.104.979 1.042.479 1.771 2.333 1.771 2.333.938 2.854 5.396 1.896 5.396 1.896 0 1.333.021 2.583.021 2.979 0 .417-.292.917-1.104.771C4.582 29.455-.001 23.455-.001 16.393-.001 7.56 7.165.394 15.998.394zM6.063 23.372c.042-.083-.021-.187-.146-.25-.125-.042-.229-.021-.271.042-.042.083.021.187.146.25.104.062.229.042.271-.042zm.646.709c.083-.062.062-.208-.042-.333-.104-.104-.25-.146-.333-.062-.083.062-.062.208.042.333.104.104.25.146.333.062zm.625.937c.104-.083.104-.25 0-.396-.083-.146-.25-.208-.354-.125-.104.062-.104.229 0 .375s.271.208.354.146zm.875.875c.083-.083.042-.271-.083-.396-.146-.146-.333-.167-.417-.062-.104.083-.062.271.083.396.146.146.333.167.417.062zm1.187.521c.042-.125-.083-.271-.271-.333-.167-.042-.354.021-.396.146s.083.271.271.312c.167.062.354 0 .396-.125zm1.313.104c0-.146-.167-.25-.354-.229-.187 0-.333.104-.333.229 0 .146.146.25.354.229.187 0 .333-.104.333-.229zm1.208-.208c-.021-.125-.187-.208-.375-.187-.187.042-.312.167-.292.312.021.125.187.208.375.167s.312-.167.292-.292z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_gitlab" xmlns="http://www.w3.org/2000/svg"><path d="M1.629 11.034L14 26.888.442 17.048a1.09 1.09 0 01-.39-1.203l1.578-4.811zm7.217 0h10.309l-5.154 15.854zM5.753 1.475l3.093 9.559H1.63l3.093-9.559a.548.548 0 011.031 0zm20.618 9.559l1.578 4.811c.141.437-.016.922-.39 1.203l-13.558 9.84 12.371-15.854zm0 0h-7.216l3.093-9.559a.548.548 0 011.031 0z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_heart" xmlns="http://www.w3.org/2000/svg"><path d="M16 29.714a1.11 1.11 0 01-.786-.321L4.072 18.643c-.143-.125-4.071-3.714-4.071-8 0-5.232 3.196-8.357 8.535-8.357 3.125 0 6.053 2.464 7.464 3.857 1.411-1.393 4.339-3.857 7.464-3.857 5.339 0 8.535 3.125 8.535 8.357 0 4.286-3.928 7.875-4.089 8.035L16.785 29.392c-.214.214-.5.321-.786.321z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_down" xmlns="http://www.w3.org/2000/svg"><path d="M3.281 5.36L14 16.079 24.719 5.36 28 8.641l-14 14-14-14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M25.875 28.25L22.125 32 6.126 16.001 22.125.002l3.75 3.75-12.25 12.25z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M6.125 28.25L18.375 16 6.125 3.75 9.875 0l15.999 15.999L9.875 31.998z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_up" xmlns="http://www.w3.org/2000/svg"><path d="M24.719 22.64L14 11.921 3.281 22.64 0 19.359l14-14 14 14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_link" xmlns="http://www.w3.org/2000/svg"><path d="M24.037 7.963q3.305 0 5.634 2.366T32 16t-2.329 5.671-5.634 2.366h-6.46v-3.08h6.46q2.028 0 3.493-1.465t1.465-3.493-1.465-3.493-3.493-1.465h-6.46v-3.08h6.46zM9.615 17.578v-3.155h12.77v3.155H9.615zM3.005 16q0 2.028 1.465 3.493t3.493 1.465h6.46v3.08h-6.46q-3.305 0-5.634-2.366T0 16.001t2.329-5.671 5.634-2.366h6.46v3.08h-6.46q-2.028 0-3.493 1.465t-1.465 3.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_menu" xmlns="http://www.w3.org/2000/svg"><path d="M.001 5.334h31.998v3.583H.001V5.334zm0 12.416v-3.5h31.998v3.5H.001zm0 8.916v-3.583h31.998v3.583H.001z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_notifications" xmlns="http://www.w3.org/2000/svg"><path d="M25.846 22.154l3.308 3.308v1.615H2.847v-1.615l3.308-3.308V14q0-3.846 1.961-6.692t5.423-3.692V2.462q0-1 .692-1.731T16 0t1.769.731.692 1.731v1.154q3.461.846 5.423 3.692T25.846 14v8.154zM16 32q-1.385 0-2.346-.923t-.962-2.308h6.615q0 1.308-1 2.269T15.999 32z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_person" xmlns="http://www.w3.org/2000/svg"><path d="M16 20.023q5.052 0 10.526 2.199t5.473 5.754v4.023H0v-4.023q0-3.555 5.473-5.754t10.526-2.199zM16 16q-3.275 0-5.614-2.339T8.047 8.047t2.339-5.661T16 0t5.614 2.386 2.339 5.661-2.339 5.614T16 16z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_pin" xmlns="http://www.w3.org/2000/svg"><path d="M17.6 19.2h9.6v-1.6L22.4 16V3.2l4.8-1.6V0H4.8v1.6l4.8 1.6V16l-4.8 1.6v1.6h9.6v11.2L16 32l1.6-1.6V19.2z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_rss_feed" xmlns="http://www.w3.org/2000/svg"><path d="M-.481 12.048q8.482 0 14.457 5.976t5.976 14.457h-5.879q0-5.976-4.289-10.264T-.48 17.928v-5.879zm0-11.565q13.204 0 22.601 9.397t9.397 22.601h-5.783q0-10.891-7.662-18.553T-.481 6.266V.483zm0 27.468q0-1.831 1.301-3.132t3.229-1.301 3.181 1.253 1.253 3.181-1.301 3.229-3.132 1.301q-1.928 0-3.229-1.301T-.48 27.952z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_search" xmlns="http://www.w3.org/2000/svg"><path d="M11.925 20.161q3.432 0 5.834-2.402t2.402-5.834-2.402-5.834-5.834-2.402-5.834 2.402-2.402 5.834 2.402 5.834 5.834 2.402zm10.981 0L32 29.255 29.255 32l-9.094-9.094v-1.458l-.515-.515q-3.26 2.831-7.721 2.831-4.976 0-8.45-3.432T.001 11.925t3.474-8.45 8.45-3.474 8.407 3.474 3.432 8.45q0 1.802-.858 4.075t-1.973 3.646l.515.515h1.458z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_security" xmlns="http://www.w3.org/2000/svg"><path d="M16 0l13.072 5.855v8.715q0 6.059-3.745 11.063T16 31.999q-5.583-1.362-9.327-6.366T2.928 14.57V5.855zm0 16v13.004q4.017-1.294 6.808-4.868T26.144 16H16zm0 0V3.2L5.856 7.693v8.306H16z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_star" xmlns="http://www.w3.org/2000/svg"><path d="M14 22.052L5.324 27.31l2.3-9.859L0 10.813l10.056-.854L14 .692l3.944 9.267L28 10.813l-7.624 6.638 2.3 9.859z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_tag" xmlns="http://www.w3.org/2000/svg"><path d="M17.52 17.52v-7.041h-7.041v7.041h7.041zM28 10.479h-7.041v7.041H28v3.439h-7.041V28H17.52v-7.041h-7.041V28H7.04v-7.041H-.001V17.52H7.04v-7.041H-.001V7.04H7.04V-.001h3.439V7.04h7.041V-.001h3.439V7.04H28v3.439z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_timer" xmlns="http://www.w3.org/2000/svg"><path d="M16 29q4.428 0 7.536-3.143t3.107-7.571-3.107-7.536T16 7.643 8.464 10.75t-3.107 7.536 3.107 7.571T16 29zM26.714 9.786q1.214 1.571 2.107 4.036t.893 4.464q0 5.643-4 9.678T16 32t-9.714-4.036-4-9.678 4-9.678T16 4.572q1.929 0 4.464.929t4.107 2.143l2.143-2.214q1.143.929 2.143 2.143zM14.5 19.857v-9.143h3v9.143h-3zM20.571.001v3.071h-9.143V.001h9.143z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_tree" xmlns="http://www.w3.org/2000/svg"><path d="M32 14.423H20.808V9.616h-3.23v12.77h3.23v-4.807H32v12.845H20.808v-4.807h-6.385v-16h-3.23v4.807H.001V1.579h11.192v4.807h9.615V1.579H32v12.845z"/></svg></defs></svg>
+
+
+
+
+    <div
+      class="wrapper "
+    >
+      <header class="gblog-header">
+  <div class="container flex flex-wrap">
+    <div class="gblog-header__col-1 flex justify-start hidden-mobile"></div>
+    <div class="gblog-header__col-2 flex align-center justify-center ">
+      <a class="gblog-header__link" rel="me" href="https://re-dojo.github.io/">
+        <span class="gblog-brand flex align-center justify-center">
+          <img
+            class="gblog-brand__img"
+            src="/images/brand/logo.svg"
+            alt=""
+          />
+          <span class="gblog-brand__title">RE-Dojo</span>
+        </span>
+        
+          <span class="gblog-brand__subtitle flex align-center justify-center">Blog about reverse engineering and program analysis</span>
+        
+      </a>
+    </div>
+    <div class="gblog-header__col-3 flex justify-end">
+      <span id="gblog-dark-mode">
+        <svg class="icon gblog_brightness_dark">
+          <title></title>
+          <use xlink:href="#gblog_brightness_dark"></use>
+        </svg>
+        <svg class="icon gblog_brightness_light">
+          <title></title>
+          <use xlink:href="#gblog_brightness_light"></use>
+        </svg>
+        <svg class="icon gblog_brightness_auto">
+          <title></title>
+          <use xlink:href="#gblog_brightness_auto"></use>
+        </svg>
+      </span>
+    </div>
+  </div>
+</header>
+<nav class="gblog-nav">
+  <input type="checkbox" id="menu-control" class="hidden" />
+  <div class="gblog-nav__control">
+    <label for="menu-control" class="flex align-center justify-center">
+      <svg class="icon gblog_menu"><use xlink:href="#gblog_menu"></use></svg>
+      <svg class="icon gblog_clear"><use xlink:href="#gblog_clear"></use></svg>
+      <span>Navigation</span>
+    </label>
+  </div>
+  <ul class="gblog-nav__list container flex flex-wrap justify-center menu-content">
+    
+    
+      
+        
+          <li>
+            <a
+              class="gblog-nav__entry"
+              href="/tags/Challenge/"
+            >
+              Challenge
+            </a>
+          </li>
+        
+      
+        
+          <li>
+            <a
+              class="gblog-nav__entry"
+              href="/tags/Reverse/"
+            >
+              Reverse
+            </a>
+          </li>
+        
+      
+    
+    
+  </ul>
+</nav>
+
+
+
+      <main class="gblog-page container">
+        
+  <article class="gblog-post">
+    <header class="gblog-post__header">
+      
+      
+
+
+      <h1 class="gblog-post__title">FCSC 2020 - Keykoolol</h1>
+
+      
+        <div class="flex flex-wrap align-center gblog-post__meta gblog-post__meta--head">
+          <span class="flex align-center no-wrap">
+  <svg class="icon gblog_date"><use xlink:href="#gblog_date"></use></svg>
+  <span class="gblog-post__tag">
+    <time datetime="2020-05-09T00:00:00Z">
+      
+      May 9, 2020
+    </time>
+  </span>
+</span>
+
+<span class="flex align-center no-wrap">
+  <svg class="icon gblog_timer"><use xlink:href="#gblog_timer"></use></svg>
+  <span class="gblog-post__tag">16 min read</span>
+</span>
+
+
+
+
+
+  
+    
+    
+      
+        <span class="flex align-center no-wrap">
+          <svg class="icon gblog_person"><use xlink:href="#gblog_person"></use></svg>
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a class="gblog-button__link" href="/authors/icecr4ck/" title="All posts of this author">
+      icecr4ck
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+
+
+
+
+  
+    
+    
+      
+        <span class="flex align-center no-wrap">
+          <svg class="icon gblog_bookmark"><use xlink:href="#gblog_bookmark"></use></svg>
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a
+      class="gblog-button__link"
+      href="/tags/Challenge/"
+      title="All posts tagged with 'Challenge'"
+    >
+      Challenge
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+    
+    
+      
+        <span class="flex align-center">
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a
+      class="gblog-button__link"
+      href="/tags/Reverse/"
+      title="All posts tagged with 'Reverse'"
+    >
+      Reverse
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+
+
+
+
+
+
+        </div>
+      
+    </header>
+    <section class="gblog-markdown">
+      <p>A few weeks ago, I participated in the France CyberSecurity Challenge (or <a
+  class="gblog-markdown__link"
+  href="https://france-cybersecurity-challenge.fr/"
+  
+>FCSC</a> in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (<a
+  class="gblog-markdown__link"
+  href="https://www.ssi.gouv.fr/en/"
+  
+>ANSSI</a>) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.</p>
+<p>Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named <strong>keykoolol</strong>.</p>
+<p>The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it. Then, we have to use this keygen to generate good serials for several usernames to get the flag.</p>
+<p>As I spent a bit of time to solve it, here is my solution for the challenge.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="first-look">
+        First look
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#first-look" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor First look" href="#first-look">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>The binary is an ELF x86-64 executable and its size is quite small, only 14KB.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file keykoolol
+</span></span><span class="line"><span class="cl">keykoolol: ELF 64-bit LSB pie executable, x86-64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, <span class="k">for</span> GNU/Linux 3.2.0, BuildID<span class="o">[</span>sha1<span class="o">]=</span>1422aa3ad6edad4cc689ec6ed5d9fd4e6263cd72, stripped
+</span></span></code></pre></div><p>If we execute it with dummy inputs, we get the following output.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ./keykoolol
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Username: aaaaaa
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Serial:   bbbbbbbbb
+</span></span><span class="line"><span class="cl"><span class="o">[</span>!<span class="o">]</span> Incorrect serial.
+</span></span></code></pre></div><p>Let&rsquo;s open it in our favorite disassembler to see what the code looks like. Here is what the <code>main</code> function looks like with IDA decompiler.</p>
+<figure><img src="/images/fcsc/main.png"/><figcaption>
+            <h4>IDA decompiler output of main function</h4>
+        </figcaption>
+</figure>
+
+<p>As you can see, the code of the <code>main</code> function is easily readable and consists of the following steps.</p>
+<ol>
+<li>Read the username and the serial from stdin.</li>
+<li>Remove the new line character of both inputs.</li>
+<li>Call a function (renamed as <code>check</code> here) taking 6 parameters including the username, the serial and their respective lengths.</li>
+<li>If the function return value is different than 0, the couple username/serial is correct.</li>
+</ol>
+<p>Without further ado, let&rsquo;s look at the function <code>check</code>.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="analysis-of-the-function-checking-the-serial">
+        Analysis of the function checking the serial
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#analysis-of-the-function-checking-the-serial" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Analysis of the function checking the serial" href="#analysis-of-the-function-checking-the-serial">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>When opening the <code>check</code> function in IDA decompiler, the first thing we notice is the time taken by IDA to decompile it.</p>
+<p>If we look at the disassembly control flow graph, we quickly understand why, the function is huge!</p>
+<figure><img src="/images/fcsc/cfg.png"/><figcaption>
+            <h4>IDA disassembly CFG of check</h4>
+        </figcaption>
+</figure>
+
+<p>Let&rsquo;s dig into the code to understand the structure of the function.</p>
+<figure><img src="/images/fcsc/init_vm_memory.png"/><figcaption>
+            <h4>IDA decompiler output of check function - 1</h4>
+        </figcaption>
+</figure>
+
+<p>The function starts with initializing the first 40 bytes at 0x203040 and the first 2048 bytes at 0x203080 to 0.</p>
+<figure><img src="/images/fcsc/copy_bytecode_username_serial.png"/><figcaption>
+            <h4>IDA decompiler output of check function - 2</h4>
+        </figcaption>
+</figure>
+
+<p>Then, it copies successively:</p>
+<ul>
+<li>the buffer at 0x24E0 (first parameter of the function) to the address 0x203080;</li>
+<li>the username buffer to the address 0x203490 (0x203080+1024+16);</li>
+<li>the serial buffer after the username buffer address plus 16.</li>
+</ul>
+<p>Afterwards, it enters into an infinite loop and reads an integer of 32 bits from the buffer at 0x24E0 (which is now at 0x203080).</p>
+<figure><img src="/images/fcsc/vm_switch.png"/><figcaption>
+            <h4>IDA decompiler output of check function - 3</h4>
+        </figcaption>
+</figure>
+
+<p>The most significant byte of the 32 bits integer is read and, depending on the value, the control flow moves to one of the 256 entries of the switch (this explains the stair-like structure of the CFG).</p>
+<p>If we look carefully at the different branches of the switch, we can observe the following code pattern in almost every branch of the switch:</p>
+<ol>
+<li>A simple operation is made on the memory between 0x203040 and 0x203080.</li>
+<li>A variable is increased by 4 (which is incidentally the same size of the integer read before entering the switch).</li>
+<li>If the switch value is different than 255, the control flow goes back to the start of the while loop.</li>
+</ol>
+<p>This structure leads us to conclude that we are dealing with a virtual machine here, and not a small one as it implements 256 instructions.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="structure-of-the-vm">
+        Structure of the VM
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#structure-of-the-vm" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Structure of the VM" href="#structure-of-the-vm">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>From here, we can make several assumptions on the structure of the virtual machine:</p>
+<ul>
+<li>the VM has <strong>16 registers</strong> of 32 bits, stored at 0x203040;</li>
+<li>the mysterious buffer copied from 0x24E0 is the <strong>bytecode of the VM</strong>;</li>
+<li>the VM program counter is stored into <strong>ESI</strong>;</li>
+<li>the VM flags (more or less equivalent to a very simplified version of the EFLAGS register) are stored into <strong>R9</strong>;</li>
+<li>the execution of the opcode 255 means the serial is not correct as it sets the return value of <code>check</code> to 0;</li>
+<li>the memory at 0x203880 corresponds to the <strong>stack of the VM</strong>.</li>
+</ul>
+<p>Also, we can evaluate the real opcodes executed by the VM by looking at the differents opcodes present in the bytecode. However, this implies that the code of the VM does not patch itself (SPOILER: it does).</p>
+<p>Still, here is the list of the 55 different opcodes present in the bytecode preceded by the number of occurrences.</p>
+<pre tabindex="0"><code>23 15
+22 212
+16 0
+14 216
+13 8
+13 19
+12 29
+12 12
+8 24
+8 18
+7 2
+6 6
+6 202
+5 223
+5 21
+5 11
+4 25
+4 221
+4 220
+4 214
+4 10
+3 28
+3 27
+3 26
+3 23
+3 215
+3 206
+3 17
+3 1
+2 9
+2 3
+2 255
+2 254
+2 219
+2 218
+2 210
+2 207
+2 204
+2 20
+2 14
+1 98
+1 63
+1 42
+1 35
+1 244
+1 217
+1 213
+1 201
+1 200
+1 197
+1 195
+1 194
+1 193
+1 192
+1 188
+</code></pre><div class="gblog-post__anchorwrap">
+    <h2 id="disassembling-the-vm-bytecode">
+        Disassembling the VM bytecode
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#disassembling-the-vm-bytecode" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Disassembling the VM bytecode" href="#disassembling-the-vm-bytecode">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>In order to disassemble the VM bytecode and continue the analysis, several strategies are at our disposal:</p>
+<ul>
+<li>implement each opcode in a Python script (for example) and read the bytecode with it;</li>
+<li>write an architecture plugin for the VM, supported by disassemblers like IDA or Binary Ninja and open the bytecode with it;</li>
+<li>make a trace of the VM execution and extract the VM instructions from it (using <a
+  class="gblog-markdown__link"
+  href="https://triton.quarkslab.com/"
+  
+>Triton</a> for example).</li>
+</ul>
+<p>As I am a bit lazy and I did not want to reimplement each instruction, I chose a solution somehow similar to the last one that consists to use <a
+  class="gblog-markdown__link"
+  href="https://github.com/cea-sec/miasm"
+  
+>Miasm</a> dynamic symbolic execution (or DSE in short) to disassemble <strong>automagically</strong> every executed VM instruction. The ultimate goal is to get a clean trace of the VM execution. The advantage of this solution is that if the VM does self-modification, we can observe it and disassemble the modified VM bytecode.</p>
+<p>I will not present the concepts of <cite>symbolic execution<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></cite> and <cite>concolic execution<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></cite> here as they are already good definitions on the Internets.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="miasm-dse">
+        Miasm DSE
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#miasm-dse" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Miasm DSE" href="#miasm-dse">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The usage of Miasm dynamic symbolic execution is not really documented (as the whole project actually) but you can find examples on Miasm <a
+  class="gblog-markdown__link"
+  href="https://miasm.re/blog/2017/10/05/playing_with_dynamic_symbolic_execution.html"
+  
+>blog</a> and a pseudo-documentation in the <a
+  class="gblog-markdown__link"
+  href="https://github.com/cea-sec/miasm/blob/master/miasm/analysis/dse.py"
+  
+>code</a>.</p>
+<p>Besides, the developers of Miasm are easily reachable if you encounter an issue, either via the <a
+  class="gblog-markdown__link"
+  href="https://gitter.im/cea-sec/miasm"
+  
+>Gitter</a> or directly via the <a
+  class="gblog-markdown__link"
+  href="https://github.com/cea-sec/miasm/issues"
+  
+>GitHub</a> repository.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="strategy">
+        Strategy
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#strategy" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Strategy" href="#strategy">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Here is an illustration of what a VM cycle looks like in our case (drawing is not my main strength as you can see).</p>
+<pre tabindex="0"><code>                      +------------+
+                      |Fetch/Decode&lt;--------------------------+
+                      +-----+------+                          |
+                            |                                 |
+                            |                                 |
+                            |                                 |
+                      +-----v------+                          |
+                      | Dispatcher |                          |
+                      +------+-----+                          |
+                             |                                |
+       +--------------------------------------------+         |
+       |                     |                      |         |
+       |                     |                      |         |
++------v-------+      +------v------+      +--------v-----+   |
+|  Handler 1   |      |  Handler 2  |      |    VM Exit   |   |
++------+-------+      +------+------+      +-------+------+   |
+       |                     |                     |          |
+       +-------------------------------------------+          |
+                             |                                |
+                      +------v------+                         |
+                      |    Next     |                         |
+                      +------+------+                         |
+                             |                                |
+                             +--------------------------------+
+</code></pre><p>In order to disassemble a given VM instruction, we need to get the <strong>constraints</strong> on the VM state (registers + flags + stack) at each VM cycle.</p>
+<ol>
+<li>At the <strong>dispatcher</strong>, we update the DSE state from the concrete execution and we symbolize the memory corresponding to the state of the VM.</li>
+<li>The code of the handler corresponding to the VM instruction is executed.</li>
+<li>At the <strong>next</strong> step, we evaluate the modifications made on the DSE state and print them.</li>
+<li>If the instruction is not a VM exit, we go back to 1.</li>
+</ol>
+<div class="gblog-post__anchorwrap">
+    <h3 id="implementation">
+        Implementation
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#implementation" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Implementation" href="#implementation">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>In Miasm, the concrete execution feature is provided by the <code>Jitter</code>, we can jit a ELF x86-64 executable by importing the class <code>Sandbox_Linux_x86_64</code> defined in <code>miasm.analysis.sandbox</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">miasm.analysis.sandbox</span> <span class="kn">import</span> <span class="n">Sandbox_Linux_x86_64</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">parser</span> <span class="o">=</span> <span class="n">Sandbox_Linux_x86_64</span><span class="o">.</span><span class="n">parser</span><span class="p">(</span><span class="s2">&#34;Disassembler for keykoolol challenge&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&#34;filename&#34;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&#34;Challenge filename&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">options</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">sb</span> <span class="o">=</span> <span class="n">Sandbox_Linux_x86_64</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="n">sb</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span></span></code></pre></div><p>When executing the Python code above, we encounter the following error.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ python keykoolol.py keykoolol
+</span></span><span class="line"><span class="cl"><span class="o">[</span>...<span class="o">]</span>
+</span></span><span class="line"><span class="cl">ValueError: <span class="o">(</span><span class="s1">&#39;unknown api&#39;</span>, <span class="s1">&#39;0x711110c4&#39;</span>, <span class="s2">&#34;&#39;xxx___printf_chk&#39;&#34;</span><span class="o">)</span>
+</span></span></code></pre></div><p>As there are calls to external APIs, we have to handle them in our code.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">xxx___printf_chk</span><span class="p">(</span><span class="n">jitter</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ret_ad</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_args_systemv</span><span class="p">([</span><span class="s2">&#34;flag&#34;</span><span class="p">,</span> <span class="s2">&#34;format&#34;</span><span class="p">,</span> <span class="s2">&#34;arg&#34;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">jitter</span><span class="o">.</span><span class="n">get_c_str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">format</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_ret_systemv</span><span class="p">(</span><span class="n">ret_ad</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">xxx_fgets</span><span class="p">(</span><span class="n">jitter</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ret_ad</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_args_systemv</span><span class="p">([</span><span class="s2">&#34;dest&#34;</span><span class="p">,</span> <span class="s2">&#34;size&#34;</span><span class="p">,</span> <span class="s2">&#34;stream&#34;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jitter</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">set_mem</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_ret_systemv</span><span class="p">(</span><span class="n">ret_ad</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">xxx_strcspn</span><span class="p">(</span><span class="n">jitter</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ret_ad</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_args_systemv</span><span class="p">([</span><span class="s2">&#34;s&#34;</span><span class="p">,</span> <span class="s2">&#34;rejected&#34;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span> <span class="o">=</span> <span class="n">jitter</span><span class="o">.</span><span class="n">get_c_str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jitter</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">set_mem</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_ret_systemv</span><span class="p">(</span><span class="n">ret_ad</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">xxx___memcpy_chk</span><span class="p">(</span><span class="n">jitter</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ret_ad</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_args_systemv</span><span class="p">([</span><span class="s2">&#34;dest&#34;</span><span class="p">,</span> <span class="s2">&#34;src&#34;</span><span class="p">,</span> <span class="s2">&#34;len&#34;</span><span class="p">,</span> <span class="s2">&#34;destlen&#34;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="n">src</span> <span class="o">=</span> <span class="n">jitter</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">get_mem</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">len</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jitter</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">set_mem</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_ret_systemv</span><span class="p">(</span><span class="n">ret_ad</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">dest</span><span class="p">)</span>
+</span></span></code></pre></div><p>Once the handles are added, we can enter the username and the serial we want (here <code>aaaaaaa</code> and <code>aaaaaaaaaaa</code>) and observe the &ldquo;execution&rdquo; of the binary.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ python keykoolol.py keykoolol
+</span></span><span class="line"><span class="cl"><span class="o">[</span>...<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>INFO    <span class="o">]</span>: xxx___libc_start_main<span class="o">(</span><span class="nv">main</span><span class="o">=</span>0x730, <span class="nv">argc</span><span class="o">=</span>0x13371acc, <span class="nv">ubp_av</span><span class="o">=</span>0x140000, <span class="nv">init</span><span class="o">=</span>0x23a0, <span class="nv">fini</span><span class="o">=</span>0x2410, <span class="nv">rtld_fini</span><span class="o">=</span>0x0, <span class="nv">stack_end</span><span class="o">=</span>0x13fff8<span class="o">)</span> ret addr: 0x88a
+</span></span><span class="line"><span class="cl"><span class="o">[</span>INFO    <span class="o">]</span>: xxx___printf_chk<span class="o">(</span><span class="nv">flag</span><span class="o">=</span>0x1, <span class="nv">format</span><span class="o">=</span>0x2424, <span class="nv">arg</span><span class="o">=</span>0x99ccd668<span class="o">)</span> ret addr: 0x76a
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Username: 
+</span></span><span class="line"><span class="cl"><span class="o">[</span>INFO    <span class="o">]</span>: xxx_fgets<span class="o">(</span><span class="nv">dest</span><span class="o">=</span>0x13fbc8, <span class="nv">size</span><span class="o">=</span>0x200, <span class="nv">stream</span><span class="o">=</span>0x71111064<span class="o">)</span> ret addr: 0x77e
+</span></span><span class="line"><span class="cl">aaaaaaa
+</span></span><span class="line"><span class="cl"><span class="o">[</span>INFO    <span class="o">]</span>: xxx_strcspn<span class="o">(</span><span class="nv">s</span><span class="o">=</span>0x13fbc8, <span class="nv">rejected</span><span class="o">=</span>0x2433<span class="o">)</span> ret addr: 0x78d
+</span></span><span class="line"><span class="cl"><span class="o">[</span>INFO    <span class="o">]</span>: xxx___printf_chk<span class="o">(</span><span class="nv">flag</span><span class="o">=</span>0x1, <span class="nv">format</span><span class="o">=</span>0x2435, <span class="nv">arg</span><span class="o">=</span>0x71111064<span class="o">)</span> ret addr: 0x7a5
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Serial:   
+</span></span><span class="line"><span class="cl"><span class="o">[</span>INFO    <span class="o">]</span>: xxx_fgets<span class="o">(</span><span class="nv">dest</span><span class="o">=</span>0x13fdc8, <span class="nv">size</span><span class="o">=</span>0x200, <span class="nv">stream</span><span class="o">=</span>0x71111064<span class="o">)</span> ret addr: 0x7b9
+</span></span><span class="line"><span class="cl">aaaaaaaaaaa
+</span></span><span class="line"><span class="cl"><span class="o">[</span>INFO    <span class="o">]</span>: xxx_strcspn<span class="o">(</span><span class="nv">s</span><span class="o">=</span>0x13fdc8, <span class="nv">rejected</span><span class="o">=</span>0x2433<span class="o">)</span> ret addr: 0x7c8
+</span></span><span class="line"><span class="cl"><span class="o">[</span>INFO    <span class="o">]</span>: xxx___memcpy_chk<span class="o">(</span><span class="nv">dest</span><span class="o">=</span>0x203080, <span class="nv">src</span><span class="o">=</span>0x24e0, <span class="nv">len</span><span class="o">=</span>0x400, <span class="nv">destlen</span><span class="o">=</span>0x800<span class="o">)</span> ret addr: 0x9c5
+</span></span><span class="line"><span class="cl"><span class="o">[</span>INFO    <span class="o">]</span>: xxx_puts<span class="o">(</span><span class="nv">s</span><span class="o">=</span>0x24a9<span class="o">)</span> ret addr: 0x834
+</span></span><span class="line"><span class="cl"><span class="o">[</span>!<span class="o">]</span> Incorrect serial.
+</span></span></code></pre></div><p>Now we ensured the concrete execution works well, we add the DSE by instantiating the <code>DSEEngine</code> class. Also, we ask it to stub external APIs (similarly to the way the Sandbox does).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">miasm.analysis.dse</span> <span class="kn">import</span> <span class="n">DSEEngine</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">dse</span> <span class="o">=</span> <span class="n">DSEEngine</span><span class="p">(</span><span class="n">sb</span><span class="o">.</span><span class="n">machine</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">dse</span><span class="o">.</span><span class="n">add_lib_handler</span><span class="p">(</span><span class="n">sb</span><span class="o">.</span><span class="n">libs</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+</span></span></code></pre></div><p>However, this is not sufficient as the DSE also needs to be attached to the Jitter. To do so, it is possible to use the call to <code>__memcpy_chk</code> to attach it as follows.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">xxx___memcpy_chk</span><span class="p">(</span><span class="n">jitter</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ret_ad</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_args_systemv</span><span class="p">([</span><span class="s2">&#34;dest&#34;</span><span class="p">,</span> <span class="s2">&#34;src&#34;</span><span class="p">,</span> <span class="s2">&#34;len&#34;</span><span class="p">,</span> <span class="s2">&#34;destlen&#34;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="n">src</span> <span class="o">=</span> <span class="n">jitter</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">get_mem</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">len</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">jitter</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">set_mem</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">global</span> <span class="n">dse</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dse</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">jitter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">jitter</span><span class="o">.</span><span class="n">func_ret_systemv</span><span class="p">(</span><span class="n">ret_ad</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">dest</span><span class="p">)</span>
+</span></span></code></pre></div><p>Afterwards, we set a breakpoint at the dispatcher to symbolize the memory corresponding to the registers of the VM, and we also create 2 dictionaries:</p>
+<ul>
+<li><code>vm_registers_symb</code>: containing the symbols of the VM registers;</li>
+<li><code>already_disass</code>: keeping the VM instructions already disassembled in order to not print unrolled loops.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">DISPATCHER_ADDR</span> <span class="o">=</span> <span class="mh">0xa5d</span>
+</span></span><span class="line"><span class="cl"><span class="n">NEXT_ADDR</span> <span class="o">=</span> <span class="mh">0xa77</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">vm_registers_symb</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="n">already_disass</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">dse</span><span class="o">.</span><span class="n">add_instrumentation</span><span class="p">(</span><span class="n">DISPATCHER_ADDR</span><span class="p">,</span> <span class="n">symbolize_vm</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</span></span></code></pre></div><p>The callback <code>symbolize_vm</code> is implemented as follows and corresponds to the strategy described above. The only difference relates to the opcode 30 that executes the <cite><code>aesenc</code><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></cite> instruction. As the latter is not currently implemented in Miasm jitter (and I did not take the time to try to implement it&hellip;), I added a dirty patch to bypass the execution of the corresponding handler.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">miasm.expression.expression</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">symbolize_vm</span><span class="p">(</span><span class="n">dse</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">global</span> <span class="n">vm_registers_symb</span><span class="p">,</span> <span class="n">already_disass</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># update the DSE state (including the memory) from the concrete state</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dse</span><span class="o">.</span><span class="n">update_state_from_concrete</span><span class="p">(</span><span class="n">mem</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># symbolize the memory corresponding to the VM registers (16 registers of 32 bits at 0x203040)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">ExprMem</span><span class="p">(</span><span class="n">ExprInt</span><span class="p">(</span><span class="mh">0x203040</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="mi">32</span><span class="p">)]</span> <span class="o">=</span> <span class="n">ExprId</span><span class="p">(</span><span class="s2">&#34;VM_R</span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="mi">32</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># symbolize the VM registers that correpond to real registers</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">dse</span><span class="o">.</span><span class="n">ir_arch</span><span class="o">.</span><span class="n">arch</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">R9</span><span class="p">]</span> <span class="o">=</span> <span class="n">ExprId</span><span class="p">(</span><span class="s2">&#34;VM_FLAGS&#34;</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">dse</span><span class="o">.</span><span class="n">ir_arch</span><span class="o">.</span><span class="n">arch</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">RSI</span><span class="p">]</span> <span class="o">=</span> <span class="n">ExprId</span><span class="p">(</span><span class="s2">&#34;VM_PC&#34;</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># update the DSE state with the VM registers symbols</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dse</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">vm_registers_symb</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># get the VM state (PC, instruction bytes and opcode)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vm_pc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dse</span><span class="o">.</span><span class="n">jitter</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">RSI</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vm_instr</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dse</span><span class="o">.</span><span class="n">jitter</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">RCX</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vm_opcode</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dse</span><span class="o">.</span><span class="n">jitter</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">RAX</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># if the VM instruction was not already disassembled, we print the state and add a breakpoint at NEXT_ADDR</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">vm_pc</span> <span class="ow">in</span> <span class="n">already_disass</span> <span class="ow">or</span> <span class="p">(</span><span class="n">vm_pc</span> <span class="ow">in</span> <span class="n">already_disass</span> <span class="ow">and</span> <span class="n">vm_instr</span> <span class="o">!=</span> <span class="n">already_disass</span><span class="p">[</span><span class="n">vm_pc</span><span class="p">]):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="si">{:x}</span><span class="s2">:&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vm_pc</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&#34; &#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">already_disass</span><span class="p">[</span><span class="n">vm_pc</span><span class="p">]</span> <span class="o">=</span> <span class="n">vm_instr</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># VM opcode 0xFF exits the VM </span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">vm_opcode</span> <span class="o">==</span> <span class="mh">0xFF</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;EXIT&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># VM opcode 30 executes aesenc instruction but this instruction is not implemented in miasm jitter</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">vm_opcode</span> <span class="o">==</span> <span class="mi">30</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">arg0</span> <span class="o">=</span> <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">ExprMem</span><span class="p">(</span><span class="n">ExprInt</span><span class="p">(</span><span class="mh">0x203040</span><span class="o">+</span><span class="p">(((</span><span class="n">vm_instr</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xF</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="p">),</span> <span class="mi">64</span><span class="p">),</span> <span class="mi">32</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">arg1</span> <span class="o">=</span> <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">ExprMem</span><span class="p">(</span><span class="n">ExprInt</span><span class="p">(</span><span class="mh">0x203040</span><span class="o">+</span><span class="p">(((</span><span class="n">vm_instr</span> <span class="o">&gt;&gt;</span> <span class="mi">12</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xF</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="p">),</span> <span class="mi">64</span><span class="p">),</span> <span class="mi">32</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dest</span> <span class="o">=</span> <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">ExprMem</span><span class="p">(</span><span class="n">ExprInt</span><span class="p">(</span><span class="mh">0x203040</span><span class="o">+</span><span class="p">(((</span><span class="n">vm_instr</span> <span class="o">&gt;&gt;</span> <span class="mi">20</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xF</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="p">),</span> <span class="mi">64</span><span class="p">),</span> <span class="mi">32</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;@128[</span><span class="si">{}</span><span class="s2"> + 0x203080] = AESENC(@128[</span><span class="si">{}</span><span class="s2"> + 0x203080], @128[</span><span class="si">{}</span><span class="s2"> + 0x203080])&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">arg0</span><span class="p">,</span> <span class="n">arg1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	
+</span></span><span class="line"><span class="cl">        <span class="n">dse</span><span class="o">.</span><span class="n">add_instrumentation</span><span class="p">(</span><span class="n">NEXT_ADDR</span><span class="p">,</span> <span class="n">disass_vm_instruction</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># as we do not want miasm to raise an exception when aesenc is jitted, we jump after the instruction and update the DSE state accordingly</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">vm_instr</span> <span class="o">&gt;&gt;</span> <span class="mi">24</span> <span class="o">==</span> <span class="mi">30</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dse</span><span class="o">.</span><span class="n">jitter</span><span class="o">.</span><span class="n">pc</span> <span class="o">=</span> <span class="mh">0x232d</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dse</span><span class="o">.</span><span class="n">jitter</span><span class="o">.</span><span class="n">cpu</span><span class="o">.</span><span class="n">RIP</span> <span class="o">=</span> <span class="mh">0x232d</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dse</span><span class="o">.</span><span class="n">update_state</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dse</span><span class="o">.</span><span class="n">ir_arch</span><span class="o">.</span><span class="n">arch</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">RIP</span><span class="p">:</span> <span class="n">ExprInt</span><span class="p">(</span><span class="mh">0x232d</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dse</span><span class="o">.</span><span class="n">ir_arch</span><span class="o">.</span><span class="n">arch</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">RAX</span><span class="p">:</span> <span class="n">ExprInt</span><span class="p">(</span><span class="n">vm_pc</span><span class="o">+</span><span class="mi">4</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span> <span class="c1"># update pc </span>
+</span></span><span class="line"><span class="cl">        <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">True</span>
+</span></span></code></pre></div><p>As you can see, a breakpoint is added at the <code>next</code> step if the VM instruction was not seen before.</p>
+<p>The callback <code>disass_vm_instruction</code> disassembles a VM instruction by extracting the modifications on the DSE state made between the dispatcher and the next step. In Miasm, those modifications are available in <code>dse.symb.modified</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">disass_vm_instruction</span><span class="p">(</span><span class="n">dse</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">global</span> <span class="n">vm_registers_symb</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">vm_instr</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># get memory modifications</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">dst</span><span class="p">,</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">dse</span><span class="o">.</span><span class="n">symb</span><span class="o">.</span><span class="n">modified</span><span class="p">(</span><span class="n">ids</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># do not print vm registers unchanged</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">dst</span> <span class="ow">in</span> <span class="n">vm_registers_symb</span> <span class="ow">and</span> <span class="n">src</span> <span class="o">==</span> <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">dst</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">        <span class="n">vm_instr</span> <span class="o">+=</span> <span class="s2">&#34;</span><span class="si">{}</span><span class="s2"> = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dst</span><span class="o">.</span><span class="n">replace_expr</span><span class="p">(</span><span class="n">vm_registers_symb</span><span class="p">),</span> <span class="n">dse</span><span class="o">.</span><span class="n">eval_expr</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># get register modifications</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">dst</span><span class="p">,</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">dse</span><span class="o">.</span><span class="n">symb</span><span class="o">.</span><span class="n">modified</span><span class="p">(</span><span class="n">mems</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># dst = ExprMem(VM_REG)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">vm_registers_symb</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">vm_instr</span> <span class="o">+=</span> <span class="s2">&#34;</span><span class="si">{}</span><span class="s2"> = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">dse</span><span class="o">.</span><span class="n">eval_expr</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># VM_REG != VM_REG_ID</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">dst</span> <span class="ow">in</span> <span class="n">vm_registers_symb</span> <span class="ow">and</span> <span class="n">src</span> <span class="o">!=</span> <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span> <span class="ow">and</span> <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ExprId</span><span class="p">(</span><span class="s2">&#34;VM_PC&#34;</span><span class="p">,</span> <span class="mi">64</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">vm_instr</span> <span class="o">+=</span> <span class="s2">&#34;</span><span class="si">{}</span><span class="s2"> = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">dst</span><span class="p">],</span> <span class="n">dse</span><span class="o">.</span><span class="n">eval_expr</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># if no modifications then print ZF and VM_PC changes</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">vm_instr</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">dst</span><span class="p">,</span> <span class="n">src</span> <span class="ow">in</span> <span class="n">dse</span><span class="o">.</span><span class="n">symb</span><span class="o">.</span><span class="n">modified</span><span class="p">(</span><span class="n">mems</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">dst</span> <span class="o">==</span> <span class="n">dse</span><span class="o">.</span><span class="n">ir_arch</span><span class="o">.</span><span class="n">arch</span><span class="o">.</span><span class="n">regs</span><span class="o">.</span><span class="n">zf</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">vm_instr</span> <span class="o">+=</span> <span class="s2">&#34;ZF = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dse</span><span class="o">.</span><span class="n">eval_expr</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="k">elif</span> <span class="n">dst</span> <span class="ow">in</span> <span class="n">vm_registers_symb</span> <span class="ow">and</span> <span class="n">vm_registers_symb</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span> <span class="o">==</span> <span class="n">ExprId</span><span class="p">(</span><span class="s2">&#34;VM_PC&#34;</span><span class="p">,</span> <span class="mi">64</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="n">vm_instr</span> <span class="o">+=</span> <span class="s2">&#34;VM_PC = </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dse</span><span class="o">.</span><span class="n">eval_expr</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">vm_instr</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># remove callback</span>
+</span></span><span class="line"><span class="cl">    <span class="k">del</span> <span class="n">dse</span><span class="o">.</span><span class="n">instrumentation</span><span class="p">[</span><span class="n">NEXT_ADDR</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">True</span>
+</span></span></code></pre></div><p>The full script is available <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FCSC-2020/Keykoolol/disass_vm.py"
+  
+>here</a>.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="vm-trace-analysis">
+        VM trace analysis
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#vm-trace-analysis" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor VM trace analysis" href="#vm-trace-analysis">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>First, let&rsquo;s define the state of the VM registers before the execution of the first instruction.</p>
+<pre tabindex="0"><code>VM_R0 = 0
+VM_R1 = 0
+VM_R2 = 0
+VM_R3 = 0
+VM_R4 = 0
+VM_R5 = 0
+VM_R6 = 0
+VM_R7 = 0
+VM_R8 = username buffer address in VM memory
+VM_R9 = username length
+VM_R10 = serial buffer address in VM memory
+VM_R11 = serial length
+VM_R12 = end of serial buffer address in VM memory
+VM_R13 = 0
+VM_R14 = 0
+VM_R15 = 0
+</code></pre><p>If we execute the script with the DSE and dummy inputs, here is the trace we get:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ python keykoolol.py keykoolol
+</span></span><span class="line"><span class="cl"><span class="o">[</span>...<span class="o">]</span>
+</span></span><span class="line"><span class="cl">0: <span class="nv">VM_R11</span> <span class="o">=</span> VM_R11 + 0xFFFFFFFF
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">4: <span class="nv">VM_FLAGS</span> <span class="o">=</span> <span class="o">{</span>VM_R11 + 0xFFFFFF01 <span class="m">0</span> 32, 0x0 <span class="m">32</span> 64<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">8: <span class="nv">ZF</span> <span class="o">=</span> VM_FLAGS<span class="o">[</span>0:32<span class="o">]</span>?<span class="o">(</span>0x0,0x1<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">VM_PC</span> <span class="o">=</span> 0x74
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">74: <span class="nv">VM_R0</span> <span class="o">=</span> 0x0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">78: EXIT
+</span></span><span class="line"><span class="cl">Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
+</span></span><span class="line"><span class="cl"><span class="o">[</span>...<span class="o">]</span>
+</span></span><span class="line"><span class="cl">RuntimeError: Symbolic stub <span class="s1">&#39;b&#39;</span>xxx_puts_symb<span class="s1">&#39;&#39;</span> not found
+</span></span></code></pre></div><p>As you can see, the VM disassembler worked well, however the VM quickly exited because value of <code>VM_R11</code> is different than 256. As we know <code>VM_R11</code> corresponds to the length of the serial, we can conclude the serial length has to be equal to 256.</p>
+<p>Also, an exception has been raised because the symbolic stub <code>xxx_puts_symb</code> was not implemented. As we do not really care of what the function <code>puts</code> prints, we can implement it like this.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">xxx_puts_symb</span><span class="p">(</span><span class="n">dse</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&#34;Exit&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>Let&rsquo;s execute again our script with a serial of 256 characters.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ python keykoolol.py keykoolol
+</span></span><span class="line"><span class="cl"><span class="o">[</span>...<span class="o">]</span>
+</span></span><span class="line"><span class="cl">0: <span class="nv">VM_R11</span> <span class="o">=</span> VM_R11 + 0xFFFFFFFF
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">4: <span class="nv">VM_FLAGS</span> <span class="o">=</span> <span class="o">{</span>VM_R11 + 0xFFFFFF01 <span class="m">0</span> 32, 0x0 <span class="m">32</span> 64<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">8: <span class="nv">ZF</span> <span class="o">=</span> VM_FLAGS<span class="o">[</span>0:32<span class="o">]</span>?<span class="o">(</span>0x0,0x1<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">VM_PC</span> <span class="o">=</span> <span class="o">{(</span>VM_PC + 0x4<span class="o">)[</span>0:32<span class="o">]</span> <span class="m">0</span> 32, 0x0 <span class="m">32</span> 64<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">c: <span class="nv">VM_R0</span> <span class="o">=</span> VM_R10
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">10: <span class="nv">VM_R1</span> <span class="o">=</span> VM_R12
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">14: @32<span class="o">[</span>0x203880<span class="o">]</span> <span class="o">=</span> VM_PC<span class="o">[</span>0:32<span class="o">]</span> + 0x4
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">374: <span class="nv">VM_R3</span> <span class="o">=</span> 0x0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">378: <span class="nv">VM_R2</span> <span class="o">=</span> VM_R0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">37c: <span class="nv">VM_R2</span> <span class="o">=</span> VM_R2 + VM_R3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">380: <span class="nv">VM_R2</span> <span class="o">=</span> <span class="o">{</span>@8<span class="o">[{</span>VM_R2 <span class="m">0</span> 32, 0x0 <span class="m">32</span> 64<span class="o">}</span> + 0x203080<span class="o">]</span> <span class="m">0</span> 8, 0x0 <span class="m">8</span> 32<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">384: <span class="nv">VM_FLAGS</span> <span class="o">=</span> <span class="o">{</span>VM_R2 <span class="m">0</span> 32, 0x0 <span class="m">32</span> 64<span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>...<span class="o">]</span>
+</span></span></code></pre></div><p>This time, far more instructions are executed. As there are too many of them, it would not be readable if I print them all here. The full trace is available <a
+  class="gblog-markdown__link"
+  href="https://raw.githubusercontent.com/icecr4ck/write-ups/master/FCSC-2020/Keykoolol/vm_trace_with_bad_inputs.txt"
+  
+>here</a>.</p>
+<p>I will not go through the analysis of each VM instruction. Instead, here are the different steps of the execution of the VM bytecode.</p>
+<ol>
+<li>Check if the length of the serial is equal to 256, if not exit the VM.</li>
+<li>Decode the serial from hexadecimal.</li>
+<li>Compute a custom &ldquo;hash&rdquo; of length 16 from the username (the exact algorithm is detailed below) and copy it after the decoded serial in memory.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">custom_hash</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">hash</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span> 
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">hash</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">)</span> <span class="o">%</span> <span class="mi">16</span><span class="p">]</span> <span class="o">^=</span> <span class="p">((((</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="mh">0xD</span><span class="p">)</span> <span class="o">^</span> <span class="mh">0x25</span><span class="p">)</span> <span class="o">%</span> <span class="mh">0xFF</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">hash</span>
+</span></span></code></pre></div><ol start="4">
+<li>Decrypt the bytecode at 0xC8 (offset in the VM bytecode) with the XOR key 0xF4E3D2C1.</li>
+<li>Expand the custom hash as follows to get a buffer of length 96.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">expand_custom_hash</span><span class="p">(</span><span class="n">custom_hash</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">expanded_buffer</span> <span class="o">=</span> <span class="n">custom_hash</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">80</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">80</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">expanded_buffer</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">16</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">expanded_buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">^</span> <span class="mh">0xFF</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">expanded_buffer</span>
+</span></span></code></pre></div><ol start="5">
+<li>Decrypt the bytecode at 0x148 (offset in the VM bytecode) with the XOR key 0xA1B2C3D4.</li>
+<li>Split the serial in 8 buffers of 16 bytes and perform 32 rounds of AES encryption with <code>aesenc</code> on the first 6 buffers of the serial as shown below.</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">aesenc</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># call aesenc instruction</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># serial = buf1 + buf2 + ... + buf8</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">buf1</span> <span class="o">=</span> <span class="n">aesenc</span><span class="p">(</span><span class="n">buf6</span><span class="p">,</span> <span class="n">buf1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">buf6</span> <span class="o">=</span> <span class="n">aesenc</span><span class="p">(</span><span class="n">buf5</span><span class="p">,</span> <span class="n">buf8</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">buf5</span> <span class="o">=</span> <span class="n">aesenc</span><span class="p">(</span><span class="n">buf4</span><span class="p">,</span> <span class="n">buf7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">buf4</span> <span class="o">=</span> <span class="n">aesenc</span><span class="p">(</span><span class="n">buf3</span><span class="p">,</span> <span class="n">buf4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">buf3</span> <span class="o">=</span> <span class="n">aesenc</span><span class="p">(</span><span class="n">buf2</span><span class="p">,</span> <span class="n">buf7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">buf2</span> <span class="o">=</span> <span class="n">aesenc</span><span class="p">(</span><span class="n">buf1</span><span class="p">,</span> <span class="n">buf7</span><span class="p">)</span>
+</span></span></code></pre></div><ol start="7">
+<li>Decrypt the bytecode at 0x334 (offset in the VM bytecode) with the XOR key 0xAABBCCDD.</li>
+<li>Compare the encrypted serial with the expanded buffer computed from the username, if they match the serial is valid.</li>
+</ol>
+<p>As you can see the VM bytecode patches itself not less than 3 times during its execution.</p>
+<p>The length of the serial is of 128 bytes once hexadecimal decoded, but the last 2 buffers of 16 bytes are not checked.</p>
+<p>As we know how the serial is verified, we can now implement our own keygen to generate a serial for any username.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="implementation-of-the-keygen">
+        Implementation of the keygen
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#implementation-of-the-keygen" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Implementation of the keygen" href="#implementation-of-the-keygen">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>I chose to implement the keygen in Rust, no reason in particular, except to improve my skills in programming with this language.</p>
+<p>Regardless the language chosen for the implementation of the keygen, it has to implement the following steps:</p>
+<ol>
+<li>Generate the custom hash from the username with the algorithm detailed above.</li>
+<li>Expand the custom hash to get the AES encrypted serial.</li>
+<li>Perform 32 rounds of inverse AES encryption on the expanded custom hash (we cannot use the <code>aesdec</code> instruction as a round of decryption is different than the inverse of the round of encryption) to get the serial.</li>
+</ol>
+<figure><img src="/images/fcsc/aes.png"/><figcaption>
+            <h4>AES encryption/decryption flowchart</h4>
+        </figcaption>
+</figure>
+
+<p>Here is one possible serial for the username <code>admin</code> with the last 2 buffers of the serial set to 1.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ./keygen_keykoolol admin <span class="m">1</span>
+</span></span><span class="line"><span class="cl">b40e0b81eb1d09c017b3c6d9001118a63b6a2377d1e14470531ee487fe9de34b86c949836a5d789baf503680717547b7910facdc11bd56c22626326ca7053d6ce72e2e638c1d0881c2e699c412485b567128c297e5c7cfa02b6f10b18dbbee140101010101010101010101010101010101010101010101010101010101010101
+</span></span></code></pre></div><p>The code of my keygen is available <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FCSC-2020/Keykoolol/keygen/src/main.rs"
+  
+>here</a>.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="last-but-not-least-getting-the-flag">
+        Last but not least: getting the flag!
+        <a data-clipboard-text="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/#last-but-not-least-getting-the-flag" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Last but not least: getting the flag!" href="#last-but-not-least-getting-the-flag">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>Once you had a functional keygen, you still had to communicate with the challenge server to get the flag.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ nc challenges2.challenge-anssi.fr <span class="m">3000</span>
+</span></span><span class="line"><span class="cl">Give me two valid serials <span class="k">for</span> username: Michael Barnett
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt; afaeff615f362ffbe36eccf4f2e80e6b18404cf0f96398e4881789c0c2b4310a58733ccd2273f48e4983fe171fdfed95d9867c67742609d24a4dbf6917742c41ba804a642b96c6792e8264454e120e26860480c292ab29537820ada4cb4b8edc0101010101010101010101010101010101010101010101010101010101010101
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt; 8e60f3338de9499d5bd3b9b2ab1371b11d61775ccf9575d47b5f669a04b60be01bf9299819c7f6eee12471fffba41f88d490854810aa62c7c23c554d65fbbdecf6eec3ebcb00f4126f09eee7281d694650942ab7e4b33a500343e83ca5d232720000000000000000000000000000000000000000000000000000000000000000
+</span></span><span class="line"><span class="cl">Give me two valid serials <span class="k">for</span> username: Shelly Heilman
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt; 
+</span></span></code></pre></div><p>Unfortunately, I quickly understood that I needed to automate the communication with the server as there was not only one username to generate the serial of.</p>
+<p>I chose <code>pwntools</code> as it offers a simple interface for this kind of stuff.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ python get_flag.py
+</span></span><span class="line"><span class="cl"><span class="o">[</span>...<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>DEBUG<span class="o">]</span> Received 0x64 bytes:
+</span></span><span class="line"><span class="cl">    b<span class="s1">&#39;Well done! Here is the flag: FCSC{REDACTED}\n&#39;</span>
+</span></span></code></pre></div><p>My script is available <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FCSC-2020/Keykoolol/get_flag.py"
+  
+>here</a>.</p>
+<p>Congrats if you have read this write-up to the end, I will try to be more concise next time !</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Symbolic_execution"
+  
+>Symbolic execution - Wikipedia</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Concolic_testing"
+  
+>Concolic testing - Wikipedia</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a
+  class="gblog-markdown__link"
+  href="https://www.felixcloutier.com/x86/aesenc"
+  
+>AESENC — Perform One Round of an AES Encryption Flow</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+    </section>
+  </article>
+
+      </main>
+
+      <footer class="gblog-footer">
+  <nav class="container flex">
+    <div>
+      <section class="flex flex-wrap align-center">
+        
+        
+        
+        
+      </section>
+      <section class="flex flex-wrap align-center">
+        <span class="gblog-footer__item">
+          Built with <a href="https://gohugo.io/" class="gblog-footer__link">Hugo</a> and
+          <svg class="icon gblog_heart"><use xlink:href="#gblog_heart"></use></svg>
+        </span>
+      </section>
+      
+      
+        <section class="flex flex-wrap align-center">
+          <span class="gblog-footer__item">
+            Content licensed under
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="gblog-footer__link no-wrap">CC BY-SA 4.0</a>
+          </span>
+        </section>
+      
+    </div>
+    
+      <div class="flex flex-25 justify-end">
+        <span class="gblog-footer__item text-right">
+          <a class="gblog-footer__link fake-link" href="#" aria-label="Back to top">
+            <svg class="icon gblog_keyboard_arrow_up">
+              <use xlink:href="#gblog_keyboard_arrow_up"></use>
+            </svg>
+            <span class="hidden-mobile">Back to top</span>
+          </a>
+        </span>
+      </div>
+    
+  </nav>
+</footer>
+
+    </div>
+  </body>
+</html>
