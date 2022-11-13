@@ -10,9 +10,8 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="generator" content="Hugo 0.93.3" />
-  <meta name="description" content="This year, I participated in the Flare-On challenge organized by the FLARE team from FireEye.
-In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.
- I want to thank all the challenge authors, especially the one that made the eight challenge as it was reallly the hardest but also the one that I learned the most from." />
+  <meta name="description" content="This year, I participated in the Flare-On challenge organized by the FLARE team from Mandiant Google.
+In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups." />
     <meta name="author" content="icecr4ck" />
 
     <title>Flare-On 9 solutions (part 1) | RE-Dojo</title>
@@ -45,9 +44,8 @@ In total, 11 challenges of reverse engineering with increasing difficulty were t
     content="Flare-On 9 solutions (part 1)"
   />
   <meta property="og:site_name" content="RE-Dojo" />
-  <meta property="og:description" content="This year, I participated in the Flare-On challenge organized by the FLARE team from FireEye.
-In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.
- I want to thank all the challenge authors, especially the one that made the eight challenge as it was reallly the hardest but also the one that I learned the most from." />
+  <meta property="og:description" content="This year, I participated in the Flare-On challenge organized by the FLARE team from Mandiant Google.
+In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-1/" />
 
@@ -64,9 +62,8 @@ In total, 11 challenges of reverse engineering with increasing difficulty were t
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Flare-On 9 solutions (part 1)" />
-  <meta name="twitter:description" content="This year, I participated in the Flare-On challenge organized by the FLARE team from FireEye.
-In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.
- I want to thank all the challenge authors, especially the one that made the eight challenge as it was reallly the hardest but also the one that I learned the most from." />
+  <meta name="twitter:description" content="This year, I participated in the Flare-On challenge organized by the FLARE team from Mandiant Google.
+In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups." />
 
 <script type="application/ld+json">
   {
@@ -76,8 +73,8 @@ In total, 11 challenges of reverse engineering with increasing difficulty were t
       "name": "Flare-On 9 solutions (part 1)",
       "url" : "https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-1/",
       "headline": "Flare-On 9 solutions (part 1)",
-      "description": "This year, I participated in the Flare-On challenge organized by the FLARE team from FireEye.\nIn total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.\n I want to thank all the challenge authors, especially the one that made the eight challenge as it was reallly the hardest but also the one that I learned the most from.",
-      "wordCount" : "919",
+      "description": "This year, I participated in the Flare-On challenge organized by the FLARE team from Mandiant Google.\nIn total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.",
+      "wordCount" : "920",
       "license": "CC BY-SA 4.0",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -85,7 +82,7 @@ In total, 11 challenges of reverse engineering with increasing difficulty were t
           "@type": "WebPage",
           "@id": "https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-1/"
       },
-      "keywords" : [ "Challenge" , "Reverse" ],
+      "keywords" : [ "Challenge" , "Flare-On" ],
       "author" : [
           {
               "@type": "Person",
@@ -263,9 +260,20 @@ In total, 11 challenges of reverse engineering with increasing difficulty were t
           <li>
             <a
               class="gblog-nav__entry"
-              href="/tags/Reverse/"
+              href="/tags/Flare-On/"
             >
-              Reverse
+              Flare On
+            </a>
+          </li>
+        
+      
+        
+          <li>
+            <a
+              class="gblog-nav__entry"
+              href="/tags/NorthSec/"
+            >
+              North Sec
             </a>
           </li>
         
@@ -360,10 +368,10 @@ In total, 11 challenges of reverse engineering with increasing difficulty were t
   <span class="gblog-post__tag gblog-button gblog-button--regular">
     <a
       class="gblog-button__link"
-      href="/tags/Reverse/"
-      title="All posts tagged with 'Reverse'"
+      href="/tags/Flare-On/"
+      title="All posts tagged with 'Flare-On'"
     >
-      Reverse
+      Flare-On
     </a>
   </span>
 
@@ -386,12 +394,12 @@ In total, 11 challenges of reverse engineering with increasing difficulty were t
   class="gblog-markdown__link"
   href="https://flare-on9.ctfd.io/"
   
->Flare-On</a> challenge organized by the FLARE team from FireEye.</p>
+>Flare-On</a> challenge organized by the FLARE team from <del>Mandiant</del> Google.</p>
 <p>In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.</p>
 <figure><img src="/images/flareon9/flareon9_solves.png"/>
 </figure>
 
-<p>I want to thank all the challenge authors, especially the one that made the eight challenge as it was reallly the hardest but also the one that I learned the most from.</p>
+<p>I want to thank all the challenge authors, especially the one who made the eighth challenge as it was reallly the hardest but also the one that I learned the most from.</p>
 <p>As my write-ups are a bit long, I split them in different blog posts. This is the part 1 that details the solutions of the challenges 1 to 4.</p>
 
 

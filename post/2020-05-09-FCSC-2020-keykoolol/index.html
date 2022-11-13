@@ -11,8 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="generator" content="Hugo 0.93.3" />
   <meta name="description" content="A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.
-Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.
-The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it." />
+Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol." />
     <meta name="author" content="icecr4ck" />
 
     <title>FCSC 2020 - Keykoolol | RE-Dojo</title>
@@ -46,8 +45,7 @@ The purpose of this challenge is to analyze a binary that takes a username and a
   />
   <meta property="og:site_name" content="RE-Dojo" />
   <meta property="og:description" content="A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.
-Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.
-The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it." />
+Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/" />
 
@@ -65,8 +63,7 @@ The purpose of this challenge is to analyze a binary that takes a username and a
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="FCSC 2020 - Keykoolol" />
   <meta name="twitter:description" content="A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.
-Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.
-The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it." />
+Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol." />
 
 <script type="application/ld+json">
   {
@@ -76,8 +73,8 @@ The purpose of this challenge is to analyze a binary that takes a username and a
       "name": "FCSC 2020 - Keykoolol",
       "url" : "https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/",
       "headline": "FCSC 2020 - Keykoolol",
-      "description": "A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.\nAmong the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.\nThe purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it.",
-      "wordCount" : "3204",
+      "description": "A few weeks ago, I participated in the France CyberSecurity Challenge (or FCSC in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (ANSSI) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.\nAmong the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named keykoolol.",
+      "wordCount" : "3239",
       "license": "CC BY-SA 4.0",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -85,7 +82,7 @@ The purpose of this challenge is to analyze a binary that takes a username and a
           "@type": "WebPage",
           "@id": "https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/"
       },
-      "keywords" : [ "Challenge" , "Reverse" ],
+      "keywords" : [ "Challenge" ],
       "author" : [
           {
               "@type": "Person",
@@ -263,9 +260,20 @@ The purpose of this challenge is to analyze a binary that takes a username and a
           <li>
             <a
               class="gblog-nav__entry"
-              href="/tags/Reverse/"
+              href="/tags/Flare-On/"
             >
-              Reverse
+              Flare On
+            </a>
+          </li>
+        
+      
+        
+          <li>
+            <a
+              class="gblog-nav__entry"
+              href="/tags/NorthSec/"
+            >
+              North Sec
             </a>
           </li>
         
@@ -352,26 +360,6 @@ The purpose of this challenge is to analyze a binary that takes a username and a
     
     
   
-    
-    
-      
-        <span class="flex align-center">
-          
-  <span class="gblog-post__tag gblog-button gblog-button--regular">
-    <a
-      class="gblog-button__link"
-      href="/tags/Reverse/"
-      title="All posts tagged with 'Reverse'"
-    >
-      Reverse
-    </a>
-  </span>
-
-        </span>
-      
-    
-    
-  
 
 
 
@@ -394,6 +382,29 @@ The purpose of this challenge is to analyze a binary that takes a username and a
 <p>Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named <strong>keykoolol</strong>.</p>
 <p>The purpose of this challenge is to analyze a binary that takes a username and a serial as inputs and write a keygen for it. Then, we have to use this keygen to generate good serials for several usernames to get the flag.</p>
 <p>As I spent a bit of time to solve it, here is my solution for the challenge.</p>
+
+
+
+  <div class="gblog-toc gblog-toc__level--6">
+    <nav id="TableOfContents"><ul>
+        <li><a href="#first-look">First look</a></li>
+        <li><a href="#analysis-of-the-function-checking-the-serial">Analysis of the function checking the serial</a></li>
+        <li><a href="#structure-of-the-vm">Structure of the VM</a></li>
+        <li><a href="#disassembling-the-vm-bytecode">Disassembling the VM bytecode</a>
+          <ul>
+            <li><a href="#miasm-dse">Miasm DSE</a></li>
+            <li><a href="#strategy">Strategy</a></li>
+            <li><a href="#implementation">Implementation</a></li>
+          </ul>
+        </li>
+        <li><a href="#vm-trace-analysis">VM trace analysis</a></li>
+        <li><a href="#implementation-of-the-keygen">Implementation of the keygen</a></li>
+        <li><a href="#last-but-not-least-getting-the-flag">Last but not least: getting the flag!</a></li>
+      </ul></nav>
+    <hr />
+  </div>
+
+
 <div class="gblog-post__anchorwrap">
     <h2 id="first-look">
         First look
@@ -1025,7 +1036,6 @@ VM_R15 = 0
 </li>
 </ol>
 </section>
-
     </section>
   </article>
 

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>icecr4ck on RE-Dojo</title>
-    <link>https://re-dojo.github.io/authors/icecr4ck/</link>
-    <description>Recent content in icecr4ck on RE-Dojo</description>
+    <title>Flare-On on RE-Dojo</title>
+    <link>https://re-dojo.github.io/tags/Flare-On/</link>
+    <description>Recent content in Flare-On on RE-Dojo</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 13 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://re-dojo.github.io/authors/icecr4ck/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 13 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://re-dojo.github.io/tags/Flare-On/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Flare-On 9 solutions (part 1)</title>
       <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-1/</link>
@@ -46,37 +46,6 @@
       
       <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-4/</guid>
       <description>&lt;p&gt;This blog post details the solution of the challenges 9 to 11 of the Flare-On 9.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>FCSC 2020 - Keykoolol</title>
-      <link>https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/</link>
-      <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/</guid>
-      <description>&lt;p&gt;A few weeks ago, I participated in the France CyberSecurity Challenge (or &lt;a
-  class=&#34;gblog-markdown__link&#34;
-  href=&#34;https://france-cybersecurity-challenge.fr/&#34;
-  
-&gt;FCSC&lt;/a&gt; in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (&lt;a
-  class=&#34;gblog-markdown__link&#34;
-  href=&#34;https://www.ssi.gouv.fr/en/&#34;
-  
-&gt;ANSSI&lt;/a&gt;) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.&lt;/p&gt;
-&lt;p&gt;Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named &lt;strong&gt;keykoolol&lt;/strong&gt;.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>ECW 2017 - Red Diamond</title>
-      <link>https://re-dojo.github.io/post/2018-09-28-ECW-2017-red-diamond/</link>
-      <pubDate>Fri, 28 Sep 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://re-dojo.github.io/post/2018-09-28-ECW-2017-red-diamond/</guid>
-      <description>&lt;p&gt;Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le &lt;a
-  class=&#34;gblog-markdown__link&#34;
-  href=&#34;https://challenge-ecw.fr/&#34;
-  
-&gt;challenge ECW&lt;/a&gt;. Tout comme l&amp;rsquo;année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense.&lt;/p&gt;</description>
     </item>
     
   </channel>
