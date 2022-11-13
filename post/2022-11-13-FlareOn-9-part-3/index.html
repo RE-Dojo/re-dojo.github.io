@@ -71,7 +71,7 @@
       "url" : "https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-3/",
       "headline": "Flare-On 9 solutions (part 3)",
       "description": "This blog post details the solution of the challenge 8 of the Flare-On 9.",
-      "wordCount" : "1677",
+      "wordCount" : "1683",
       "license": "CC BY-SA 4.0",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -448,7 +448,7 @@
     </h3>
 </div>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">I&#39;m such a backdoor, decompile me why don&#39;t you...
-</span></span></code></pre></div><p>The eight challenge is a PE executable written in .NET.</p>
+</span></span></code></pre></div><p>The eighth challenge is a PE executable written in .NET.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file FlareOn.Backdoor.exe
 </span></span><span class="line"><span class="cl">FlareOn.Backdoor.exe: PE32 executable <span class="o">(</span>console<span class="o">)</span> Intel <span class="m">80386</span> Mono/.Net assembly, <span class="k">for</span> MS Windows
 </span></span></code></pre></div><div class="gblog-post__anchorwrap">
@@ -459,7 +459,7 @@
         </a>
     </h3>
 </div>
-<p>When the executable is opened in dnSpy, we quickly understand that something is wrong.</p>
+<p>When the executable is opened in dnSpy, we quickly understand that something is wrong as some methods cannot be decompiled.</p>
 <figure><img src="/images/flareon9/Challenge_8_main_function.png"/>
 </figure>
 
