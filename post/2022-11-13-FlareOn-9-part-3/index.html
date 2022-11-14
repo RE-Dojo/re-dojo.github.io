@@ -71,7 +71,7 @@
       "url" : "https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-3/",
       "headline": "Flare-On 9 solutions (part 3)",
       "description": "This blog post details the solution of the challenge 8 of the Flare-On 9.",
-      "wordCount" : "1683",
+      "wordCount" : "1725",
       "license": "CC BY-SA 4.0",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -306,7 +306,7 @@
 
 <span class="flex align-center no-wrap">
   <svg class="icon gblog_timer"><use xlink:href="#gblog_timer"></use></svg>
-  <span class="gblog-post__tag">8 min read</span>
+  <span class="gblog-post__tag">9 min read</span>
 </span>
 
 
@@ -447,7 +447,7 @@
         </a>
     </h3>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">I&#39;m such a backdoor, decompile me why don&#39;t you...
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">I&#39;m such a backdoor, decompile me why don&#39;t you...
 </span></span></code></pre></div><p>The eighth challenge is a PE executable written in .NET.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file FlareOn.Backdoor.exe
 </span></span><span class="line"><span class="cl">FlareOn.Backdoor.exe: PE32 executable <span class="o">(</span>console<span class="o">)</span> Intel <span class="m">80386</span> Mono/.Net assembly, <span class="k">for</span> MS Windows
@@ -466,7 +466,7 @@
 <p>Looking more closely at the other functions of the executable, we can divide them into two categories.</p>
 <ul>
 <li><code>flare_XX()</code>: classic C# bytecode, can be decompiled using dnSpy.</li>
-<li><code>flared_XX()</code>: obfuscated/encrypted functions.</li>
+<li><code>flared_XX()</code>: obfuscated/encrypted methods.</li>
 </ul>
 <figure><img src="/images/flareon9/Challenge_8_function_list.png"/>
 </figure>
@@ -479,18 +479,18 @@
         </a>
     </h3>
 </div>
-<p>If we follow the execution flow from the <code>Main()</code> function, the function <code>FLARE15.flare_74()</code> is called to initialize several global arrays and returns normally. Then, the call <code>Program.flared_38()</code> raises an exception (<code>InvalidProgramException</code>) as the latter is obfuscated/encrypted. The exception is catched and leads to the execution of <code>FLARE15.flare_70()</code>.</p>
+<p>If we follow the execution flow from the <code>Main()</code> function, the function <code>FLARE15.flare_74()</code> is called to initialize several global arrays and returns normally. Then, the call to <code>Program.flared_38()</code> raises an exception (<code>InvalidProgramException</code>) as the method is invalid. The exception is catched and leads to the execution of <code>FLARE15.flare_70()</code>.</p>
 <figure><img src="/images/flareon9/Challenge_8_flare_70.png"/>
 </figure>
 
 <p>Again, an exception is raised when <code>FLARE15.flared_70()</code> is executed and this time it is handled by <code>FLARE15.flare_71()</code>. Interestingly, the latter also takes two extra parameters: <code>FLARE15.wl_m</code> and <code>FLARE15.wl_b</code> (defined in <code>FLARE15.flare_74()</code>).</p>
 <p>This method is not obfuscated and can be easily analyzed once decompiled. Here is what it does.</p>
 <ol>
-<li>Retrieve the metadata token (pointer in metadata table, see <a
+<li>Retrieve the <a
   class="gblog-markdown__link"
   href="https://learn.microsoft.com/en-us/dotnet/standard/metadata-and-self-describing-components#metadata-tokens"
   
->here</a> for more details) of the function that caused the exception from the stack trace.</li>
+>metadata token</a> of the function that caused the exception from the stack trace.</li>
 <li>Get the prototype of the function from the metadata token.</li>
 <li>Create a new <code>DynamicMethod</code> from the prototype.</li>
 <li>Iterate over the <code>Dictionary</code> given as third parameter (<code>FLARE15.wl_m</code>)
@@ -499,18 +499,18 @@
 <li>each value is a valid metadata token in the program.</li>
 </ul>
 </li>
-<li>Each metadata token is translated into a valid token in the scope of the dynamic method. For example, if the token &ldquo;points&rdquo; to a string of the program, it is first resolved using the <code>Module.ResolveString()</code> function and then a token is created the using <code>DynamicILInfo.GetTokenFor()</code> method.</li>
+<li>Each metadata token is translated into a valid token in the scope of the dynamic method. For example, if the token &ldquo;points&rdquo; to a string of the program, it is first resolved via <code>Module.ResolveString()</code> and then a token is created using <code>DynamicILInfo.GetTokenFor()</code>.</li>
 </ol>
 <figure><img src="/images/flareon9/Challenge_8_flare_71_resolve_token.png"/>
 </figure>
 
-<ol start="7">
+<ol start="6">
 <li>The resulting token is written to the bytecode of the dynamic method at the index specified by the <code>key</code> variable.</li>
 </ol>
 <figure><img src="/images/flareon9/Challenge_8_flare_71_patch_token.png"/>
 </figure>
 
-<ol start="8">
+<ol start="7">
 <li>Finally, the patched bytecode is set as the code body of the dynamic method and the latter is executed.</li>
 </ol>
 <figure><img src="/images/flareon9/Challenge_8_flare_71_exec_bytecode.png"/>
@@ -614,7 +614,7 @@
     </h4>
 </div>
 <p>The backdoor communicates with its Command &amp; Control (C&amp;C) server via DNS (only A queries are supported).</p>
-<p>Obviously, the domain name of the C&amp;C server is <code>flare-on.com</code> and the payload is encoded using a custom algorithm as a sub-domain.</p>
+<p>Obviously, the domain name of the C&amp;C server is <code>flare-on.com</code>. The payload is encoded using a custom algorithm as a sub-domain.</p>
 <p>The method responsible for building the payload is <code>FLARE05.flared_29()</code>. It takes two parameters:</p>
 <ul>
 <li>a payload type (<code>FLARE06.DomT</code>));</li>
@@ -652,8 +652,33 @@
 </tbody>
 </table> </div>
 <p>The following sequence diagram sums up how the different payloads are used by the backdoor.</p>
-<figure><img src="/images/flareon9/Challenge_8_seq_diagram.png"/>
-</figure>
+
+
+  
+  <script defer src="/js/mermaid-9299d9b9.bundle.min.js"></script>
+  
+
+
+
+<pre class="gblog-mermaid mermaid ">
+sequenceDiagram
+	participant Backdoor
+	participant C2
+	Backdoor->>C2: DomT.A (HELLO)
+	C2->>Backdoor: Answer (NEW AGENT_ID)
+	Backdoor->>C2: DomT.E (REQUEST TASK)
+	C2->>Backdoor: Answer (TASK SIZE)
+	loop GET_TASK_DATA
+		Backdoor->>C2: DomT.C (REQUEST TASK DATA)
+		C2->>Backdoor: Answer (TASK DATA)
+	end
+	loop SEND_TASK_RESULT
+		Backdoor->>C2: DomT.B (TASK RESULT DATA)
+		C2->>Backdoor: Answer (NEXT TASK SIZE)
+	end
+	Backdoor->>C2: DomT.D (REQUEST NEXT TASK DATA)
+	C2->>Backdoor: Answer (TASK DATA)
+</pre>
 
 <p>Payload data is encoded using a substitution alphabet built from the <code>counter</code>. More precisely, the alphabet is randomly generated using a <a
   class="gblog-markdown__link"
