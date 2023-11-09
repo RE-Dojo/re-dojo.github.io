@@ -8,44 +8,17 @@
     <language>en</language>
     <lastBuildDate>Sun, 13 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://re-dojo.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Flare-On 9 solutions (part 1)</title>
-      <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-1/</link>
+      <title>Flare-On 9 solutions</title>
+      <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9/</link>
       <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-1/</guid>
+      <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9/</guid>
       <description>&lt;p&gt;This year, I participated in the &lt;a
   class=&#34;gblog-markdown__link&#34;
   href=&#34;https://flare-on9.ctfd.io/&#34;
   
 &gt;Flare-On&lt;/a&gt; challenge organized by the FLARE team from &lt;del&gt;Mandiant&lt;/del&gt; Google.&lt;/p&gt;
 &lt;p&gt;In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flare-On 9 solutions (part 2)</title>
-      <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-2/</link>
-      <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-2/</guid>
-      <description>&lt;p&gt;This blog post details the solutions of the challenges 5 to 7 of the Flare-On 9.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flare-On 9 solutions (part 3)</title>
-      <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-3/</link>
-      <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-3/</guid>
-      <description>&lt;p&gt;This blog post details the solution of the challenge 8 of the Flare-On 9.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flare-On 9 solutions (part 4)</title>
-      <link>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-4/</link>
-      <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://re-dojo.github.io/post/2022-11-13-FlareOn-9-part-4/</guid>
-      <description>&lt;p&gt;This blog post details the solutions of the challenges 9 to 11 of the Flare-On 9.&lt;/p&gt;</description>
     </item>
     
     <item>

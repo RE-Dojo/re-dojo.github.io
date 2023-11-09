@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="en"
+  class="color-toggle-hidden"
+>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="referrer" content="no-referrer" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content="Hugo 0.101.0" />
+  <meta name="description" content="This year, I participated in the Flare-On challenge organized by the FLARE team from Mandiant Google.
+In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups." />
+    <meta name="author" content="icecr4ck" />
+
+    <title>Flare-On 9 solutions | RE-Dojo</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+<link
+  rel="icon"
+  type="image/png"
+  sizes="48x48"
+  href="/favicon/favicon-32x32.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="/favicon/favicon-32x32.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="/favicon/favicon-16x16.png"
+/>
+
+    
+
+    
+  <meta
+    property="og:title"
+    content="Flare-On 9 solutions"
+  />
+  <meta property="og:site_name" content="RE-Dojo" />
+  <meta property="og:description" content="This year, I participated in the Flare-On challenge organized by the FLARE team from Mandiant Google.
+In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/" />
+
+<meta property="article:section" content="Post" />
+    <meta
+      property="article:published_time"
+      content="2022-11-13T00:00:00+00:00"
+    />
+    <meta
+      property="article:modified_time"
+      content="2022-11-13T00:00:00+00:00"
+    />
+
+
+  <meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Flare-On 9 solutions" />
+  <meta name="twitter:description" content="This year, I participated in the Flare-On challenge organized by the FLARE team from Mandiant Google.
+In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups." />
+
+<script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "BlogPosting",
+      "articleSection": "Post",
+      "name": "Flare-On 9 solutions",
+      "url" : "https://re-dojo.github.io/post/2022-11-13-FlareOn-9/",
+      "headline": "Flare-On 9 solutions",
+      "description": "This year, I participated in the Flare-On challenge organized by the FLARE team from Mandiant Google.\nIn total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.",
+      "wordCount" : "6719",
+      "license": "CC BY-SA 4.0",
+      "inLanguage": "en",
+      "isFamilyFriendly": "true",
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://re-dojo.github.io/post/2022-11-13-FlareOn-9/"
+      },
+      "keywords" : [ "Challenge" , "Flare-On" ],
+      "author" : [
+          {
+              "@type": "Person",
+              "name": "icecr4ck"
+          }
+      ],
+      "copyrightHolder" : "RE-Dojo",
+      "copyrightYear" : "2022",
+      "dateCreated": "2022-11-13T00:00:00.00Z",
+      "datePublished": "2022-11-13T00:00:00.00Z",
+      "dateModified": "2022-11-13T00:00:00.00Z",
+      "publisher":{
+          "@type":"Organization",
+          "name": "RE-Dojo",
+          "url": "https://re-dojo.github.io/",
+          "logo": {
+              "@type": "ImageObject",
+              "url": "https://re-dojo.github.io/images/brand/logo.svg",
+              "width":"32",
+              "height":"32"
+          }
+      }
+  }
+  </script>
+
+
+    <script src="/js/main-8d4fb56f.bundle.min.js"></script>
+
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/Metropolis.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/LiberationSans.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/GeekblogIcons.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+
+<link
+  rel="preload"
+  href="/main-67545b00.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/main-67545b00.min.css"
+  media="all"
+/>
+
+<link
+  rel="preload"
+  href="/mobile-3888ed2b.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/mobile-3888ed2b.min.css"
+  media="screen and (max-width: 45rem)"
+/>
+
+<link
+  rel="preload"
+  href="/print-8a905a2e.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/print-8a905a2e.min.css"
+  media="print"
+/>
+
+<link
+  rel="preload"
+  href="/custom.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/custom.css"
+  media="all"
+/>
+  <link href="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/" rel="canonical" type="text/html" />
+    <link href="https://re-dojo.github.io/index.xml" rel="alternate" type="application/rss+xml" title="RE-Dojo RSS Feed" />
+
+<!-- Made with Geekblog theme https://github.com/thegeeklab/hugo-geekblog -->
+
+    
+
+  </head>
+
+  <body>
+    
+  <!-- geekblog include: sprites/geekblog.svg -->
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_back" xmlns="http://www.w3.org/2000/svg"><path d="M31.999 14.035v3.93H7.673l11.134 11.228L16 32 .001 16.001 16 .002l2.807 2.807L7.673 14.037h24.326z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M7.954 17.965v5.988L.001 16l7.953-7.953v5.988H32v3.93H7.954z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M24.046 14.035V8.047L31.999 16l-7.953 7.953v-5.988H0v-3.93h24.046z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_bitbucket" xmlns="http://www.w3.org/2000/svg"><path d="M15.905 13.355c.189 1.444-1.564 2.578-2.784 1.839-1.375-.602-1.375-2.784-.034-3.403 1.151-.705 2.818.223 2.818 1.564zm1.907-.361c-.309-2.44-3.076-4.056-5.328-3.042-1.426.636-2.389 2.148-2.32 3.747.086 2.097 2.08 3.815 4.176 3.626s3.729-2.234 3.472-4.331zm4.108-9.315c-.756-.997-2.045-1.169-3.179-1.358-3.214-.516-6.513-.533-9.727.034-1.066.172-2.269.361-2.939 1.323 1.1 1.031 2.664 1.186 4.073 1.358 2.544.327 5.156.344 7.699.017 1.426-.172 3.008-.309 4.073-1.375zm.979 17.788c-.481 1.684-.206 3.953-1.994 4.932-3.076 1.701-6.806 1.89-10.191 1.289-1.787-.327-3.884-.894-4.864-2.578-.43-1.65-.705-3.334-.98-5.018l.103-.275.309-.155c5.121 3.386 12.288 3.386 17.427 0 .808.241.206 1.22.189 1.805zM26.01 4.951c-.584 3.764-1.255 7.51-1.908 11.257-.189 1.1-1.255 1.719-2.148 2.183-3.214 1.615-6.96 1.89-10.483 1.512-2.389-.258-4.829-.894-6.771-2.389-.911-.705-.911-1.908-1.083-2.922-.602-3.523-1.289-7.046-1.719-10.604.206-1.547 1.942-2.217 3.231-2.698C6.848.654 8.686.362 10.508.19c3.884-.378 7.854-.241 11.618.859 1.341.395 2.784.945 3.695 2.097.412.533.275 1.203.189 1.805z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_bookmark" xmlns="http://www.w3.org/2000/svg"><path d="M20.357 5.856q1.157 0 2.043.851t.885 2.008v23.284l-10.212-4.357-10.144 4.357V8.715q0-1.157.885-2.008t2.042-.851h14.502zm5.787 18.859V5.856q0-1.157-.851-2.042t-2.008-.885H8.715q0-1.157.885-2.042t2.043-.885h14.502q1.157 0 2.043.885t.885 2.042v23.216z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_auto" xmlns="http://www.w3.org/2000/svg"><path d="M16.846 18.938h2.382L15.22 7.785h-2.44L8.772 18.938h2.382l.871-2.44h3.95zm7.087-9.062L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809zm-11.385 4.937L14 10.282l1.452 4.531h-2.904z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_dark" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565q-1.51 0-3.079.697 1.917.871 3.108 2.701T15.22 14t-1.191 4.037-3.108 2.701q1.568.697 3.079.697zm9.933-11.559L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_light" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565 8.743 8.743 6.565 14t2.178 5.257T14 21.435zm9.933-3.311v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809L27.999 14z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_check" xmlns="http://www.w3.org/2000/svg"><path d="M8.885 20.197L25.759 3.323l2.24 2.24L8.885 24.677 0 15.792l2.24-2.24z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_clear" xmlns="http://www.w3.org/2000/svg"><path d="M32 3.222L19.222 16 32 28.778l-3.221 3.221-12.778-12.778L3.223 31.999.002 28.778 12.78 16 .002 3.222 3.223.001l12.778 12.778L28.779.001z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_cloud_off" xmlns="http://www.w3.org/2000/svg"><path d="M9.023 10.5H7q-1.914 0-3.281 1.395t-1.367 3.309 1.367 3.281T7 19.852h11.375zM3.5 4.976l1.477-1.477L24.5 23.022l-1.477 1.477-2.352-2.297H6.999q-2.898 0-4.949-2.051t-2.051-4.949q0-2.844 1.969-4.867t4.758-2.133zm19.086 5.578q2.242.164 3.828 1.832T28 16.351q0 3.008-2.461 4.758l-1.695-1.695q1.805-.984 1.805-3.063 0-1.422-1.039-2.461t-2.461-1.039h-1.75v-.602q0-2.68-1.859-4.539t-4.539-1.859q-1.531 0-2.953.711l-1.75-1.695Q11.431 3.5 14.001 3.5q2.953 0 5.496 2.078t3.09 4.977z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_code" xmlns="http://www.w3.org/2000/svg"><path d="M9.917 24.5a1.75 1.75 0 10-3.501.001 1.75 1.75 0 003.501-.001zm0-21a1.75 1.75 0 10-3.501.001A1.75 1.75 0 009.917 3.5zm11.666 2.333a1.75 1.75 0 10-3.501.001 1.75 1.75 0 003.501-.001zm1.75 0a3.502 3.502 0 01-1.75 3.026c-.055 6.581-4.721 8.039-7.82 9.023-2.898.911-3.846 1.349-3.846 3.117v.474a3.502 3.502 0 011.75 3.026c0 1.932-1.568 3.5-3.5 3.5s-3.5-1.568-3.5-3.5c0-1.294.711-2.424 1.75-3.026V6.526A3.502 3.502 0 014.667 3.5c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5a3.502 3.502 0 01-1.75 3.026v9.06c.93-.456 1.914-.766 2.807-1.039 3.391-1.075 5.323-1.878 5.359-5.687a3.502 3.502 0 01-1.75-3.026c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_contacts" xmlns="http://www.w3.org/2000/svg"><path d="M22.688 22.688v-2q0-1.5-2.281-2.438t-4.406-.938-4.406.938-2.281 2.438v2h13.375zM16 9q-1.25 0-2.125.875T13 12t.875 2.125T16 15t2.125-.875T19 12t-.875-2.125T16 9zm10.688-3.687q1.063 0 1.844.813t.781 1.875v16q0 1.063-.781 1.875t-1.844.813H5.313q-1.063 0-1.844-.813t-.781-1.875v-16q0-1.063.781-1.875t1.844-.813h21.375zM5.313 32v-2.688h21.375V32H5.313zM26.688 0v2.688H5.313V0h21.375z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_copy" xmlns="http://www.w3.org/2000/svg"><path d="M23.502 25.438V7.626H9.562v17.812h13.94zm0-20.315q1.013 0 1.787.745t.774 1.757v17.812q0 1.013-.774 1.787t-1.787.774H9.562q-1.013 0-1.787-.774t-.774-1.787V7.625q0-1.013.774-1.757t1.787-.745h13.94zM19.689 0v2.562H4.438v17.812H1.936V2.562q0-1.013.745-1.787T4.438.001h15.251z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_create" xmlns="http://www.w3.org/2000/svg"><path d="M31.499 7.167l-3.25 3.25-6.666-6.666 3.25-3.25q.5-.5 1.25-.5t1.25.5l4.166 4.166q.5.5.5 1.25t-.5 1.25zM.001 25.333L19.667 5.667l6.666 6.666L6.667 31.999H.001v-6.666z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_date" xmlns="http://www.w3.org/2000/svg"><path d="M27.192 28.844V11.192H4.808v17.652h22.384zm0-25.689q1.277 0 2.253.976t.976 2.253v22.459q0 1.277-.976 2.216t-2.253.939H4.808q-1.352 0-2.291-.901t-.939-2.253V6.385q0-1.277.939-2.253t2.291-.976h1.577V.001h3.23v3.155h12.769V.001h3.23v3.155h1.577zm-3.155 11.267v3.155h-3.23v-3.155h3.23zm-6.46 0v3.155h-3.155v-3.155h3.155zm-6.384 0v3.155h-3.23v-3.155h3.23z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_download" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 28.209h26.269v3.79H2.866v-3.79zm26.268-16.925L16 24.418 2.866 11.284h7.493V.001h11.283v11.283h7.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_email" xmlns="http://www.w3.org/2000/svg"><path d="M28.845 9.615v-3.23L16 14.422 3.155 6.385v3.23L16 17.577zm0-6.46q1.277 0 2.216.977T32 6.385v19.23q0 1.277-.939 2.253t-2.216.977H3.155q-1.277 0-2.216-.977T0 25.615V6.385q0-1.277.939-2.253t2.216-.977h25.69z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_git" xmlns="http://www.w3.org/2000/svg"><path d="M27.472 12.753L15.247.529a1.803 1.803 0 00-2.55 0l-2.84 2.84 2.137 2.137a2.625 2.625 0 013.501 3.501l3.499 3.499a2.625 2.625 0 11-1.237 1.237l-3.499-3.499c-.083.04-.169.075-.257.106v7.3a2.626 2.626 0 11-1.75 0v-7.3a2.626 2.626 0 01-1.494-3.607L8.62 4.606l-8.09 8.09a1.805 1.805 0 000 2.551l12.225 12.224a1.803 1.803 0 002.55 0l12.168-12.168a1.805 1.805 0 000-2.551z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_github" xmlns="http://www.w3.org/2000/svg"><path d="M16 .394c8.833 0 15.999 7.166 15.999 15.999 0 7.062-4.583 13.062-10.937 15.187-.813.146-1.104-.354-1.104-.771 0-.521.021-2.25.021-4.396 0-1.5-.5-2.458-1.083-2.958 3.562-.396 7.312-1.75 7.312-7.896 0-1.75-.625-3.167-1.646-4.291.167-.417.708-2.042-.167-4.25-1.333-.417-4.396 1.646-4.396 1.646a15.032 15.032 0 00-8 0S8.937 6.602 7.603 7.018c-.875 2.208-.333 3.833-.167 4.25-1.021 1.125-1.646 2.542-1.646 4.291 0 6.125 3.729 7.5 7.291 7.896-.458.417-.875 1.125-1.021 2.146-.917.417-3.25 1.125-4.646-1.333-.875-1.521-2.458-1.646-2.458-1.646-1.562-.021-.104.979-.104.979 1.042.479 1.771 2.333 1.771 2.333.938 2.854 5.396 1.896 5.396 1.896 0 1.333.021 2.583.021 2.979 0 .417-.292.917-1.104.771C4.582 29.455-.001 23.455-.001 16.393-.001 7.56 7.165.394 15.998.394zM6.063 23.372c.042-.083-.021-.187-.146-.25-.125-.042-.229-.021-.271.042-.042.083.021.187.146.25.104.062.229.042.271-.042zm.646.709c.083-.062.062-.208-.042-.333-.104-.104-.25-.146-.333-.062-.083.062-.062.208.042.333.104.104.25.146.333.062zm.625.937c.104-.083.104-.25 0-.396-.083-.146-.25-.208-.354-.125-.104.062-.104.229 0 .375s.271.208.354.146zm.875.875c.083-.083.042-.271-.083-.396-.146-.146-.333-.167-.417-.062-.104.083-.062.271.083.396.146.146.333.167.417.062zm1.187.521c.042-.125-.083-.271-.271-.333-.167-.042-.354.021-.396.146s.083.271.271.312c.167.062.354 0 .396-.125zm1.313.104c0-.146-.167-.25-.354-.229-.187 0-.333.104-.333.229 0 .146.146.25.354.229.187 0 .333-.104.333-.229zm1.208-.208c-.021-.125-.187-.208-.375-.187-.187.042-.312.167-.292.312.021.125.187.208.375.167s.312-.167.292-.292z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_gitlab" xmlns="http://www.w3.org/2000/svg"><path d="M1.629 11.034L14 26.888.442 17.048a1.09 1.09 0 01-.39-1.203l1.578-4.811zm7.217 0h10.309l-5.154 15.854zM5.753 1.475l3.093 9.559H1.63l3.093-9.559a.548.548 0 011.031 0zm20.618 9.559l1.578 4.811c.141.437-.016.922-.39 1.203l-13.558 9.84 12.371-15.854zm0 0h-7.216l3.093-9.559a.548.548 0 011.031 0z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_heart" xmlns="http://www.w3.org/2000/svg"><path d="M16 29.714a1.11 1.11 0 01-.786-.321L4.072 18.643c-.143-.125-4.071-3.714-4.071-8 0-5.232 3.196-8.357 8.535-8.357 3.125 0 6.053 2.464 7.464 3.857 1.411-1.393 4.339-3.857 7.464-3.857 5.339 0 8.535 3.125 8.535 8.357 0 4.286-3.928 7.875-4.089 8.035L16.785 29.392c-.214.214-.5.321-.786.321z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_down" xmlns="http://www.w3.org/2000/svg"><path d="M3.281 5.36L14 16.079 24.719 5.36 28 8.641l-14 14-14-14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M25.875 28.25L22.125 32 6.126 16.001 22.125.002l3.75 3.75-12.25 12.25z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M6.125 28.25L18.375 16 6.125 3.75 9.875 0l15.999 15.999L9.875 31.998z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_up" xmlns="http://www.w3.org/2000/svg"><path d="M24.719 22.64L14 11.921 3.281 22.64 0 19.359l14-14 14 14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_link" xmlns="http://www.w3.org/2000/svg"><path d="M24.037 7.963q3.305 0 5.634 2.366T32 16t-2.329 5.671-5.634 2.366h-6.46v-3.08h6.46q2.028 0 3.493-1.465t1.465-3.493-1.465-3.493-3.493-1.465h-6.46v-3.08h6.46zM9.615 17.578v-3.155h12.77v3.155H9.615zM3.005 16q0 2.028 1.465 3.493t3.493 1.465h6.46v3.08h-6.46q-3.305 0-5.634-2.366T0 16.001t2.329-5.671 5.634-2.366h6.46v3.08h-6.46q-2.028 0-3.493 1.465t-1.465 3.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_menu" xmlns="http://www.w3.org/2000/svg"><path d="M.001 5.334h31.998v3.583H.001V5.334zm0 12.416v-3.5h31.998v3.5H.001zm0 8.916v-3.583h31.998v3.583H.001z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_notifications" xmlns="http://www.w3.org/2000/svg"><path d="M25.846 22.154l3.308 3.308v1.615H2.847v-1.615l3.308-3.308V14q0-3.846 1.961-6.692t5.423-3.692V2.462q0-1 .692-1.731T16 0t1.769.731.692 1.731v1.154q3.461.846 5.423 3.692T25.846 14v8.154zM16 32q-1.385 0-2.346-.923t-.962-2.308h6.615q0 1.308-1 2.269T15.999 32z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_person" xmlns="http://www.w3.org/2000/svg"><path d="M16 20.023q5.052 0 10.526 2.199t5.473 5.754v4.023H0v-4.023q0-3.555 5.473-5.754t10.526-2.199zM16 16q-3.275 0-5.614-2.339T8.047 8.047t2.339-5.661T16 0t5.614 2.386 2.339 5.661-2.339 5.614T16 16z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_pin" xmlns="http://www.w3.org/2000/svg"><path d="M17.6 19.2h9.6v-1.6L22.4 16V3.2l4.8-1.6V0H4.8v1.6l4.8 1.6V16l-4.8 1.6v1.6h9.6v11.2L16 32l1.6-1.6V19.2z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_rss_feed" xmlns="http://www.w3.org/2000/svg"><path d="M-.481 12.048q8.482 0 14.457 5.976t5.976 14.457h-5.879q0-5.976-4.289-10.264T-.48 17.928v-5.879zm0-11.565q13.204 0 22.601 9.397t9.397 22.601h-5.783q0-10.891-7.662-18.553T-.481 6.266V.483zm0 27.468q0-1.831 1.301-3.132t3.229-1.301 3.181 1.253 1.253 3.181-1.301 3.229-3.132 1.301q-1.928 0-3.229-1.301T-.48 27.952z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_search" xmlns="http://www.w3.org/2000/svg"><path d="M11.925 20.161q3.432 0 5.834-2.402t2.402-5.834-2.402-5.834-5.834-2.402-5.834 2.402-2.402 5.834 2.402 5.834 5.834 2.402zm10.981 0L32 29.255 29.255 32l-9.094-9.094v-1.458l-.515-.515q-3.26 2.831-7.721 2.831-4.976 0-8.45-3.432T.001 11.925t3.474-8.45 8.45-3.474 8.407 3.474 3.432 8.45q0 1.802-.858 4.075t-1.973 3.646l.515.515h1.458z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_security" xmlns="http://www.w3.org/2000/svg"><path d="M16 0l13.072 5.855v8.715q0 6.059-3.745 11.063T16 31.999q-5.583-1.362-9.327-6.366T2.928 14.57V5.855zm0 16v13.004q4.017-1.294 6.808-4.868T26.144 16H16zm0 0V3.2L5.856 7.693v8.306H16z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_star" xmlns="http://www.w3.org/2000/svg"><path d="M14 22.052L5.324 27.31l2.3-9.859L0 10.813l10.056-.854L14 .692l3.944 9.267L28 10.813l-7.624 6.638 2.3 9.859z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_tag" xmlns="http://www.w3.org/2000/svg"><path d="M17.52 17.52v-7.041h-7.041v7.041h7.041zM28 10.479h-7.041v7.041H28v3.439h-7.041V28H17.52v-7.041h-7.041V28H7.04v-7.041H-.001V17.52H7.04v-7.041H-.001V7.04H7.04V-.001h3.439V7.04h7.041V-.001h3.439V7.04H28v3.439z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_timer" xmlns="http://www.w3.org/2000/svg"><path d="M16 29q4.428 0 7.536-3.143t3.107-7.571-3.107-7.536T16 7.643 8.464 10.75t-3.107 7.536 3.107 7.571T16 29zM26.714 9.786q1.214 1.571 2.107 4.036t.893 4.464q0 5.643-4 9.678T16 32t-9.714-4.036-4-9.678 4-9.678T16 4.572q1.929 0 4.464.929t4.107 2.143l2.143-2.214q1.143.929 2.143 2.143zM14.5 19.857v-9.143h3v9.143h-3zM20.571.001v3.071h-9.143V.001h9.143z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_tree" xmlns="http://www.w3.org/2000/svg"><path d="M32 14.423H20.808V9.616h-3.23v12.77h3.23v-4.807H32v12.845H20.808v-4.807h-6.385v-16h-3.23v4.807H.001V1.579h11.192v4.807h9.615V1.579H32v12.845z"/></svg></defs></svg>
+
+
+
+
+    <div
+      class="wrapper "
+    >
+      <header class="gblog-header">
+  <div class="container flex flex-wrap">
+    <div class="gblog-header__col-1 flex justify-start hidden-mobile"></div>
+    <div class="gblog-header__col-2 flex align-center justify-center ">
+      <a class="gblog-header__link" rel="me" href="https://re-dojo.github.io/">
+        <span class="gblog-brand flex align-center justify-center">
+          <img
+            class="gblog-brand__img"
+            src="/images/brand/logo.svg"
+            alt=""
+          />
+          <span class="gblog-brand__title">RE-Dojo</span>
+        </span>
+        
+          <span class="gblog-brand__subtitle flex align-center justify-center">Blog about reverse engineering and program analysis</span>
+        
+      </a>
+    </div>
+    <div class="gblog-header__col-3 flex justify-end">
+      <span id="gblog-dark-mode">
+        <svg class="icon gblog_brightness_dark">
+          <title></title>
+          <use xlink:href="#gblog_brightness_dark"></use>
+        </svg>
+        <svg class="icon gblog_brightness_light">
+          <title></title>
+          <use xlink:href="#gblog_brightness_light"></use>
+        </svg>
+        <svg class="icon gblog_brightness_auto">
+          <title></title>
+          <use xlink:href="#gblog_brightness_auto"></use>
+        </svg>
+      </span>
+    </div>
+  </div>
+</header>
+<nav class="gblog-nav">
+  <input type="checkbox" id="menu-control" class="hidden" />
+  <div class="gblog-nav__control">
+    <label for="menu-control" class="flex align-center justify-center">
+      <svg class="icon gblog_menu"><use xlink:href="#gblog_menu"></use></svg>
+      <svg class="icon gblog_clear"><use xlink:href="#gblog_clear"></use></svg>
+      <span>Navigation</span>
+    </label>
+  </div>
+  <ul class="gblog-nav__list container flex flex-wrap justify-center menu-content">
+    
+    
+      
+        
+          <li>
+            <a
+              class="gblog-nav__entry"
+              href="/tags/Challenge/"
+            >
+              Challenge
+            </a>
+          </li>
+        
+      
+        
+          <li>
+            <a
+              class="gblog-nav__entry"
+              href="/tags/Flare-On/"
+            >
+              Flare On
+            </a>
+          </li>
+        
+      
+        
+          <li>
+            <a
+              class="gblog-nav__entry"
+              href="/tags/NorthSec/"
+            >
+              North Sec
+            </a>
+          </li>
+        
+      
+    
+    
+  </ul>
+</nav>
+
+
+
+      <main class="gblog-page container">
+        
+  <article class="gblog-post">
+    <header class="gblog-post__header">
+      
+      
+
+
+      <h1 class="gblog-post__title">Flare-On 9 solutions</h1>
+
+      
+        <div class="flex flex-wrap align-center gblog-post__meta gblog-post__meta--head">
+          <span class="flex align-center no-wrap">
+  <svg class="icon gblog_date"><use xlink:href="#gblog_date"></use></svg>
+  <span class="gblog-post__tag">
+    <time datetime="2022-11-13T00:00:00Z">
+      
+      Nov 13, 2022
+    </time>
+  </span>
+</span>
+
+<span class="flex align-center no-wrap">
+  <svg class="icon gblog_timer"><use xlink:href="#gblog_timer"></use></svg>
+  <span class="gblog-post__tag">32 min read</span>
+</span>
+
+
+
+
+
+  
+    
+    
+      
+        <span class="flex align-center no-wrap">
+          <svg class="icon gblog_person"><use xlink:href="#gblog_person"></use></svg>
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a class="gblog-button__link" href="/authors/icecr4ck/" title="All posts of this author">
+      icecr4ck
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+
+
+
+
+  
+    
+    
+      
+        <span class="flex align-center no-wrap">
+          <svg class="icon gblog_bookmark"><use xlink:href="#gblog_bookmark"></use></svg>
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a
+      class="gblog-button__link"
+      href="/tags/Challenge/"
+      title="All posts tagged with 'Challenge'"
+    >
+      Challenge
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+    
+    
+      
+        <span class="flex align-center">
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a
+      class="gblog-button__link"
+      href="/tags/Flare-On/"
+      title="All posts tagged with 'Flare-On'"
+    >
+      Flare-On
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+
+
+
+
+
+
+        </div>
+      
+    </header>
+    <section class="gblog-markdown">
+      <p>This year, I participated in the <a
+  class="gblog-markdown__link"
+  href="https://flare-on9.ctfd.io/"
+  
+>Flare-On</a> challenge organized by the FLARE team from <del>Mandiant</del> Google.</p>
+<p>In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.</p>
+<figure><img src="/images/flareon9/flareon9_solves.png"/>
+</figure>
+
+<p>I want to thank all the challenge authors, especially the one who made the eighth challenge as it was reallly the hardest but also the one that I learned the most from.</p>
+
+
+
+  <div class="gblog-toc gblog-toc__level--6">
+    <nav id="TableOfContents"><ul>
+        <li><a href="#challenge-1---flaredle">Challenge 1 - Flaredle</a>
+          <ul>
+            <li><a href="#description">Description</a></li>
+            <li><a href="#solution">Solution</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-2---pixel-poker">Challenge 2 - Pixel Poker</a>
+          <ul>
+            <li><a href="#description-1">Description</a></li>
+            <li><a href="#solution-1">Solution</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-3---magic-8-ball">Challenge 3 - Magic 8 Ball</a>
+          <ul>
+            <li><a href="#description-2">Description</a></li>
+            <li><a href="#solution-2">Solution</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-4---darn_mice">Challenge 4 - darn_mice</a>
+          <ul>
+            <li><a href="#description-3">Description</a></li>
+            <li><a href="#solution-3">Solution</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-5---t8">Challenge 5 - T8</a>
+          <ul>
+            <li><a href="#description-4">Description</a></li>
+            <li><a href="#solution-4">Solution</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-6---à-la-mode">Challenge 6 - à la mode</a>
+          <ul>
+            <li><a href="#description-5">Description</a></li>
+            <li><a href="#solution-5">Solution</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-7---anode">Challenge 7 - anode</a>
+          <ul>
+            <li><a href="#description-6">Description</a></li>
+            <li><a href="#extracting-and-analyzing-the-js-script">Extracting and analyzing the JS script</a></li>
+            <li><a href="#dealing-with-the-math-module">Dealing with the <code>math</code> module</a></li>
+            <li><a href="#extracting-the-equations">Extracting the equations</a></li>
+            <li><a href="#solving-the-equations">Solving the equations</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-8---backdoor">Challenge 8 - backdoor</a>
+          <ul>
+            <li><a href="#description-7">Description</a></li>
+            <li><a href="#first-look">First look</a></li>
+            <li><a href="#understanding-the-first-layer-of-obfuscation">Understanding the first layer of obfuscation</a></li>
+            <li><a href="#recovering-the-first-layer-methods">Recovering the first layer methods</a></li>
+            <li><a href="#understanding-the-second-layer-of-obfuscation">Understanding the second layer of obfuscation</a></li>
+            <li><a href="#recovering-the-second-layer-methods">Recovering the second layer methods</a></li>
+            <li><a href="#analyzing-the-backdoor">Analyzing the backdoor</a>
+              <ul>
+                <li><a href="#initialization">Initialization</a></li>
+                <li><a href="#communication-protocol">Communication protocol</a></li>
+                <li><a href="#command-execution">Command execution</a></li>
+              </ul>
+            </li>
+            <li><a href="#decrypting-the-final-stage">Decrypting the final stage</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-9---encryptor">Challenge 9 - encryptor</a>
+          <ul>
+            <li><a href="#description-8">Description</a></li>
+            <li><a href="#first-look-1">First look</a></li>
+            <li><a href="#static-analysis">Static analysis</a>
+              <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#analysis-of-the-function-at-0x4021d0">Analysis of the function at <code>0x4021d0</code></a></li>
+              </ul>
+            </li>
+            <li><a href="#decrypting-the-suspicious-file">Decrypting the suspicious file</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-10---nur-getraumt">Challenge 10 - Nur geträumt</a>
+          <ul>
+            <li><a href="#description-9">Description</a></li>
+            <li><a href="#mounting-the-image">Mounting the image</a></li>
+            <li><a href="#analysis-of-the-application">Analysis of the application</a>
+              <ul>
+                <li><a href="#static-analysis-1">Static analysis</a></li>
+                <li><a href="#dynamic-analysis">Dynamic analysis</a></li>
+              </ul>
+            </li>
+            <li><a href="#getting-the-flag">Getting the flag</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-11---the-challenge-that-shall-not-be-named">Challenge 11 - The challenge that shall not be named.</a>
+          <ul>
+            <li><a href="#description-10">Description</a></li>
+            <li><a href="#first-look-2">First look</a></li>
+            <li><a href="#analyzing-the-pyarmor-protection">Analyzing the PyArmor protection</a>
+              <ul>
+                <li><a href="#reading-the-documentation">Reading the documentation</a></li>
+                <li><a href="#static-analysis-of-the-pytransform-module">Static analysis of the pytransform module</a></li>
+              </ul>
+            </li>
+            <li><a href="#deobfuscating-the-python-script">Deobfuscating the Python script</a></li>
+          </ul>
+        </li>
+      </ul></nav>
+    <hr />
+  </div>
+
+
+<div class="gblog-post__anchorwrap">
+    <h2 id="challenge-1---flaredle">
+        Challenge 1 - Flaredle
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-1---flaredle" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 1 - Flaredle" href="#challenge-1---flaredle">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">Welcome to Flare-On 9!
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You probably won&#39;t win. Maybe you&#39;re like us and spent the year playing Wordle. We made our own version that is too hard to beat without cheating.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Play it live at: [<span class="nt">http://flare-on.com/flaredle/</span>](<span class="na">http://flare-on.com/flaredle/</span>)
+</span></span></code></pre></div><p>The first challenge is a Wordle-like game, developed using HTML and JavaScript.</p>
+<figure><img src="/images/flareon9/Challenge_1_flaredle.png"/>
+</figure>
+
+<div class="gblog-post__anchorwrap">
+    <h3 id="solution">
+        Solution
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#solution" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Solution" href="#solution">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>If we look at the <code>script.js</code> file (corresponding to the game logic), we see the right guess is defined at the beginning of the script.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">import</span> <span class="p">{</span> <span class="nx">WORDS</span> <span class="p">}</span> <span class="nx">from</span> <span class="s2">&#34;./words.js&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">NUMBER_OF_GUESSES</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">WORD_LENGTH</span> <span class="o">=</span> <span class="mi">21</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">CORRECT_GUESS</span> <span class="o">=</span> <span class="mi">57</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">guessesRemaining</span> <span class="o">=</span> <span class="nx">NUMBER_OF_GUESSES</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">currentGuess</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">nextLetter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">let</span> <span class="nx">rightGuessString</span> <span class="o">=</span> <span class="nx">WORDS</span><span class="p">[</span><span class="nx">CORRECT_GUESS</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">[...]</span>
+</span></span></code></pre></div><p>By resolving the word in <code>words.js</code>, we get <code>flareonisallaboutcats</code>, which immediately gives the flag.</p>
+<figure><img src="/images/flareon9/Challenge_1_flaredle_solved.png"/>
+</figure>
+
+<div class="gblog-post__anchorwrap">
+    <h2 id="challenge-2---pixel-poker">
+        Challenge 2 - Pixel Poker
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-2---pixel-poker" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 2 - Pixel Poker" href="#challenge-2---pixel-poker">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-1">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-1" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-1">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">I said you wouldn&#39;t win that last one. I lied. The last challenge was basically a captcha. Now the real work begins. 
+</span></span><span class="line"><span class="cl">Shall we play another game?
+</span></span></code></pre></div><p>For this challenge, we have a PE executable to analyze.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file PixelPoker.exe 
+</span></span><span class="line"><span class="cl">PixelPoker.exe: PE32 executable <span class="o">(</span>GUI<span class="o">)</span> Intel 80386, <span class="k">for</span> MS Windows
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="solution-1">
+        Solution
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#solution-1" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Solution" href="#solution-1">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>When executed, a picture is showed and we have to click on a specific pixel to get the flag. If we miss more than 10 times, a popup is displayed.</p>
+<figure><img src="/images/flareon9/Challenge_2_pixelpoker.png"/>
+</figure>
+
+<p>After opening the executable in IDA, we can easily retrieve the function responsible for creating the window (at <code>0x401120</code>) and the associated callback (at <code>0x4012c0</code>).</p>
+<p>When the user clicks on a pixel, the callback checks the x and y coordinates of the pixel against the result of a modulo operation on hardcoded values. Here is a Python implementation of the check.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">struct</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">s</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;FLARE-On&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">assert</span> <span class="n">x</span> <span class="o">==</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&#34;I&#34;</span><span class="p">,</span> <span class="n">s</span><span class="p">[:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="mh">0x2e5</span> <span class="c1"># 95</span>
+</span></span><span class="line"><span class="cl"><span class="k">assert</span> <span class="n">y</span> <span class="o">==</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&#34;I&#34;</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="mi">4</span><span class="p">:])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="mh">0x281</span> <span class="c1"># 313</span>
+</span></span></code></pre></div><p>Clicking on the pixel at <code>(95, 313)</code> gives the flag.</p>
+<figure><img src="/images/flareon9/Challenge_2_pixelpoker_solved.png"/>
+</figure>
+
+<div class="gblog-post__anchorwrap">
+    <h2 id="challenge-3---magic-8-ball">
+        Challenge 3 - Magic 8 Ball
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-3---magic-8-ball" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 3 - Magic 8 Ball" href="#challenge-3---magic-8-ball">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-2">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-2" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-2">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">You got a question? Ask the 8 ball!
+</span></span></code></pre></div><p>The third challenge is a PE executable dynamically linked with several DLLs, including the SDL (generally used to develop computer games).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file Magic8Ball.exe
+</span></span><span class="line"><span class="cl">Magic8Ball.exe: PE32 executable <span class="o">(</span>GUI<span class="o">)</span> Intel 80386, <span class="k">for</span> MS Windows
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="solution-2">
+        Solution
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#solution-2" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Solution" href="#solution-2">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>When executed, the program waits for a combination of arrow keys and a question.</p>
+<figure><img src="/images/flareon9/Challenge_3_magic8ball.png"/>
+</figure>
+
+<p>After opening the executable in IDA, we can identify the function at <code>0x2924E0</code> as the one checking the user input.</p>
+<p>By statically analyzing this function, we retrieve the combination of arrow keys (<code>LLURULDUL</code>) to ask the question that gives us the flag (<code>gimme flag pls?</code>). Note that the question is set by the function at <code>0x292090</code>.</p>
+<figure><img src="/images/flareon9/Challenge_3_magic8ball_solved.png"/>
+</figure>
+
+<div class="gblog-post__anchorwrap">
+    <h2 id="challenge-4---darn_mice">
+        Challenge 4 - darn_mice
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-4---darn_mice" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 4 - darn_mice" href="#challenge-4---darn_mice">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-3">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-3" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-3">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">&#34;If it crashes its user error.&#34; -Flare Team
+</span></span></code></pre></div><p>This challenge is a PE executable that waits for a specific command line parameter.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file darn_mice.exe
+</span></span><span class="line"><span class="cl">darn_mice.exe: PE32 executable <span class="o">(</span>console<span class="o">)</span> Intel 80386, <span class="k">for</span> MS Windows
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="solution-3">
+        Solution
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#solution-3" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Solution" href="#solution-3">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>When executed with a dummy input, we get the following output.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">&gt;</span> <span class="p">.\</span><span class="n">darn_mice</span><span class="p">.</span><span class="n">exe</span> <span class="n">AAAAAAAAAAAAAAAAAAAAAAA</span>
+</span></span><span class="line"><span class="cl"><span class="n">On</span> <span class="n">your</span> <span class="n">plate</span><span class="p">,</span> <span class="n">you</span> <span class="n">see</span> <span class="n">four</span> <span class="n">olives</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">You</span> <span class="n">leave</span> <span class="n">the</span> <span class="n">room</span><span class="p">,</span> <span class="n">and</span> <span class="n">a</span> <span class="n">mouse</span> <span class="n">EATS</span> <span class="n">one</span><span class="p">!</span>
+</span></span></code></pre></div><p>By doing static analysis, we can see that the user input is used as a key to decrypt the flag.</p>
+<p>Also, the input has to verify several conditions:</p>
+<ul>
+<li>input length is equal to 35 bytes;</li>
+<li>input is printable;</li>
+<li>when adding a byte of the input to a byte of a hardcoded sequence, we get an executable function which is immediately called (see screenshot of the corresponding decompiled code below).</li>
+</ul>
+<figure><img src="/images/flareon9/Challenge_4_darn_mice.png"/>
+</figure>
+
+<p>The last condition is the most important one as there is only one possibility to respect it: the called instruction has to be a <code>ret</code>. Meaning that the sum of each input byte and a byte of the hardcoded sequence has to be equal to <code>0xc3</code>.</p>
+<p>From there, it is trivial to get the user input using a few lines of Python.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">hardcoded_seq</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s2">&#34;505E5EA34F5B515E5E97A38090A38090A38090A38090A38090A38090A38090A2A36B7F&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ret</span> <span class="o">=</span> <span class="mh">0xc3</span>
+</span></span><span class="line"><span class="cl"><span class="n">user_input</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hardcoded_seq</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">user_input</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ret</span> <span class="o">-</span> <span class="n">hardcoded_seq</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</span></span></code></pre></div><p>This script gives the encryption key <code>see three, C3 C3 C3 C3 C3 C3 C3! XD</code> and the latter gives us the flag.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">&gt;</span> <span class="p">.\</span><span class="n">darn_mice</span><span class="p">.</span><span class="n">exe</span> <span class="s2">&#34;see three, C3 C3 C3 C3 C3 C3 C3! XD&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">On</span> <span class="n">your</span> <span class="n">plate</span><span class="p">,</span> <span class="n">you</span> <span class="n">see</span> <span class="n">four</span> <span class="n">olives</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">You</span> <span class="n">leave</span> <span class="n">the</span> <span class="n">room</span><span class="p">,</span> <span class="n">and</span> <span class="n">a</span> <span class="n">mouse</span> <span class="n">EATS</span> <span class="n">one</span><span class="p">!</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nibble</span><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">When</span> <span class="n">you</span> <span class="k">return</span><span class="p">,</span> <span class="n">you</span> <span class="n">only</span><span class="err">:</span> <span class="n">see</span> <span class="n">three</span><span class="p">,</span> <span class="n">C3</span> <span class="n">C3</span> <span class="n">C3</span> <span class="n">C3</span> <span class="n">C3</span> <span class="n">C3</span> <span class="n">C3</span><span class="p">!</span> <span class="n">XD</span>
+</span></span><span class="line"><span class="cl"><span class="n">i_w0uld_l1k3_to_RETurn_this_joke</span><span class="nv">@flare</span><span class="n">-on</span><span class="p">.</span><span class="n">com</span>
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h2 id="challenge-5---t8">
+        Challenge 5 - T8
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-5---t8" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 5 - T8" href="#challenge-5---t8">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-4">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-4" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-4">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">FLARE FACT #823: Studies show that C++ Reversers have fewer friends on average than normal people do. That&#39;s why you&#39;re here, reversing this, instead of with them, because they don&#39;t exist.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">We’ve found an unknown executable on one of our hosts. The file has been there for a while, but our networking logs only show suspicious traffic on one day. Can you tell us what happened?
+</span></span></code></pre></div><p>For this challenge, we get a PE executable and a PCAP capture.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file t8.exe traffic.pcapng
+</span></span><span class="line"><span class="cl">t8.exe:         PE32 executable <span class="o">(</span>console<span class="o">)</span> Intel 80386, <span class="k">for</span> MS Windows
+</span></span><span class="line"><span class="cl">traffic.pcapng: pcapng capture file - version 1.0
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="solution-4">
+        Solution
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#solution-4" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Solution" href="#solution-4">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>As mentioned in the description, the executable is a fake backdoor developed in C++.</p>
+<p>Starting from the <code>main()</code> function, the backdoor performs the following actions.</p>
+<ol>
+<li>Decrypts (one-byte XOR) the domain name of the Command and Control server (<code>flare-on.com</code>).</li>
+<li>Instantiate a <code>CClientSock</code> object, this is a custom class responsible for communicating with the Command and Control server (via HTTP).</li>
+<li>Set the HTTP request type of the object to <code>POST</code>.</li>
+<li>Compute the MD5 hash of the <code>FO9</code> string concatenated with a random number, and use the resulting hash as a RC4 key.</li>
+<li>Encrypt the payload (<code>ahoy</code>) using the previous RC4 key and encode the result using base64.</li>
+<li>Append the random number used to build the RC4 key to the User-Agent of the request.</li>
+<li>Send the request to the Command and Control server.</li>
+<li>Decode (base64) and decrypt the response using the same RC4 key.</li>
+<li>Parse and decode the decrypted response using a custom algorithm.</li>
+<li>Compute the MD5 hash of the concatenation of the previous step result and <code>@flare-on.com</code> (which gives the flag basically), the resulting hash is used as a second RC4 key.</li>
+<li>Encrypt the payload (<code>sce</code>) using this new RC4 key, encode the result using base64 and send the request to the Command and Control server.</li>
+<li>Decode (base64) and decrypt (second key) the response.</li>
+<li>The decrypted response corresponds to a shellcode, which is immediately mapped and executed.</li>
+</ol>
+<p>The first goal was to retrieve the initial RC4 key. This requires to extract the random number appended to the User-Agent of the first request from the PCAP.</p>
+<figure><img src="/images/flareon9/Challenge_5_t8_user_agent.png"/>
+</figure>
+
+<p>Retrieving the initial RC4 key can be done in a few lines of Python. Note that the strings are wide.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">to_wide</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&#34;utf-16&#34;</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">rand_num</span> <span class="o">=</span> <span class="mi">11950</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">to_wide</span><span class="p">(</span><span class="s2">&#34;FO9&#34;</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_wide</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">rand_num</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">())</span> <span class="c1"># a5c6993299429aa7b900211d4a279848</span>
+</span></span></code></pre></div><p>Once we have the initial RC4 key, we can decode, decrypt and parse the response to the first request.</p>
+<p>As the algorithm used to decode the decrypted response was a bit painful to reverse (see code at <code>0x404570</code>), I used the Appcall feature of IDA to instrument the function.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">struct</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">ida_idd</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">ARC4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">upck32</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&#34;I&#34;</span><span class="p">,</span> <span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">rc4_key</span> <span class="o">=</span> <span class="s2">&#34;a5c6993299429aa7b900211d4a279848&#34;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-16&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl"><span class="n">response</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;TdQdBRa1nxGU06dbB27E7SQ7TJ2+cd7zstLXRQcLbmh2nTvDm1p5IfT/Cu0JxShk6tHQBRWwPlo9zA1dISfslkLgGDs41WK12ibWIflqLE4Yq3OYIEnLNjwVHrjL2U4Lu3ms+HQc4nfMWXPgcOHb4fhokk93/AJd5GTuC5z+4YsmgRh1Z90yinLBKB+fmGUyagT6gon/KHmJdvAOQ8nAnl8K/0XG+8zYQbZRwgY6tHvvpfyn9OXCyuct5/cOi8KWgALvVHQWafrp8qB/JtT+t5zmnezQlp3zPL4sj2CJfcUTK5copbZCyHexVD4jJN+LezJEtrDXP1DJNg==&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">response_dec</span> <span class="o">=</span> <span class="n">ARC4</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">rc4_key</span><span class="p">)</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">b64decode</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response_dec</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&#34;,</span><span class="se">\x00</span><span class="s2">&#34;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dec_chunk</span> <span class="o">=</span> <span class="n">ida_idd</span><span class="o">.</span><span class="n">Appcall</span><span class="o">.</span><span class="n">decode_chunk</span><span class="p">(</span><span class="n">upck32</span><span class="p">(</span><span class="n">chunk</span><span class="p">[:</span><span class="mi">4</span><span class="p">]),</span> <span class="n">upck32</span><span class="p">(</span><span class="n">chunk</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">8</span><span class="p">]),</span> <span class="n">upck32</span><span class="p">(</span><span class="n">chunk</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">12</span><span class="p">]),</span> <span class="n">upck32</span><span class="p">(</span><span class="n">chunk</span><span class="p">[</span><span class="mi">12</span><span class="p">:]))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dec_char</span> <span class="o">=</span> <span class="n">ida_idd</span><span class="o">.</span><span class="n">Appcall</span><span class="o">.</span><span class="n">chunk_to_char</span><span class="p">(</span><span class="n">dec_chunk</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">flag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dec_char</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&#34;@flare-on.com&#34;</span><span class="p">)</span>
+</span></span></code></pre></div><p>The execution of this script in a debug session gives the flag <code>i_s33_you_m00n@flare-on.com</code>.</p>
+<p>At this point, the challenge was already finished but I wanted to know what the shellcode does, so I decrypted it.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64decode</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">ARC4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">to_wide</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&#34;utf-16&#34;</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">m</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">m</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">to_wide</span><span class="p">(</span><span class="s2">&#34;i_s33_you_m00n@flare-on.com&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">rc4_key</span> <span class="o">=</span> <span class="n">to_wide</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">response</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;F1KFlZbNGuKQxrTD/ORwudM8S8kKiL5F906YlR8TKd8XrKPeDYZ0HouiBamyQf9/Ns7u3C2UEMLoCA0B8EuZp1FpwnedVjPSdZFjkieYqWzKA7up+LYe9B4dmAUM2lYkmBSqPJYT6nEg27n3X656MMOxNIHt0HsOD0d+&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">shellcode</span> <span class="o">=</span> <span class="n">ARC4</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">rc4_key</span><span class="p">)</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">b64decode</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;shellcode.bin&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">shellcode</span><span class="p">)</span>
+</span></span></code></pre></div><p>Turns out, the shellcode is not that interesting (call to <code>FatalAppExit(0, &quot;You're a mac !!!\x00&quot;)</code>). Here is a commented version of the disassembled shellcode.</p>
+<figure><img src="/images/flareon9/Challenge_5_shellcode.png"/>
+</figure>
+
+<div class="gblog-post__anchorwrap">
+    <h2 id="challenge-6---à-la-mode">
+        Challenge 6 - à la mode
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-6---à-la-mode" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 6 - à la mode" href="#challenge-6---%c3%a0-la-mode">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-5">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-5" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-5">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">FLARE FACT <span class="ni">#824:</span> Disregard flare fact <span class="ni">#823</span> if you are a .NET Reverser too.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">We will now reward your fantastic effort with a small binary challenge. You&#39;ve earned it kid!
+</span></span></code></pre></div><p>For this challenge, we have a PE DLL written in .NET and a text file corresponding to a chat log with the incident response team.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file HowDoesThisWork.dll IR<span class="se">\ </span>chat<span class="se">\ </span>log.txt
+</span></span><span class="line"><span class="cl">HowDoesThisWork.dll: PE32 executable <span class="o">(</span>DLL<span class="o">)</span> <span class="o">(</span>GUI<span class="o">)</span> Intel <span class="m">80386</span> Mono/.Net assembly, <span class="k">for</span> MS Windows
+</span></span><span class="line"><span class="cl">IR chat log.txt:     ASCII text, with CRLF line terminators
+</span></span></code></pre></div><p>Here are the contents of the <code>IR chat log.txt</code> file.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">[FLARE Team]  Hey IR Team, it looks like this sample has some other binary that might interact with it, do you have any other files that might be of help.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[IR Team]     Nope, sorry this is all we got from the client, let us know what you got.
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="solution-5">
+        Solution
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#solution-5" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Solution" href="#solution-5">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>After opening the executable in dnSpy, one can notice that the entry point indicated by the dnSpy (<code>0x0000181A</code>) is a native entry point. This means this address does not point to managed code (.NET code) but to unmanaged code (x86 assembly in this case).</p>
+<figure><img src="/images/flareon9/Challenge_6_dnspy.png"/>
+</figure>
+
+<p>At this point, I switched to IDA to continue the analysis. The code at <code>0x1000181A</code> corresponds to a classic DLL entry point, it is trivial to identify the <code>DllMain()</code> at <code>0x10001163</code>. The latter does two things:</p>
+<ul>
+<li>resolve several Windows API by parsing the module list from the PEB (the API names are encrypted with a one-byte XOR);</li>
+<li>start the main thread.</li>
+</ul>
+<p>The main thread creates a named pipe <code>\\.\pipe\FlareOn</code> and read from it. If it receives the string <code>MyV0ic3!</code> then the flag is decryted (using RC4) and written on the pipe.</p>
+<p>One thing to note is the reuse of the same RC4 stream to decrypt the string <code>MyV0ic3!</code> and the flag (see the script below).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">ARC4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">rc4_key</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s2">&#34;558BEC83EC20EBFE&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">cipher</span> <span class="o">=</span> <span class="n">ARC4</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">rc4_key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">passwd</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s2">&#34;3E3951FBA211F7B92C&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">flag</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s2">&#34;E160A118932E96AD73BB4A92DE180AAA4174ADC01D9F3F19FF2B02DBD1CD1A&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</span></span></code></pre></div><p>The resulting flag is <code>M1x3d_M0dE_4_l1f3@flare-on.com</code>.</p>
+<p>Interestingly, the first 6 bytes of the RC4 key match a classic prologue of a x86 function.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="challenge-7---anode">
+        Challenge 7 - anode
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-7---anode" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 7 - anode" href="#challenge-7---anode">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-6">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-6" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-6">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">You&#39;ve made it so far! I can&#39;t believe it! And so many people are ahead of you!
+</span></span></code></pre></div><p>This challenge is a (very) large PE executable.</p>
+<pre tabindex="0"><code>$ file anode.exe
+anode.exe: PE32+ executable (console) x86-64, for MS Windows
+$ ls -lh anode.exe
+-rw-r--r--. 1 user user 55M Sep 26 14:08 anode.exe
+</code></pre><p>Looking at the strings of the executable shows that this is actually a Node.js application built using <a
+  class="gblog-markdown__link"
+  href="https://github.com/nexe/nexe"
+  
+>nexe</a>.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="extracting-and-analyzing-the-js-script">
+        Extracting and analyzing the JS script
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#extracting-and-analyzing-the-js-script" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Extracting and analyzing the JS script" href="#extracting-and-analyzing-the-js-script">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The first step consists to extract the embedded JS script. This can be done either using <code>strings</code> or the npm package <a
+  class="gblog-markdown__link"
+  href="https://www.npmjs.com/package/nexe-decompile"
+  
+>nexe-decompile</a>. By using one of these methods, we get a large <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-9/Challenge_7_anode/anode.js"
+  
+>JS script</a>.</p>
+<p>When executed, the script asks for the flag (size is 44 bytes) and enters a large switch statement (1024 cases in total) where each case modifies a byte of the input by a combination of other bytes of the input.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="k">case</span> <span class="mi">306211</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">b</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span> <span class="o">-=</span> <span class="nx">b</span><span class="p">[</span><span class="mi">34</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">23</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">37</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">33</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">256</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">b</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="mh">0xFF</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">b</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">-=</span> <span class="nx">b</span><span class="p">[</span><span class="mi">24</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">41</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">43</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="nx">b</span><span class="p">[</span><span class="mi">30</span><span class="p">]</span> <span class="o">+</span> <span class="mi">225</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">b</span><span class="p">[</span><span class="mi">26</span><span class="p">]</span> <span class="o">&amp;=</span> <span class="mh">0xFF</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">state</span> <span class="o">=</span> <span class="mi">868071080</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">continue</span><span class="p">;</span>
+</span></span></code></pre></div><p>At the end of the switch statement, the modified input is checked against an hardcoded sequence.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="p">[</span><span class="mi">106</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">178</span><span class="p">,</span> <span class="mi">174</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">66</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">86</span><span class="p">,</span> <span class="mi">196</span><span class="p">,</span> <span class="mi">74</span><span class="p">,</span> <span class="mi">139</span><span class="p">,</span> <span class="mi">219</span><span class="p">,</span> <span class="mi">166</span><span class="p">,</span> <span class="mi">106</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">211</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">227</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">156</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">239</span><span class="p">,</span> <span class="mi">153</span><span class="p">,</span> <span class="mi">223</span><span class="p">,</span> <span class="mi">225</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">171</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">207</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">212</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">189</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">76</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">every</span><span class="p">((</span><span class="nx">x</span><span class="p">,</span><span class="nx">i</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">x</span> <span class="o">===</span> <span class="nx">target</span><span class="p">[</span><span class="nx">i</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Congrats!&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Try again.&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>In addition to these large equations to solve, the <code>math</code> module of Node.js was tampered with:</p>
+<ul>
+<li><code>if</code> statements that depends on integers only have a different behavior depending on the integer (see the example below);</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="c1">// something strange is happening...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="mi">1</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;uh-oh, math is too correct...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li><code>Math.random()</code> is not so random as two consecutive executions of the executable produce the same &ldquo;random&rdquo; numbers.</li>
+</ul>
+<p>At this point, I had an idea on how I could solve this challenge but my solution required to know which modifications were done in the <code>math</code> module.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="dealing-with-the-math-module">
+        Dealing with the <code>math</code> module
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#dealing-with-the-math-module" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Dealing with the math module" href="#dealing-with-the-math-module">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>My first attempt was to do static analysis of the module in IDA to understand the modifications. However, I quickly gave up this idea as there are way too many functions to look at, and I did not manage to identify the ones that could be of interest.</p>
+<figure><img src="/images/flareon9/Challenge_7_anode_functions.png"/>
+</figure>
+
+<p>After that, I thought to compile the same version of Node.js using <code>nexe</code> and then do some binary diffing with the executable, but I was not sure to get good results.</p>
+<p>Instead, I chose to modify a bit the embedded script to leak two things:</p>
+<ul>
+<li>the &ldquo;random&rdquo; numbers generated by <code>Math.random()</code>;</li>
+<li>the result of the <code>if</code> conditions present in the script.</li>
+</ul>
+<p>For the former, I replaced some code at the beginning of the JS script with a <code>for</code> loop of 10000 iterations that prints (using <code>console.log()</code>) the result of <code>Math.random()</code> on <code>stdout</code> (redirected to a file named <code>math_random.txt</code>).</p>
+<p>For the latter, I extracted all the numbers present in <code>if</code> conditions in the script, and gave the list to the following script (via the <code>if_cond.txt</code> file).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">subprocess</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">PATCH_OFFSET</span> <span class="o">=</span> <span class="mh">0x35e3874</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;if_cond.txt&#34;</span><span class="p">,</span> <span class="s2">&#34;r&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">conditions</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">cond</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data_to_patch</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;  if (&#34;</span> <span class="o">+</span> <span class="n">cond</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&#34;) {</span><span class="se">\n</span><span class="s2">    console.log(1);</span><span class="se">\n</span><span class="s2">  }</span><span class="se">\n\n\n\n\n\n\n</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;anode_patched.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data_to_patch</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">data</span><span class="p">[</span><span class="n">PATCH_OFFSET</span><span class="o">+</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_to_patch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;anode_patched.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s1">&#39;anode_patched.exe&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">output</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">output</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">output</span> <span class="o">=</span> <span class="s2">&#34;0&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cond</span><span class="p">,</span> <span class="n">output</span><span class="p">))</span>
+</span></span></code></pre></div><p>This Python script patches the JS script with a test on each extracted number, and executes the application (using the <code>subprocess</code> module). If it prints <code>1</code> then the number corresponds to a <code>True</code>, otherwise, to a <code>False</code>. Again, those results are written on the <code>stdout</code>, which is redirected to a file (named <code>if_cond_results.txt</code>).</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="extracting-the-equations">
+        Extracting the equations
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#extracting-the-equations" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Extracting the equations" href="#extracting-the-equations">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Once I had these two files (<code>math_random.txt</code> and <code>if_cond_results.txt</code>), the next step was to extract and parse the equations.</p>
+<p>Here is the algorithm I used for each case of the switch statement.</p>
+<ol>
+<li>Compute the case number from the state value (requires the <code>math_random.txt</code>).</li>
+<li>If the case number is <code>185078700</code> (case that breaks the <code>while</code> loop) then stop the algorithm.</li>
+<li>Get the offset of the switch case in the JS script (using regex).</li>
+<li>Identify and resolve the <code>if</code> statement (either a check on <code>Math.random()</code> or an integer) after the case (still using regex).</li>
+<li>Depending on the taken branch, extract the corresponding equation (regex again).</li>
+<li>If necessary, replace the call to <code>Math.random()</code> in the equation by the actual value.</li>
+<li>Extract the next state value and go back to step 1.</li>
+</ol>
+<p>Obviously, the algorithm starts with the initial state value used by the script (<code>1337</code>), so it follows the actual execution flow of the script (which is quite important to correcly solve the equations).</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="solving-the-equations">
+        Solving the equations
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#solving-the-equations" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Solving the equations" href="#solving-the-equations">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The last step consists to solve the resulting equations. I chose to use <code>z3</code>.</p>
+<p>Before using the solver, I had to clean the equations a bit, espcially:</p>
+<ul>
+<li>differentiate the versions a one byte of the flag (as each byte is rewritten several times);</li>
+<li>replace the <code>=</code> symbol with  <code>==</code> ;</li>
+<li>add logical AND with <code>0xFF</code> because operations are done on bytes only.</li>
+</ul>
+<p>Also, I had some specificities of <code>z3</code> to deal with:</p>
+<ul>
+<li>each version of a byte of the flag needs to be repesented by a <code>z3</code>  variable (a <code>BitVec</code> in my case);</li>
+<li>using <code>eval()</code> to add the equations (which are <code>str</code> objects) in the solver.</li>
+</ul>
+<p>The final script is available on <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-9/Challenge_7_anode/solve.py"
+  
+>GitHub</a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ <span class="nb">time</span> python solve.py
+</span></span><span class="line"><span class="cl">n0t_ju5t_A_j4vaSCriP7_ch4l1eng3@flare-on.com
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">________________________________________________________
+</span></span><span class="line"><span class="cl">Executed in    3.24 secs    fish           external
+</span></span><span class="line"><span class="cl">   usr <span class="nb">time</span>    3.07 secs  392.00 micros    3.07 secs
+</span></span><span class="line"><span class="cl">   sys <span class="nb">time</span>    0.15 secs  204.00 micros    0.15 secs
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h2 id="challenge-8---backdoor">
+        Challenge 8 - backdoor
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-8---backdoor" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 8 - backdoor" href="#challenge-8---backdoor">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-7">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-7" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-7">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">I&#39;m such a backdoor, decompile me why don&#39;t you...
+</span></span></code></pre></div><p>The eighth challenge is a PE executable written in .NET.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file FlareOn.Backdoor.exe
+</span></span><span class="line"><span class="cl">FlareOn.Backdoor.exe: PE32 executable <span class="o">(</span>console<span class="o">)</span> Intel <span class="m">80386</span> Mono/.Net assembly, <span class="k">for</span> MS Windows
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="first-look">
+        First look
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#first-look" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor First look" href="#first-look">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>When the executable is opened in dnSpy, we quickly understand that something is wrong as some methods cannot be decompiled.</p>
+<figure><img src="/images/flareon9/Challenge_8_main_function.png"/>
+</figure>
+
+<p>Looking more closely at the other functions of the executable, we can divide them into two categories.</p>
+<ul>
+<li><code>flare_XX()</code>: classic C# bytecode, can be decompiled using dnSpy.</li>
+<li><code>flared_XX()</code>: obfuscated/encrypted methods.</li>
+</ul>
+<figure><img src="/images/flareon9/Challenge_8_function_list.png"/>
+</figure>
+
+<div class="gblog-post__anchorwrap">
+    <h3 id="understanding-the-first-layer-of-obfuscation">
+        Understanding the first layer of obfuscation
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#understanding-the-first-layer-of-obfuscation" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Understanding the first layer of obfuscation" href="#understanding-the-first-layer-of-obfuscation">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>If we follow the execution flow from the <code>Main()</code> function, the function <code>FLARE15.flare_74()</code> is called to initialize several global arrays and returns normally. Then, the call to <code>Program.flared_38()</code> raises an exception (<code>InvalidProgramException</code>) as the method is invalid. The exception is catched and leads to the execution of <code>FLARE15.flare_70()</code>.</p>
+<figure><img src="/images/flareon9/Challenge_8_flare_70.png"/>
+</figure>
+
+<p>Again, an exception is raised when <code>FLARE15.flared_70()</code> is executed and this time it is handled by <code>FLARE15.flare_71()</code>. Interestingly, the latter also takes two extra parameters: <code>FLARE15.wl_m</code> and <code>FLARE15.wl_b</code> (defined in <code>FLARE15.flare_74()</code>).</p>
+<p>This method is not obfuscated and can be easily analyzed once decompiled. Here is what it does.</p>
+<ol>
+<li>Retrieve the <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/dotnet/standard/metadata-and-self-describing-components#metadata-tokens"
+  
+>metadata token</a> of the function that caused the exception from the stack trace.</li>
+<li>Get the prototype of the function from the metadata token.</li>
+<li>Create a new <code>DynamicMethod</code> from the prototype.</li>
+<li>Iterate over the <code>Dictionary</code> given as third parameter (<code>FLARE15.wl_m</code>)
+<ul>
+<li>each key is an index in the byte array given as fourth parameter (<code>FLARE15.wl_b</code>), the latter is actually the bytecode of the dynamic method previously created;</li>
+<li>each value is a valid metadata token in the program.</li>
+</ul>
+</li>
+<li>Each metadata token is translated into a valid token in the scope of the dynamic method. For example, if the token &ldquo;points&rdquo; to a string of the program, it is first resolved via <code>Module.ResolveString()</code> and then a token is created using <code>DynamicILInfo.GetTokenFor()</code>.</li>
+</ol>
+<figure><img src="/images/flareon9/Challenge_8_flare_71_resolve_token.png"/>
+</figure>
+
+<ol start="6">
+<li>The resulting token is written to the bytecode of the dynamic method at the index specified by the <code>key</code> variable.</li>
+</ol>
+<figure><img src="/images/flareon9/Challenge_8_flare_71_patch_token.png"/>
+</figure>
+
+<ol start="7">
+<li>Finally, the patched bytecode is set as the code body of the dynamic method and the latter is executed.</li>
+</ol>
+<figure><img src="/images/flareon9/Challenge_8_flare_71_exec_bytecode.png"/>
+</figure>
+
+<p>In a nutshell, this method patches the bytecode given as parameter using the provided metadata tokens and invokes it as a dynamic method.</p>
+<p>Using the &ldquo;Analyzer&rdquo; feature (accessible by right-clicking on method name) of dnSpy, we can identify the locations where <code>FLARE15.flare_71()</code> is called, and thus, the methods obfuscated via this technique.</p>
+<figure><img src="/images/flareon9/Challenge_8_flare_71_cross_refs.png"/>
+</figure>
+
+<p>For each method, the actual bytecode and the metadata tokens can be retrieved from the parameters given to <code>FLARE15.flare_71()</code>.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="recovering-the-first-layer-methods">
+        Recovering the first layer methods
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#recovering-the-first-layer-methods" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Recovering the first layer methods" href="#recovering-the-first-layer-methods">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>From there, I chose to statically fix the obfuscated methods by the actual executed bytecode, in order to get the decompiled code when the patched executable is loaded into dnSpy.</p>
+<p>This is actually quite trivial, just follow the steps below for each obfuscated method.</p>
+<ol>
+<li>Retrieve the real bytecode (i.e <code>cl_b</code>) and the corresponding metadata tokens (i.e <code>cl_m</code>).</li>
+<li>Iterate over each <code>key</code>/<code>value</code> of the metadata tokens dictionary, and patch the bytecode at index <code>key</code> with the metadata token <code>value</code>.</li>
+<li>Write the resulting bytecode over the obfuscated method in the executable.</li>
+</ol>
+<p>This can be done in a few lines of Python, my script is available on <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-9/Challenge_8_backdoor/patch_first_layer.py"
+  
+>GitHub</a>.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="understanding-the-second-layer-of-obfuscation">
+        Understanding the second layer of obfuscation
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#understanding-the-second-layer-of-obfuscation" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Understanding the second layer of obfuscation" href="#understanding-the-second-layer-of-obfuscation">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Obviously, this was only a first step as lots of methods remain obfuscated/encrypted (including <code>Program.flared_38()</code>), but we can now statically analyze <code>FLARE15.flared_70()</code> (called when <code>Program.flared_38()</code> raises an exception).</p>
+<figure><img src="/images/flareon9/Challenge_8_flared_70.png"/>
+</figure>
+
+<p>In a nutshell, it decrypts and executes the method that caused the exception. The different steps of this process are detailed below.</p>
+<ol>
+<li>Get metadata token of the method that raised the exception.</li>
+<li><code>FLARE15.flared_66()</code> computes a SHA256 hash of some of the attributes (return type, prototype, etc.) of the method resolved by the token.</li>
+<li><code>FLARE15.flared_69()</code> gets the contents of the section whose name starts with the first four bytes (in hexadecimal) of the SHA256 hash previously computed.</li>
+<li><code>FLARE15.flared_46()</code> decrypts (RC4) the section contents using the key given as parameter (<code>1278abdf</code> in hexa), the decrypted data corresponds to the actual bytecode of the method.</li>
+<li><code>FLARE15.flared_67()</code> decrypts the metadata tokens of the bytecode (XOR with <code>0xa298a6bd</code>) and executes it as a dynamic method (using similar code to <code>flare_71()</code>).</li>
+</ol>
+<p>This technique is used to protect all the remaining obfuscated methods of the executable.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="recovering-the-second-layer-methods">
+        Recovering the second layer methods
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#recovering-the-second-layer-methods" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Recovering the second layer methods" href="#recovering-the-second-layer-methods">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Again, I chose to decrypt the obfuscated methods statically.</p>
+<p>This time, the algorithm is a bit more complex as <code>FLARE15.flared_67()</code> uses a large hardcoded dictionary to identify the offsets of the bytecode to patch. The most painful part of this step was probably to retrieve the relation between a section name (containing the encrypted bytecode) and the offset of the obfuscated method in the executable.</p>
+<p>The Python script I used to patch the second layer of obfuscation is available on <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-9/Challenge_8_backdoor/patch_second_layer.py"
+  
+>GitHub</a>.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="analyzing-the-backdoor">
+        Analyzing the backdoor
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#analyzing-the-backdoor" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Analyzing the backdoor" href="#analyzing-the-backdoor">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Once the obfuscation is defeated, we can finally analyze the actual code of the backdoor, starting with the <code>Program.flared_38()</code> method.</p>
+<div class="gblog-post__anchorwrap">
+    <h4 id="initialization">
+        Initialization
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#initialization" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Initialization" href="#initialization">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>After creating a <code>Mutex</code> (set to <code>e94901cd-77d9-44ca-9e5a-125190bcf317</code>), the method initializes several variables in the <code>FLARE13</code> module before entering a while loop where the control flow seems to have been flattened.</p>
+<figure><img src="/images/flareon9/Challenge_8_flared_38_cff.png"/>
+</figure>
+
+<p>The <code>FLARE13.flare_50()</code> is responsible to update the <code>FLARE13.cs</code> variable which indicates the next method to call. The latter depends on the return value of the method given as parameter as well as on a dictionary (<code>FLARE13.t</code>) initialized by <code>FLARE13.flare_48()</code>.</p>
+<p>Before entering the while loop, a file named <code>flare.agent.id</code> is created in the same directory as the backdoor. It contains an <code>agent_id</code> (set to <code>-</code> by default) and a <code>counter</code> (set to a random value between 0 and 46656). We will return on these two variables in the next sections.</p>
+<p>The first case to be executed is <code>FLARE08.A</code> but it does not call any method, which only sets the next case to <code>FLARE08.C</code> (as shown on the screenshot below). The latter initializes a communication channel with the Command and Control server.</p>
+<figure><img src="/images/flareon9/Challenge_8_flared_48.png"/>
+</figure>
+
+<div class="gblog-post__anchorwrap">
+    <h4 id="communication-protocol">
+        Communication protocol
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#communication-protocol" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Communication protocol" href="#communication-protocol">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>The backdoor communicates with its Command &amp; Control (C&amp;C) server via DNS (only A queries are supported).</p>
+<p>Obviously, the domain name of the C&amp;C server is <code>flare-on.com</code>. The payload is encoded using a custom algorithm as a sub-domain.</p>
+<p>The method responsible for building the payload is <code>FLARE05.flared_29()</code>. It takes two parameters:</p>
+<ul>
+<li>a payload type (<code>FLARE06.DomT</code>));</li>
+<li>a string.</li>
+</ul>
+<p>Five different payload types are implemented by the backdoor, they are detailed in the following table.</p>
+<div class=table-wrap> <table>
+<thead>
+<tr>
+<th>Payload type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FLARE06.DomT.A</td>
+<td>Initialize communication with C&amp;C</td>
+</tr>
+<tr>
+<td>FLARE06.DomT.B</td>
+<td>Send result data</td>
+</tr>
+<tr>
+<td>FLARE06.DomT.C</td>
+<td>Ask for task data</td>
+</tr>
+<tr>
+<td>FLARE06.DomT.D</td>
+<td>Ask for next task</td>
+</tr>
+<tr>
+<td>FLARE06.DomT.E</td>
+<td>Ask for task</td>
+</tr>
+</tbody>
+</table> </div>
+<p>The following sequence diagram sums up how the different payloads are used by the backdoor.</p>
+
+
+  
+  <script defer src="/js/mermaid-9299d9b9.bundle.min.js"></script>
+  
+
+
+
+<pre class="gblog-mermaid mermaid ">
+sequenceDiagram
+	participant Backdoor
+	participant C2
+	Backdoor->>C2: DomT.A (HELLO)
+	C2->>Backdoor: Answer (NEW AGENT_ID)
+	Backdoor->>C2: DomT.E (REQUEST TASK)
+	C2->>Backdoor: Answer (TASK SIZE)
+	loop GET_TASK_DATA
+		Backdoor->>C2: DomT.C (REQUEST TASK DATA)
+		C2->>Backdoor: Answer (TASK DATA)
+	end
+	loop SEND_TASK_RESULT
+		Backdoor->>C2: DomT.B (TASK RESULT DATA)
+		C2->>Backdoor: Answer (NEXT TASK SIZE)
+	end
+	Backdoor->>C2: DomT.D (REQUEST NEXT TASK DATA)
+	C2->>Backdoor: Answer (TASK DATA)
+</pre>
+
+<p>Payload data is encoded using a substitution alphabet built from the <code>counter</code>. More precisely, the alphabet is randomly generated using a <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Mersenne_Twister"
+  
+>Mersenne-Twister</a> seeded with the <code>counter</code>. The latter is incremented by one after each request to the C&amp;C server.</p>
+<p>As the value of the <code>counter</code> is also randomly generated, it is encoded using another substitution alphabet (hardcoded this time) and sent to the C&amp;C server.</p>
+<div class="gblog-post__anchorwrap">
+    <h4 id="command-execution">
+        Command execution
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#command-execution" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Command execution" href="#command-execution">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Once the backdoor has finished to received task data, it calls the method <code>FLARE07.flared_56()</code> to process the task.</p>
+<p>The first byte of task data corresponds to the task type (defined in <code>FLARE06.TT</code>). Depending on the latter, the rest of the task data can be decompressed before being interpreted.</p>
+<div class=table-wrap> <table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Is compressed</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FLARE06.TT.A</code></td>
+<td>N/A</td>
+<td>Not implemented</td>
+</tr>
+<tr>
+<td><code>FLARE06.TT.B</code></td>
+<td>Yes</td>
+<td>Execute a command</td>
+</tr>
+<tr>
+<td><code>FLARE06.TT.C</code></td>
+<td>No</td>
+<td>Execute a command</td>
+</tr>
+<tr>
+<td><code>FLARE06.TT.D</code></td>
+<td>No</td>
+<td>Write <code>:)</code> to the given file path</td>
+</tr>
+<tr>
+<td><code>FLARE06.TT.E</code></td>
+<td>Yes</td>
+<td>Write <code>:)</code> to the given file path</td>
+</tr>
+</tbody>
+</table> </div>
+<p>Various commands are supported by the backdoor, and most of them are base64-encoded.</p>
+<figure><img src="/images/flareon9/Challenge_8_command_example.png"/>
+</figure>
+
+<p>Once decoded, the command shown on the screenshot above corresponds to:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="p">$(</span><span class="n">ping</span> <span class="n">-n</span> <span class="n">1</span> <span class="n">10</span><span class="p">.</span><span class="n">65</span><span class="p">.</span><span class="n">45</span><span class="p">.</span><span class="n">3</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="n">ttl</span><span class="p">)</span> <span class="o">-eq</span> <span class="nv">$null</span><span class="p">;$(</span><span class="n">ping</span> <span class="n">-n</span> <span class="n">1</span> <span class="n">10</span><span class="p">.</span><span class="n">65</span><span class="p">.</span><span class="n">4</span><span class="p">.</span><span class="n">52</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="n">ttl</span><span class="p">)</span> <span class="o">-eq</span> <span class="nv">$null</span><span class="p">;$(</span><span class="n">ping</span> <span class="n">-n</span> <span class="n">1</span> <span class="n">10</span><span class="p">.</span><span class="n">65</span><span class="p">.</span><span class="n">31</span><span class="p">.</span><span class="n">155</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="n">ttl</span><span class="p">)</span> <span class="o">-eq</span> <span class="nv">$null</span><span class="p">;$(</span><span class="n">ping</span> <span class="n">-n</span> <span class="n">1</span> <span class="nb">flare-on</span><span class="p">.</span><span class="n">com</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">/</span><span class="n">i</span> <span class="n">ttl</span><span class="p">)</span> <span class="o">-eq</span> <span class="nv">$null</span>
+</span></span></code></pre></div><p>Interestingly, most of the commands append a short string to a global variable (<code>FLARE14.h</code>) when they are executed. Two other methods also use this global variable.</p>
+<ul>
+<li><code>FLARE11.flared_42()</code> initializes the Mersenne-Twister algorithm but also the variable <code>FLARE14.h</code> as an <code>IncrementalHash</code> object (only once). <code>IncrementalHash</code> provides support for computing hashes incrementally across several segments. In our case segments are the short strings appended by the commands of the backdoor.</li>
+</ul>
+<figure><img src="/images/flareon9/Challenge_8_flared_42.png"/>
+</figure>
+
+<ul>
+<li><code>FLARE14.flared_54()</code> reverses <code>FLARE14.sh</code> to obtain a section name, computes the hash to get a RC4 key and uses it to decrypt the section data. Then it decrypts the hash with a hardcoded RC4 key to get a filename, and writes the decrypted section data to this file. Finally, the latter is executed/started as a new process.</li>
+</ul>
+<figure><img src="/images/flareon9/Challenge_8_flared_54.png"/>
+</figure>
+
+<div class="gblog-post__anchorwrap">
+    <h3 id="decrypting-the-final-stage">
+        Decrypting the final stage
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#decrypting-the-final-stage" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Decrypting the final stage" href="#decrypting-the-final-stage">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>At this point, we understand that we have to execute commands in a particular order by the backdoor to decrypt and execute the next (and maybe final) stage.</p>
+<p>To determine the order in which the commands have to be executed, we need to understand how <code>FLARE14.sh</code> is built. The method responsible for updating this variable is <code>flared_55()</code>.</p>
+<figure><img src="/images/flareon9/Challenge_8_flared_55.png"/>
+</figure>
+
+<p>This method takes the command identifier and the short string corresponding to the command as parameters. It checks if the first item of <code>FLARE15.c</code> corresponds to the command identifier XORed with 248. If it is the case, the short string is appended to <code>FLARE14.sh</code> and the item that matched in <code>FLARE15.c</code> is removed. Thus this array gives us the order in which the commands have to be executed.</p>
+<figure><img src="/images/flareon9/Challenge_8_observable_collection.png"/>
+</figure>
+
+<p>I chose to implement my own C&amp;C server to execute the different commands. The code is available on <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-9/Challenge_8_backdoor/c2_server.py"
+  
+>GitHub</a>.</p>
+<p>After executing all the commands, a GIF file is finally decrypted by the backdoor.</p>
+<figure><img src="/images/flareon9/Challenge_8_flag.gif"/>
+</figure>
+
+<div class="gblog-post__anchorwrap">
+    <h2 id="challenge-9---encryptor">
+        Challenge 9 - encryptor
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-9---encryptor" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 9 - encryptor" href="#challenge-9---encryptor">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-8">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-8" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-8">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">You&#39;re really crushing it to get this far. This is probably the end for you. Better luck next year!
+</span></span></code></pre></div><p>Two files are given for this challenge: a PE executable and what seems to be an encrypted file.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file flareon.exe SuspiciousFile.txt.Encrypted
+</span></span><span class="line"><span class="cl">flareon.exe:                  PE32+ executable <span class="o">(</span>console<span class="o">)</span> x86-64 <span class="o">(</span>stripped to external PDB<span class="o">)</span>, <span class="k">for</span> MS Windows
+</span></span><span class="line"><span class="cl">SuspiciousFile.txt.Encrypted: data
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="first-look-1">
+        First look
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#first-look-1" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor First look" href="#first-look-1">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>When executed, the binary waits for a command line parameter: a valid filename ending with <code>.EncryptMe</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">User</span><span class="p">\</span><span class="n">Desktop</span><span class="p">&gt;</span> <span class="p">.\</span><span class="n">flareon</span><span class="p">.</span><span class="n">exe</span>
+</span></span><span class="line"><span class="cl"><span class="n">usage</span><span class="err">:</span> <span class="n">flareon</span> <span class="n">path</span> <span class="no">[path ...]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">PS </span><span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">User</span><span class="p">\</span><span class="n">Desktop</span><span class="p">&gt;</span> <span class="p">.\</span><span class="n">flareon</span><span class="p">.</span><span class="n">exe</span> <span class="p">.\</span><span class="n">Test</span><span class="p">.</span><span class="n">txt</span><span class="p">.</span><span class="n">EncryptMe</span>
+</span></span><span class="line"><span class="cl"><span class="p">.\</span><span class="n">Test</span><span class="p">.</span><span class="n">txt</span><span class="p">.</span><span class="n">EncryptMe</span>
+</span></span><span class="line"><span class="cl"><span class="n">1</span> <span class="n">File</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">Encrypted</span>
+</span></span></code></pre></div><p>After the execution, two files are created:</p>
+<ul>
+<li><code>Test.txt.Encrypted</code> corresponding to the encrypted version of our input file;</li>
+<li><code>HOW_TO_DECRYPT.txt</code> is the ransomware note (see the contents below).</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">~*~*~* The FLARE-ON Encryptor ~*~*~*
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">All your files have been encrypted with a powerful combination of
+</span></span><span class="line"><span class="cl">symmetric and asymmetric cryptography. Do not tamper with the encrypted files.
+</span></span><span class="line"><span class="cl">It is of no use and will only risk corrupting your data.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">To get your files decrypted send lots of cryptocurrency over Tor.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You&#39;ll need to copy and paste us these values to get your key.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">9f18776bd3e78835b5ea24259706d89cbe7b5a79010afb524609efada04d0d71170a83c853525888c942e0dd1988251dfdb3cd85e95ce22a5712fb5e235dc5b6ffa3316b54166c55dd842101b1d77a41fdcc08a43019c218a8f8274e8164be2e857680c2b11554b8d593c2f13af2704e85847f80a1fc01b9906e22baba2f82a1</span><span class="err">,</span>
+</span></span><span class="line"><span class="cl"><span class="na">d9a288e5743484a7dc040d14b3e04ca6f6967656c085f8a9c53aab7bfb0f6beee7e101ba27a900f340754daf701b0964d479bc55f49a1c871e04c6da3dc3e6ee857116004f3eeb00866c45e48eb202535de5dc4716a54c39835d20dbdf2c9da56af8f9edbdd8786a5e507e4215c097be075ef4601f67071685461fdbd22926c1</span><span class="err">,</span>
+</span></span><span class="line"><span class="cl"><span class="na">368f92b2e96b2a212a32984d3adee85d1e9e90cab6602c44377a47541b4b89f9e13cc353612d8cba9319794f06dcc4b4371c9730143b867b937845b709b729dcb62fe5f5fc36cd22616291c3d6fac2189c5ff4e525aebf85041fccbd068b7f5c39dea6d72fd31a21d033d0f4e7e4b2fe156e565a0d0331f85792acc0eaa9394a</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>The goal of the challenge is to analyze the executable in order to decrypt <code>SuspiciousFile.txt.Encrypted</code>.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="static-analysis">
+        Static analysis
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#static-analysis" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Static analysis" href="#static-analysis">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h4 id="overview">
+        Overview
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#overview" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Overview" href="#overview">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>After opening the executable in our favorite disassembler, we can see there is no obfuscation at all and the code seems to be easy to read. Here is what it does.</p>
+<ol>
+<li>Resolve the <code>RtlGenRandom</code> Windows API.</li>
+<li>Call a function (at <code>0x4021D0</code>) to initialize some large buffers (we will come back to this one in the next section).</li>
+<li>Open the file given as command line parameter.</li>
+<li>Generate a random encryption key (via <code>RtlGenRandom()</code>).</li>
+<li>Encrypt the file contents using the random key. According to a constant of the encryption algorithm and a bit of dynamic analysis, the algorithm seems to be ChaCha20.</li>
+<li>Use several buffers initialized at step 2 to (maybe?) encrypt the ChaCha20 key.</li>
+<li>Write some of these large buffers and the result of the previous step after the encrypted file contents.</li>
+</ol>
+<div class="gblog-post__anchorwrap">
+    <h4 id="analysis-of-the-function-at-0x4021d0">
+        Analysis of the function at <code>0x4021d0</code>
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#analysis-of-the-function-at-0x4021d0" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Analysis of the function at 0x4021d0" href="#analysis-of-the-function-at-0x4021d0">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>The ransomware note gives us a hint regarding the purpose of this function, as files &ldquo;have been encrypted with a powerful combination of symmetric and asymmetric cryptography&rdquo;. We already know that ChaCha20 is used and the latter is a symmetric algorithm so this function is likely an implementation of an asymmetric algorithm.</p>
+<p>Without a surprise, the first that came to my mind is RSA (see <a
+  class="gblog-markdown__link"
+  href="https://www.geeksforgeeks.org/rsa-algorithm-cryptography/"
+  
+>here</a> for a quick remainder on the algorithm). This cryptography algorithm is based on modular exponentiation and can use several key sizes, the most popular are 1024, 2048 and 4096 bits. Thus, the first thing I did is looking at the size of the buffers processed by our mystery function.</p>
+<p>At first, two random buffers of 64 bytes (or 512 bits) are generated using <code>RtlGenRandom()</code>. Several checks are done on these buffers (especially by the function at <code>0x401DF2</code>) and if the checks are not verfied, new buffers are randomly generated, and so on.</p>
+<p>If we compare this with RSA, the initialization of RSA 1024-bit also requires two numbers of 512 bits (<code>p</code> and <code>q</code>). Both numbers have to be prime numbers, this property can be verified using a <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Primality_test"
+  
+>primality test</a>. Looking more closely at the function doing the checks (at <code>0x401DF2</code>), we understand this is actually an implementation of the <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test"
+  
+>Miller-Rabin</a> primality test.</p>
+<p>At this point, RSA 1024-bit seems to be a good candidate for our mystery function, but we have to confirm this hypothesis by looking at how the two 512-bit prime numbers are processed next.</p>
+<p>After a bit of static analysis, here is what my IDA decompilation output looks like and this confirms our hypothesis.</p>
+<figure><img src="/images/flareon9/Challenge_9_rsa_function.png"/>
+</figure>
+
+<p>Finally, the RSA private key is generated from <code>phi(n)</code> and the exponent <code>e = 0x10001</code>.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="decrypting-the-suspicious-file">
+        Decrypting the suspicious file
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#decrypting-the-suspicious-file" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Decrypting the suspicious file" href="#decrypting-the-suspicious-file">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>If we go back to the step where the ChaCha20 encryption key is (maybe?) encrypted using RSA, we understand that the modular exponentiation is done using the private key <code>d</code> instead of the public exponent <code>e</code>. In other words, the ChaCha20 key is only signed but not encrypted.</p>
+<p>As the signed ChaCha20 key as well as the modulus <code>n</code> are written at the end of the encrypted file, we can easily retrieve the ChaCha20 key by doing the modular exponentiation of the signed ChaCha20 key using the public exponent <code>e</code> and the modulus <code>n</code>.</p>
+<p>There were several ways to perform this, I chose to use miasm to emulate the modular exponentiation function. My script is available on <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-9/Challenge_9_encryptor/decrypt_file.py"
+  
+>GitHub</a>.</p>
+<p>After running the script, we get the following result.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ python decrypt_file.py flareon.exe SuspiciousFile.txt.Encrypted
+</span></span><span class="line"><span class="cl"><span class="o">[</span>...<span class="o">]</span>
+</span></span><span class="line"><span class="cl">Hello!
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">The flag is:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">R<span class="nv">$A_$16</span>n1n6_15_0pp0<span class="nv">$17</span>e_0f_3ncryp710n@flare-on.com
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h2 id="challenge-10---nur-getraumt">
+        Challenge 10 - Nur geträumt
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-10---nur-getraumt" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 10 - Nur geträumt" href="#challenge-10---nur-getraumt">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-9">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-9" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-9">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">This challenge is a Macintosh disk image (Disk Copy 4.2 format, for those who need to know) containing a 68K Macintosh program. You must determine the passphrase used to decode the flag contained within the application. Super ResEdit, an augmented version of Apple&#39;s ResEdit resource editor which adds a disassembler, is also included on the disk image to help you complete the challenge, though you will likely also need to do some outside research to guess the passphrase. 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">This application can be run on any Macintosh emulator (or any real Macintosh from as far back as a Mac Plus running System 6.0.x up to a G5 running Classic). The setup of the emulation environment is part of the challenge, so few spoilers live here, but if you want to save yourself some headaches, Mini vMac is a pretty good choice that doesn&#39;t take much effort to get up and running compared to some other options. 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">This application was written on a Power Macintosh 7300 using CodeWarrior Pro 5, ResEdit, and Resourcerer (my old setup from roughly 1997, still alive!). It was tested on a great many machines and emulators, and validated to run well on Mac OS from 6.0.8 through 10.4. 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Happy solving! Be curious!
+</span></span></code></pre></div><p>As mentioned in the description, this challenge is a Apple DiskCopy image. A <code>README.txt</code>  is also provided but it is only a copy of the challenge description above.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file Nur<span class="se">\ </span>geträumt.img
+</span></span><span class="line"><span class="cl">Nur geträumt.img: Apple DiskCopy 4.2 image Nur getr<span class="se">\2</span>12umt, <span class="m">1474560</span> bytes, MFM CAV dshd <span class="o">(</span>1440k<span class="o">)</span>, 0x2 format
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="mounting-the-image">
+        Mounting the image
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#mounting-the-image" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Mounting the image" href="#mounting-the-image">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>As this is a disk image, the first thing I did was mounting it. For that purpose, I used a tool named <a
+  class="gblog-markdown__link"
+  href="https://github.com/jonthysell/Convert2Dsk"
+  
+>Convert2Dsk</a> that converts DiskCopy 4.2 images into raw disk images (HFS image in my case). Then, I used the <a
+  class="gblog-markdown__link"
+  href="https://linux.die.net/man/1/hfsutils"
+  
+>hfsutils</a> tools to interact with the HFS image.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file Nur<span class="se">\ </span>geträumt.img.dsk
+</span></span><span class="line"><span class="cl">Nur geträumt.img.dsk: Macintosh HFS data block size: 512, number of blocks: 2874, volume name: Nur getr<span class="se">\2</span>12umt
+</span></span><span class="line"><span class="cl">$ hmount Nur<span class="se">\ </span>geträumt.img.dsk
+</span></span><span class="line"><span class="cl">Volume name is <span class="s2">&#34;Nur getrumt&#34;</span>
+</span></span><span class="line"><span class="cl">Volume was created on Fri Jul <span class="m">29</span> 10:54:35 <span class="m">2022</span>
+</span></span><span class="line"><span class="cl">Volume was last modified on Wed Oct <span class="m">19</span> 22:05:58 <span class="m">2022</span>
+</span></span><span class="line"><span class="cl">Volume has <span class="m">522240</span> bytes free
+</span></span><span class="line"><span class="cl">$ hls
+</span></span><span class="line"><span class="cl">Desktop Folder       Nur getr?umt         Super ResEdit 2.1.3
+</span></span></code></pre></div><p>The <code>hcopy</code> tool can be used to extract the application to analyze.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ hcopy <span class="s2">&#34;Nur getr?umt&#34;</span> . 
+</span></span><span class="line"><span class="cl">$ file Nur_getr<span class="se">\X</span>8aumt.bin
+</span></span><span class="line"><span class="cl">Nur_getrumt.bin: MacBinary II, inited, Sun Jan <span class="m">16</span> 03:32:01 2022, modified Thu Sep <span class="m">15</span> 18:10:54 2022, creator <span class="s1">&#39;Nena&#39;</span>, <span class="nb">type</span> application <span class="s2">&#34;Nur getr\212umt&#34;</span>, at 0x80 <span class="m">6420</span> bytes resource  Apple HFS/HFS+ resource fork
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="analysis-of-the-application">
+        Analysis of the application
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#analysis-of-the-application" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Analysis of the application" href="#analysis-of-the-application">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h4 id="static-analysis-1">
+        Static analysis
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#static-analysis-1" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Static analysis" href="#static-analysis-1">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>According to the specification of <a
+  class="gblog-markdown__link"
+  href="http://files.stairways.com/other/macbinaryii-standard-info.txt"
+  
+>MacBinary II</a>, the format is composed of a 128 bytes header followed by forks. In our case, there is only a resource fork corresponding to the 68k program we have to analyze. We can extract it using the following command line.</p>
+<pre tabindex="0"><code>$ dd if=Nur_getr\X8aumt.bin of=resource.bin bs=1 skip=128 count=6420
+</code></pre><p>Once we have the resource, we can load it and disassemble it in IDA using the IDC scripts from this <a
+  class="gblog-markdown__link"
+  href="https://github.com/MacPaw/XADMaster/wiki/Disassembling68KMacExecutables"
+  
+>project</a>.</p>
+<p>Interestingly, the name of the creator indicated in the binary header (<code>Nena</code>) and the hardcoded string (<code>99 Luftballons</code>) seem to be a reference to a song named <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/99_Luftballons"
+  
+>99 Luftballons</a> from the German band Nena.</p>
+<p>We can identify the <code>main()</code> function of the program at the offset <code>0x13C0</code> and start to analyze it. I quickly spotted a XOR loop (in the <code>decodeFlag()</code> function) that seems to decrypt the flag from an encrypted data resource but I had some difficulties to retrieve the XOR key.</p>
+<div class="gblog-post__anchorwrap">
+    <h4 id="dynamic-analysis">
+        Dynamic analysis
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#dynamic-analysis" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Dynamic analysis" href="#dynamic-analysis">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>At this point, I switched to dynamic analysis to get a better understanding of what the application actually does.</p>
+<p>As mentioned in the challenge description, we can use Mini vMac to setup an emulation environment.</p>
+<figure><img src="/images/flareon9/Challenge_10_mini_vmac.png"/>
+</figure>
+
+<p>Double-clicking on the application opens the following dialog.</p>
+<figure><img src="/images/flareon9/Challenge_10_ask_password.png"/>
+</figure>
+
+<p>If we enter a dummy password, the flag value is modified accordingly.</p>
+<figure><img src="/images/flareon9/Challenge_10_test_password.png"/>
+</figure>
+
+<p>This test indicates us that the password is the XOR key as XORing the input with the resulting flag returns the encrypted flag resource.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="getting-the-flag">
+        Getting the flag
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#getting-the-flag" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Getting the flag" href="#getting-the-flag">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>As we partially know what the flag looks like (ends with <code>@flare-on.com</code>), we can partially retrieve the XOR key. Indeed, if we XOR the end of the encrypted flag resource with <code>@flare-on.com</code>, we get <code>du etwas Zei</code> which looks like german words.</p>
+<p>My skills in german are near zero, however searching for these words on Google and linking this with the previous hint we had on the song from the german band Nena, allowed me to identify the same words in the lyrics of this song: &ldquo;Hast du etwas Zeit für mich?&rdquo;.</p>
+<p>Using this sentence as the XOR key gives us the flag <code>Dann_singe_ich_ein_Lied_fur_dich@flare-on.com</code>.</p>
+<div class="gblog-post__anchorwrap">
+    <h2 id="challenge-11---the-challenge-that-shall-not-be-named">
+        Challenge 11 - The challenge that shall not be named.
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#challenge-11---the-challenge-that-shall-not-be-named" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Challenge 11 - The challenge that shall not be named." href="#challenge-11---the-challenge-that-shall-not-be-named">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h3 id="description-10">
+        Description
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#description-10" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Description" href="#description-10">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">Protection, Obfuscation, Restrictions... Oh my!!
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">The good part about this one is that if you fail to solve it I don&#39;t need to ship you a prize.
+</span></span></code></pre></div><p>The last challenge is a Python application bundled in a PE executable using PyInstaller.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ file 11.exe
+</span></span><span class="line"><span class="cl">11.exe: PE32+ executable <span class="o">(</span>console<span class="o">)</span> x86-64, <span class="k">for</span> MS Windows
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="first-look-2">
+        First look
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#first-look-2" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor First look" href="#first-look-2">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>I used <a
+  class="gblog-markdown__link"
+  href="https://github.com/extremecoders-re/pyinstxtractor"
+  
+>pyinstxtractor</a> to extract the Python scripts.</p>
+<p>Two extracted files are particularly interesting:</p>
+<ul>
+<li><code>11.pyc</code> is the compiled Python script we have to analyze;</li>
+<li><code>pytransform.pyd</code> is a module that is part of the <a
+  class="gblog-markdown__link"
+  href="https://pyarmor.dashingsoft.com/"
+  
+>PyArmor</a> obfuscator.</li>
+</ul>
+<p>After using <a
+  class="gblog-markdown__link"
+  href="https://github.com/rocky/python-uncompyle6"
+  
+>uncompyle6</a> to decompile <code>11.pyc</code>, we get the following Python script.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pytransform</span> <span class="kn">import</span> <span class="n">pyarmor</span>
+</span></span><span class="line"><span class="cl"><span class="n">pyarmor</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="vm">__file__</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;PYARMOR</span><span class="se">\x00\x00\x03\x07\x00</span><span class="s1">B</span><span class="se">\r\r\n\t</span><span class="s1">0</span><span class="se">\xe0\x02\x01\x00\x00\x00\x01\x00\x00\x00</span><span class="s1">@</span><span class="se">\x00\x00\x00</span><span class="s1">a</span><span class="se">\x02\x00\x00\x0b\x00\x00</span><span class="s1">x</span><span class="se">\xa7\xf5\x80\x15\x8c\x1f\x90\xbb\x16</span><span class="s1">Xu</span><span class="se">\x86\x9d\xbb\xbd\x8d\x00\x00\x00\x00\x00\x00\x00\x00</span><span class="s1">54$</span><span class="se">\xf1\xeb</span><span class="s1">,</span><span class="se">\n</span><span class="s1">Y</span><span class="se">\xa9\x9b\xa5\xb3\xba\xdc\xd9</span><span class="s1">7</span><span class="se">\xba\x13\x0b\x89</span><span class="s1"> </span><span class="se">\xd2\x14\xa7\xcc</span><span class="s1">H0</span><span class="se">\x9b</span><span class="s1">)</span><span class="se">\xd4\x0f\xfb\xe4</span><span class="s1">`</span><span class="se">\xbd\xcf\xa2</span><span class="s1">8</span><span class="se">\xfc\xf1\x08\x87</span><span class="s1">w</span><span class="se">\x1a\xfb</span><span class="s1">%+</span><span class="se">\xc1\xbe\x8b\xc0</span><span class="s1">]8h</span><span class="se">\x1f\x88\xa6</span><span class="s1">CB&gt;*</span><span class="se">\xdd\xf6\xec\xf5\xe3</span><span class="s1">0</span><span class="se">\xf9\x85</span><span class="s1">6</span><span class="se">\xfa\xd9</span><span class="s1">P</span><span class="se">\xc8</span><span class="s1">C</span><span class="se">\xc1\xbd</span><span class="s1">m</span><span class="se">\xca</span><span class="s1">&amp;</span><span class="se">\x81\xa9\xfb\x07</span><span class="s1">HE</span><span class="se">\x1b\x00\x9e\x00</span><span class="s1">a</span><span class="se">\x0c\xf2\xd0\x87\x0c</span><span class="s1">&lt;</span><span class="se">\xf8\xdd</span><span class="s1">Zf</span><span class="se">\xf1</span><span class="s1">,</span><span class="se">\x84\xce\r\x14</span><span class="s1">*s</span><span class="se">\x11\x82\x88\x8d\xa7\x00</span><span class="s1">k</span><span class="se">\xd9</span><span class="s1">s</span><span class="se">\xae\xd3\xfc\x16</span><span class="s1">v</span><span class="se">\x0f\xb9\xd1\xd3\xd0</span><span class="s1">2</span><span class="se">\xec</span><span class="s1">Q</span><span class="se">\x9a\xd7</span><span class="s1">aL</span><span class="se">\xdf\xc1</span><span class="s1">~u</span><span class="se">\xca\x8a\xd4</span><span class="s1">xk</span><span class="se">\xde\x03</span><span class="s1">0;</span><span class="se">\xb2</span><span class="s1">Q</span><span class="se">\xc8</span><span class="s1">$</span><span class="se">\xdd</span><span class="s1">Q</span><span class="se">\xd3</span><span class="s1">Jj</span><span class="se">\xd1</span><span class="s1">U</span><span class="se">\xcc</span><span class="s1">V</span><span class="se">\xd1\x03\xa9\xbf\x9f\xed\xe6</span><span class="s1">8n</span><span class="se">\xac</span><span class="s1">&amp;</span><span class="se">\xd6</span><span class="s1">7</span><span class="se">\x0c\xfd\xc6</span><span class="s1">^</span><span class="se">\x0e\xb4</span><span class="s1">0</span><span class="se">\x07\x97</span><span class="s1">|</span><span class="se">\xab\xad</span><span class="s1">Bc&lt;T</span><span class="se">\x0b</span><span class="s1"> d$</span><span class="se">\x94\xf9\x90</span><span class="s1">Oq</span><span class="se">\x02</span><span class="s1">7</span><span class="se">\xe4\xf2\xec\xc9\xbc\xfa</span><span class="s1">L7dN</span><span class="se">\x83\x96</span><span class="s1">X</span><span class="se">\xab\xf7\x18\xad\xfc\xf7\x99</span><span class="s1">2</span><span class="se">\x87\x1d\xe8</span><span class="s1">p</span><span class="se">\x97</span><span class="s1">C</span><span class="se">\xd4</span><span class="s1">D.</span><span class="se">\x1b</span><span class="s1">;F_ </span><span class="se">\x91</span><span class="s1">t</span><span class="se">\t</span><span class="s1">M</span><span class="se">\x15</span><span class="s1">5</span><span class="se">\x0c\xb9\x9f\xd0</span><span class="s1">W C</span><span class="se">\x19</span><span class="s1">oz4.</span><span class="se">\x99</span><span class="s1">8</span><span class="se">\xe7\xa9\x98\xd4\xd2\x9f\x95</span><span class="s1">H</span><span class="se">\x91\xf2</span><span class="s1">`</span><span class="se">\x1c\xfa\xa4</span><span class="s1">,</span><span class="se">\xa9</span><span class="s1">d?day</span><span class="se">\xc4\xf3\xcb\xc8</span><span class="s1">r</span><span class="se">\xf7\x97\xd1</span><span class="s1">u</span><span class="se">\xfe\xec\x91\xc1\xe6</span><span class="s1">V</span><span class="se">\xa3</span><span class="s1">j</span><span class="se">\x0f\xb9\xd5\xa1</span><span class="s1">a</span><span class="se">\xd5\x17\x8b</span><span class="s1">!</span><span class="se">\xc4</span><span class="s1">{A</span><span class="se">\xb2</span><span class="s1">t</span><span class="se">\x85\xfe\x88\xff</span><span class="s1">aO</span><span class="se">\x05\xc5\xac</span><span class="s1">g</span><span class="se">\xed</span><span class="s1">;]</span><span class="se">\xb9\xdd\x7f</span><span class="s1">S</span><span class="se">\xef\xe4</span><span class="s1">F</span><span class="se">\xf9</span><span class="s1">&#34;</span><span class="se">\x0c\xd9\x1a\xb6\x88</span><span class="s1">-Y </span><span class="se">\xdd\xea\xc9\xf1</span><span class="s1">&gt;:</span><span class="se">\xbf</span><span class="s1">][</span><span class="se">\xdf</span><span class="s1">[</span><span class="se">\x07\xb9\xe2</span><span class="s1">@</span><span class="se">\xee</span><span class="s1">q</span><span class="se">\xf9</span><span class="s1">Ho</span><span class="se">\xc3\xc4</span><span class="s1">sD</span><span class="se">\xcd\xcc\x8a\x11</span><span class="s1">tq</span><span class="se">\xf6</span><span class="s1">;</span><span class="se">\xe9\x84\x7f</span><span class="s1">b</span><span class="se">\xe9\xf4</span><span class="s1">t</span><span class="se">\x80\xe4</span><span class="s1">l)_</span><span class="se">\xea</span><span class="s1">Q</span><span class="se">\x10\x8f</span><span class="s1">^-</span><span class="se">\xc5\x11\xe7\x84</span><span class="s1">x</span><span class="se">\xe7</span><span class="s1">-</span><span class="se">\xb2\x15</span><span class="s1">[5</span><span class="se">\xb0\xdc</span><span class="s1">k</span><span class="se">\x1a</span><span class="s1">wh</span><span class="se">\r</span><span class="s1">;</span><span class="se">\x9b</span><span class="s1">y</span><span class="se">\x14\x1a\xe0</span><span class="s1">:</span><span class="se">\xbd\x90</span><span class="s1">4</span><span class="se">\xa2\xfa</span><span class="s1">p[</span><span class="se">\xe0\x9f</span><span class="s1">n3</span><span class="se">\x7f</span><span class="s1">k;3n</span><span class="se">\xf8\xe3</span><span class="s1">%</span><span class="se">\xc6</span><span class="s1">t</span><span class="se">\xbf</span><span class="s1">|</span><span class="se">\x12\x9a\x1b\xe2\xf1</span><span class="s1">C</span><span class="se">\x10\xbe\xee\xe7</span><span class="s1">.</span><span class="se">\x98</span><span class="s1">&gt;k</span><span class="se">\xb9</span><span class="s1">r</span><span class="se">\xf9\x9c</span><span class="s1">N8</span><span class="se">\xae\xc0\x8b</span><span class="s1">A</span><span class="se">\x0f\xbb\x8d\xf4\x04\xb0\x01</span><span class="s1">,</span><span class="se">\x05\xaa\xc5\r\xce\x91\&#39;\x98\xc6\xd3</span><span class="s1">Y</span><span class="se">\x1b\xd1</span><span class="s1">U</span><span class="se">\xd3\xd7</span><span class="s1">d|{I</span><span class="se">\x18</span><span class="s1">JG</span><span class="se">\xa6</span><span class="s1">3</span><span class="se">\xd6\&#39;</span><span class="s1">r</span><span class="se">\xcf</span><span class="s1">!7</span><span class="se">\x17</span><span class="s1">qd</span><span class="se">\xb7</span><span class="s1">|</span><span class="se">\x1f\x7f\x17\xb4\xa8\xb9\xa8\xda</span><span class="s1">z</span><span class="se">\x02</span><span class="s1">g</span><span class="se">\xc7</span><span class="s1">+]F</span><span class="se">\x10\x18</span><span class="s1">l</span><span class="se">\x0c\x91</span><span class="s1">g</span><span class="se">\xd0</span><span class="s1">e</span><span class="se">\x1f\xe4\xa6</span><span class="s1">7</span><span class="se">\xb2\xba\x9f\xef\xba\xc7</span><span class="s1">[3_</span><span class="se">\x12</span><span class="s1">C</span><span class="se">\xe9\xf4</span><span class="s1">s</span><span class="se">\x87</span><span class="s1">q</span><span class="se">\xa3\xec\xa0\xcc\x06\xf4\x9f\xe1\xb3\xe6</span><span class="s1">R</span><span class="se">\x93\xf2\xd5</span><span class="s1">7i</span><span class="se">\xf8\x96\xb3</span><span class="s1">x</span><span class="se">\xa7</span><span class="s1">uEw</span><span class="se">\x12</span><span class="s1">D</span><span class="se">\x8c\xc6</span><span class="s1">XkdfY</span><span class="se">\xe0</span><span class="s1">J2N</span><span class="se">\xbf\x85</span><span class="s1">o</span><span class="se">\x8e\x81</span><span class="s1">|C</span><span class="se">\xa9</span><span class="s1">1#y</span><span class="se">\xd9</span><span class="s1">u</span><span class="se">\xf1\xd1</span><span class="s1">BC</span><span class="se">\xcc</span><span class="s1">}</span><span class="se">\xe8</span><span class="s1">;?</span><span class="se">\x12</span><span class="s1">S</span><span class="se">\x16</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span></span></code></pre></div><div class="gblog-post__anchorwrap">
+    <h3 id="analyzing-the-pyarmor-protection">
+        Analyzing the PyArmor protection
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#analyzing-the-pyarmor-protection" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Analyzing the PyArmor protection" href="#analyzing-the-pyarmor-protection">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="gblog-post__anchorwrap">
+    <h4 id="reading-the-documentation">
+        Reading the documentation
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#reading-the-documentation" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Reading the documentation" href="#reading-the-documentation">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Before this challenge, I was not familiar with PyArmor, so the first thing I did was looking for documentation on that obfuscator. Surprisingly, the official <a
+  class="gblog-markdown__link"
+  href="https://pyarmor.readthedocs.io/en/latest/index.html"
+  
+>documentation</a> of the project is quite complete.</p>
+<p>The following picture, taken from PyArmor official website, illustrates how the obfuscator works.</p>
+<figure><img src="/images/flareon9/Challenge_11_pyamor_big_picture.png"/>
+</figure>
+
+<p>Obfuscated <a
+  class="gblog-markdown__link"
+  href="https://docs.python.org/3/c-api/code.html"
+  
+>code objects</a> are wrapped between a header (<code>__armor_enter__</code>) and a footer (<code>__armor_exit__</code>). The former is responsible for restoring the original bytecode and the latter obfuscate the bytecode again after its execution.</p>
+<p>PyArmor supports differents modes (Super Mode, Super Plus Mode, VM Mode, etc.) for obfuscating scripts. In our case, as there is no <a
+  class="gblog-markdown__link"
+  href="https://pyarmor.readthedocs.io/en/latest/understand-obfuscated-scripts.html#bootstrap-code"
+  
+>Bootstrap code</a> at the beginning of the script, we can assert that at least the <a
+  class="gblog-markdown__link"
+  href="https://pyarmor.readthedocs.io/en/latest/mode.html#super-mode"
+  
+>Super Mode</a> was used. Besides the fourth parameter given to the <code>pyarmor()</code> function means that the <a
+  class="gblog-markdown__link"
+  href="https://pyarmor.readthedocs.io/en/latest/mode.html#obfuscating-module-mode"
+  
+>obfuscating module mode</a> was set to 2 (stronger cryptography algorithm).</p>
+<p>At this point, I switched to the analysis of the pytransform module in order to understand how the code object was obfuscated.</p>
+<div class="gblog-post__anchorwrap">
+    <h4 id="static-analysis-of-the-pytransform-module">
+        Static analysis of the pytransform module
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#static-analysis-of-the-pytransform-module" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Static analysis of the pytransform module" href="#static-analysis-of-the-pytransform-module">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>After loading the module in IDA, we can see there are only a few export functions. I started with <code>PyInit_pytransform()</code> as this is the function called when the module is imported in the Python script.</p>
+<p>The function creates a new callable PyObject named <code>__armor_wrap__</code> using <code>PyCFunction_NewEx()</code>. Then, it initializes several ciphers, installs some anti-debug mechanisms (at <code>0x6D654420</code>) and verifies the PyArmor license.</p>
+<p>What is interesting here is the <code>__armor_wrap__</code> function (handled at <code>0x6D604BC0</code>). Indeed, instead of using the functions <code>__armor_enter__</code> and <code>__armor_exit__</code>, it seems that the mode used to obfuscate this script calls <code>__armor_wrap__</code>. At the time of the challenge, the latter was not really documented so I continued my analysis on this function.</p>
+<p>The bytecode is decrypted using AES-256 in CTR mode and executed by a (very) big function at <code>0x6D67A640</code> (see the CFG below).</p>
+<figure><img src="/images/flareon9/Challenge_11_exec_bytecode_cfg.png"/>
+</figure>
+
+<p>From here, there are likely several solutions to continue this challenge but I chose the lazy one: using a debugger and breaking before the execution of the bytecode to extract it.</p>
+<div class="gblog-post__anchorwrap">
+    <h3 id="deobfuscating-the-python-script">
+        Deobfuscating the Python script
+        <a data-clipboard-text="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/#deobfuscating-the-python-script" class="gblog-post__anchor gblog-post__anchor--right clip" aria-label="Anchor Deobfuscating the Python script" href="#deobfuscating-the-python-script">
+            <svg class="icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>In order to debug the script, there are two requirements:</p>
+<ul>
+<li>patching the anti-debug mechanisms (<code>NOP</code> is your friend);</li>
+<li>bypassing the <a
+  class="gblog-markdown__link"
+  href="https://pyarmor.readthedocs.io/en/latest/mode.html#restrict-mode"
+  
+>Restrict Mode</a>.</li>
+</ul>
+<p>I discovered the latter when I was trying to attach my debugger to the Python process. As the mode 2 was used, I could not import the obfuscated script from a plain script without a &ldquo;protection exception&rdquo; being raised. However, this security measure can be patched as well.</p>
+<p>Once these requirements are met, it is trivial to break before the bytecode execution and dump the decrypted code object.</p>
+<figure><img src="/images/flareon9/Challenge_11_partial_dump.png"/>
+</figure>
+
+<p>As the flag was only a constant of the code object, the challenge was already over, but I still wanted to get a clean decompiled code. However, when I understood that the opcodes were remapped in the pytransform module, I changed my mind :)</p>
+    </section>
+  </article>
+
+      </main>
+
+      <footer class="gblog-footer">
+  <nav class="container flex">
+    <div>
+      <section class="flex flex-wrap align-center">
+        
+        
+        
+        
+      </section>
+      <section class="flex flex-wrap align-center">
+        <span class="gblog-footer__item">
+          Built with <a href="https://gohugo.io/" class="gblog-footer__link">Hugo</a> and
+          <svg class="icon gblog_heart"><use xlink:href="#gblog_heart"></use></svg>
+        </span>
+      </section>
+      
+      
+        <section class="flex flex-wrap align-center">
+          <span class="gblog-footer__item">
+            Content licensed under
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="gblog-footer__link no-wrap">CC BY-SA 4.0</a>
+          </span>
+        </section>
+      
+    </div>
+    
+      <div class="flex flex-25 justify-end">
+        <span class="gblog-footer__item text-right">
+          <a class="gblog-footer__link fake-link" href="#" aria-label="Back to top">
+            <svg class="icon gblog_keyboard_arrow_up">
+              <use xlink:href="#gblog_keyboard_arrow_up"></use>
+            </svg>
+            <span class="hidden-mobile">Back to top</span>
+          </a>
+        </span>
+      </div>
+    
+  </nav>
+</footer>
+
+    </div>
+  </body>
+</html>
