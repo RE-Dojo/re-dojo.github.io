@@ -3,45 +3,30 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://re-dojo.github.io/</loc>
+    <lastmod>2023-11-19T00:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://re-dojo.github.io/posts/flareon10/</loc>
+    <lastmod>2023-11-19T00:00:00+00:00</lastmod>
+  </url>
+  <url>
+    <loc>https://re-dojo.github.io/posts/flareon9/</loc>
     <lastmod>2022-11-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/post/</loc>
-    <lastmod>2022-11-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/authors/</loc>
-    <lastmod>2022-11-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/tags/Challenge/</loc>
-    <lastmod>2022-11-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/tags/Flare-On/</loc>
-    <lastmod>2022-11-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/post/2022-11-13-FlareOn-9/</loc>
-    <lastmod>2022-11-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/authors/icecr4ck/</loc>
-    <lastmod>2022-11-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/tags/</loc>
-    <lastmod>2022-11-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/post/2020-05-09-FCSC-2020-keykoolol/</loc>
+  </url>
+  <url>
+    <loc>https://re-dojo.github.io/posts/fcsc2020/keykoolol/</loc>
     <lastmod>2020-05-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/tags/NorthSec/</loc>
+  </url>
+  <url>
+    <loc>https://re-dojo.github.io/posts/nsec2019/doom/</loc>
     <lastmod>2019-05-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/post/2019-05-26-NSEC-2019-doom/</loc>
-    <lastmod>2019-05-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/authors/scud/</loc>
-    <lastmod>2019-05-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/post/2018-10-28-NSEC-2018-mars-analytica/</loc>
+  </url>
+  <url>
+    <loc>https://re-dojo.github.io/posts/nsec2018/mars_analytica/</loc>
     <lastmod>2018-10-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://re-dojo.github.io/post/2018-09-28-ECW-2017-red-diamond/</loc>
+  </url>
+  <url>
+    <loc>https://re-dojo.github.io/posts/ecw2017/red_diamond/</loc>
     <lastmod>2018-09-28T00:00:00+00:00</lastmod>
   </url>
 </urlset>

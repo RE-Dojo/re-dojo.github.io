@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="en"
+  class="color-toggle-hidden"
+  
+>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="referrer" content="no-referrer" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content="Hugo 0.101.0" />
+  <meta name="robots" content="index, follow" />
+  <meta name="description" content="Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l’année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense." />
+    <meta name="author" content="icecr4ck" />
+
+    <title>ECW 2017 - Red Diamond | RE-Dojo</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="/favicon/favicon-32x32.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="/favicon/favicon-16x16.png"
+/>
+
+    
+
+    
+  <meta
+    property="og:title"
+    content="ECW 2017 - Red Diamond"
+  />
+  <meta property="og:site_name" content="RE-Dojo" />
+  <meta property="og:description" content="Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l’année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://re-dojo.github.io/posts/ecw2017/red_diamond/" />
+
+<meta property="article:section" content="Posts" />
+    <meta
+      property="article:published_time"
+      content="2018-09-28T00:00:00+00:00"
+    />
+    <meta
+      property="article:modified_time"
+      content="2018-09-28T00:00:00+00:00"
+    />
+
+
+  <meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="ECW 2017 - Red Diamond" />
+  <meta name="twitter:description" content="Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l’année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense." />
+
+<script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "BlogPosting",
+      "articleSection": "Posts",
+      "name": "ECW 2017 - Red Diamond",
+      "url" : "https://re-dojo.github.io/posts/ecw2017/red_diamond/",
+      "headline": "ECW 2017 - Red Diamond",
+      "description": "Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le challenge ECW. Tout comme l’année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque\/Défense.",
+      "wordCount" : "4336",
+      "license": "CC BY-SA 4.0",
+      "inLanguage": "en",
+      "isFamilyFriendly": "true",
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://re-dojo.github.io/posts/ecw2017/red_diamond/"
+      },
+      "keywords" : [ "Challenge" ],
+      "author" : [
+          {
+              "@type": "Person",
+              "name": "icecr4ck"
+          }
+      ],
+      "copyrightHolder" : "RE-Dojo",
+      "copyrightYear" : "2018",
+      "dateCreated": "2018-09-28T00:00:00.00Z",
+      "datePublished": "2018-09-28T00:00:00.00Z",
+      "dateModified": "2018-09-28T00:00:00.00Z",
+      "publisher":{
+          "@type":"Organization",
+          "name": "RE-Dojo",
+          "url": "https://re-dojo.github.io/",
+          "logo": {
+              "@type": "ImageObject",
+              "url": "https://re-dojo.github.io/images/brand/logo.svg",
+              "width":"32",
+              "height":"32"
+          }
+      }
+  }
+  </script>
+
+
+    
+  <script src="/js/colortheme-67ebb30b.bundle.min.js"></script>
+<script src="/js/main-91724a27.bundle.min.js"></script>
+
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/Metropolis.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/LiberationSans.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/GeekblogIcons.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+
+<link
+  rel="preload"
+  href="/main-78aaa671.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/main-78aaa671.min.css"
+  media="all"
+/>
+
+<link
+  rel="preload"
+  href="/mobile-8caf109e.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/mobile-8caf109e.min.css"
+  media="screen and (max-width: 45rem)"
+/>
+
+<link
+  rel="preload"
+  href="/print-cc34f864.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/print-cc34f864.min.css"
+  media="print"
+/>
+
+<link
+  rel="preload"
+  href="/custom.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/custom.css"
+  media="all"
+/>
+  <link href="https://re-dojo.github.io/posts/ecw2017/red_diamond/" rel="canonical" type="text/html" />
+    <link href="https://re-dojo.github.io/index.xml" rel="alternate" type="application/rss+xml" title="RE-Dojo RSS Feed" />
+
+<!-- Made with Geekblog theme https://github.com/thegeeklab/hugo-geekblog -->
+
+    
+
+  </head>
+
+  <body>
+    
+  <!-- geekblog include: sprites/geekblog.svg -->
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_back" xmlns="http://www.w3.org/2000/svg"><path d="M31.999 14.035v3.93H7.673l11.134 11.228L16 32 .001 16.001 16 .002l2.807 2.807L7.673 14.037h24.326z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M7.954 17.965v5.988L.001 16l7.953-7.953v5.988H32v3.93H7.954z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M24.046 14.035V8.047L31.999 16l-7.953 7.953v-5.988H0v-3.93h24.046z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_bitbucket" xmlns="http://www.w3.org/2000/svg"><path d="M15.905 13.355c.189 1.444-1.564 2.578-2.784 1.839-1.375-.602-1.375-2.784-.034-3.403 1.151-.705 2.818.223 2.818 1.564zm1.907-.361c-.309-2.44-3.076-4.056-5.328-3.042-1.426.636-2.389 2.148-2.32 3.747.086 2.097 2.08 3.815 4.176 3.626s3.729-2.234 3.472-4.331zm4.108-9.315c-.756-.997-2.045-1.169-3.179-1.358-3.214-.516-6.513-.533-9.727.034-1.066.172-2.269.361-2.939 1.323 1.1 1.031 2.664 1.186 4.073 1.358 2.544.327 5.156.344 7.699.017 1.426-.172 3.008-.309 4.073-1.375zm.979 17.788c-.481 1.684-.206 3.953-1.994 4.932-3.076 1.701-6.806 1.89-10.191 1.289-1.787-.327-3.884-.894-4.864-2.578-.43-1.65-.705-3.334-.98-5.018l.103-.275.309-.155c5.121 3.386 12.288 3.386 17.427 0 .808.241.206 1.22.189 1.805zM26.01 4.951c-.584 3.764-1.255 7.51-1.908 11.257-.189 1.1-1.255 1.719-2.148 2.183-3.214 1.615-6.96 1.89-10.483 1.512-2.389-.258-4.829-.894-6.771-2.389-.911-.705-.911-1.908-1.083-2.922-.602-3.523-1.289-7.046-1.719-10.604.206-1.547 1.942-2.217 3.231-2.698C6.848.654 8.686.362 10.508.19c3.884-.378 7.854-.241 11.618.859 1.341.395 2.784.945 3.695 2.097.412.533.275 1.203.189 1.805z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_bookmark" xmlns="http://www.w3.org/2000/svg"><path d="M20.357 5.856q1.157 0 2.043.851t.885 2.008v23.284l-10.212-4.357-10.144 4.357V8.715q0-1.157.885-2.008t2.042-.851h14.502zm5.787 18.859V5.856q0-1.157-.851-2.042t-2.008-.885H8.715q0-1.157.885-2.042t2.043-.885h14.502q1.157 0 2.043.885t.885 2.042v23.216z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_auto" xmlns="http://www.w3.org/2000/svg"><path d="M16.846 18.938h2.382L15.22 7.785h-2.44L8.772 18.938h2.382l.871-2.44h3.95zm7.087-9.062L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809zm-11.385 4.937L14 10.282l1.452 4.531h-2.904z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_dark" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565q-1.51 0-3.079.697 1.917.871 3.108 2.701T15.22 14t-1.191 4.037-3.108 2.701q1.568.697 3.079.697zm9.933-11.559L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_light" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565 8.743 8.743 6.565 14t2.178 5.257T14 21.435zm9.933-3.311v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809L27.999 14z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_check" xmlns="http://www.w3.org/2000/svg"><path d="M8.885 20.197 25.759 3.323l2.24 2.24L8.885 24.677 0 15.792l2.24-2.24z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_check_circle_outline" xmlns="http://www.w3.org/2000/svg"><path d="M14 25.239q4.601 0 7.92-3.319T25.239 14 21.92 6.08 14 2.761 6.08 6.08 2.761 14t3.319 7.92T14 25.239zM14 0q5.784 0 9.892 4.108T28 14t-4.108 9.892T14 28t-9.892-4.108T0 14t4.108-9.892T14 0zm6.441 7.822 1.972 1.972-11.239 11.239L4.207 14l1.972-1.972 4.995 4.995z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_clear" xmlns="http://www.w3.org/2000/svg"><path d="M32 3.222 19.222 16 32 28.778l-3.221 3.221-12.778-12.778L3.223 31.999.002 28.778 12.78 16 .002 3.222 3.223.001l12.778 12.778L28.779.001z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_cloud_off" xmlns="http://www.w3.org/2000/svg"><path d="M9.023 10.5H7q-1.914 0-3.281 1.395t-1.367 3.309 1.367 3.281T7 19.852h11.375zM3.5 4.976l1.477-1.477L24.5 23.022l-1.477 1.477-2.352-2.297H6.999q-2.898 0-4.949-2.051t-2.051-4.949q0-2.844 1.969-4.867t4.758-2.133zm19.086 5.578q2.242.164 3.828 1.832T28 16.351q0 3.008-2.461 4.758l-1.695-1.695q1.805-.984 1.805-3.063 0-1.422-1.039-2.461t-2.461-1.039h-1.75v-.602q0-2.68-1.859-4.539t-4.539-1.859q-1.531 0-2.953.711l-1.75-1.695Q11.431 3.5 14.001 3.5q2.953 0 5.496 2.078t3.09 4.977z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_code" xmlns="http://www.w3.org/2000/svg"><path d="M9.917 24.5a1.75 1.75 0 1 0-3.501.001 1.75 1.75 0 0 0 3.501-.001zm0-21a1.75 1.75 0 1 0-3.501.001A1.75 1.75 0 0 0 9.917 3.5zm11.666 2.333a1.75 1.75 0 1 0-3.501.001 1.75 1.75 0 0 0 3.501-.001zm1.75 0a3.502 3.502 0 0 1-1.75 3.026c-.055 6.581-4.721 8.039-7.82 9.023-2.898.911-3.846 1.349-3.846 3.117v.474a3.502 3.502 0 0 1 1.75 3.026c0 1.932-1.568 3.5-3.5 3.5s-3.5-1.568-3.5-3.5c0-1.294.711-2.424 1.75-3.026V6.526A3.502 3.502 0 0 1 4.667 3.5c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5a3.502 3.502 0 0 1-1.75 3.026v9.06c.93-.456 1.914-.766 2.807-1.039 3.391-1.075 5.323-1.878 5.359-5.687a3.502 3.502 0 0 1-1.75-3.026c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_contacts" xmlns="http://www.w3.org/2000/svg"><path d="M22.688 22.688v-2q0-1.5-2.281-2.438t-4.406-.938-4.406.938-2.281 2.438v2h13.375zM16 9q-1.25 0-2.125.875T13 12t.875 2.125T16 15t2.125-.875T19 12t-.875-2.125T16 9zm10.688-3.687q1.063 0 1.844.813t.781 1.875v16q0 1.063-.781 1.875t-1.844.813H5.313q-1.063 0-1.844-.813t-.781-1.875v-16q0-1.063.781-1.875t1.844-.813h21.375zM5.313 32v-2.688h21.375V32H5.313zM26.688 0v2.688H5.313V0h21.375z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_copy" xmlns="http://www.w3.org/2000/svg"><path d="M23.502 25.438V7.626H9.562v17.812h13.94zm0-20.315q1.013 0 1.787.745t.774 1.757v17.812q0 1.013-.774 1.787t-1.787.774H9.562q-1.013 0-1.787-.774t-.774-1.787V7.625q0-1.013.774-1.757t1.787-.745h13.94zM19.689 0v2.562H4.438v17.812H1.936V2.562q0-1.013.745-1.787T4.438.001h15.251z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_create" xmlns="http://www.w3.org/2000/svg"><path d="m31.499 7.167-3.25 3.25-6.666-6.666 3.25-3.25q.5-.5 1.25-.5t1.25.5l4.166 4.166q.5.5.5 1.25t-.5 1.25zM.001 25.333 19.667 5.667l6.666 6.666L6.667 31.999H.001v-6.666z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_dangerous" xmlns="http://www.w3.org/2000/svg"><path d="M21.802 19.833 15.969 14l5.833-5.833-1.969-1.969L14 12.031 8.167 6.198 6.198 8.167 12.031 14l-5.833 5.833 1.969 1.969L14 15.969l5.833 5.833zM19.833 0 28 8.167v11.666L19.833 28H8.167L0 19.833V8.167L8.167 0h11.666z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_date" xmlns="http://www.w3.org/2000/svg"><path d="M27.192 28.844V11.192H4.808v17.652h22.384zm0-25.689q1.277 0 2.253.976t.976 2.253v22.459q0 1.277-.976 2.216t-2.253.939H4.808q-1.352 0-2.291-.901t-.939-2.253V6.385q0-1.277.939-2.253t2.291-.976h1.577V.001h3.23v3.155h12.769V.001h3.23v3.155h1.577zm-3.155 11.267v3.155h-3.23v-3.155h3.23zm-6.46 0v3.155h-3.155v-3.155h3.155zm-6.384 0v3.155h-3.23v-3.155h3.23z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_download" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 28.209h26.269v3.79H2.866v-3.79zm26.268-16.925L16 24.418 2.866 11.284h7.493V.001h11.283v11.283h7.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_email" xmlns="http://www.w3.org/2000/svg"><path d="M28.845 9.615v-3.23L16 14.422 3.155 6.385v3.23L16 17.577zm0-6.46q1.277 0 2.216.977T32 6.385v19.23q0 1.277-.939 2.253t-2.216.977H3.155q-1.277 0-2.216-.977T0 25.615V6.385q0-1.277.939-2.253t2.216-.977h25.69z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_error_outline" xmlns="http://www.w3.org/2000/svg"><path d="M14 25.239q4.601 0 7.92-3.319T25.239 14 21.92 6.08 14 2.761 6.08 6.08 2.761 14t3.319 7.92T14 25.239zM14 0q5.784 0 9.892 4.108T28 14t-4.108 9.892T14 28t-9.892-4.108T0 14t4.108-9.892T14 0zm-1.38 6.967h2.761v8.413H12.62V6.967zm0 11.239h2.761v2.826H12.62v-2.826z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_fire" xmlns="http://www.w3.org/2000/svg"><path d="M17.689 21.998q-.32.32-.8.576t-.864.384q-1.152.384-2.272.032t-1.888-.992q-.128-.128-.096-.256t.16-.192q1.216-.384 1.92-1.216t.96-1.792q.192-.896-.064-1.728t-.384-1.728q-.128-.704-.096-1.376t.288-1.312q0-.128.128-.128t.192.064q.384.832.992 1.472t1.28 1.216 1.216 1.248.672 1.568q.064.384.064.704.064.96-.32 1.92t-1.088 1.536zm3.84-10.944q-.768-.704-1.6-1.28t-1.6-1.344q-1.536-1.536-2.016-3.584t.16-4.16q.128-.32-.096-.544t-.544-.096q-.768.32-1.44.768t-1.312.896q-1.984 1.664-3.136 3.936T8.633 10.51t.8 5.088q0 .128.032.256t.032.256q0 .576-.512.832t-1.024-.192q-.128-.192-.192-.32-1.024-1.28-1.376-2.912t-.096-3.232q.064-.384-.288-.576t-.608.128q-1.28 1.664-1.856 3.68t-.448 4.064q0 .576.096 1.184t.288 1.184q.448 1.536 1.216 2.816 1.216 2.048 3.264 3.424t4.416 1.696q2.496.32 5.024-.256t4.448-2.304q1.408-1.344 2.208-3.104t.864-3.68-.704-3.712q-.064-.128-.096-.224t-.096-.224q-.576-1.088-1.28-1.984-.256-.384-.544-.704t-.672-.64z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_git" xmlns="http://www.w3.org/2000/svg"><path d="M27.472 12.753 15.247.529a1.803 1.803 0 0 0-2.55 0l-2.84 2.84 2.137 2.137a2.625 2.625 0 0 1 3.501 3.501l3.499 3.499a2.625 2.625 0 1 1-1.237 1.237l-3.499-3.499c-.083.04-.169.075-.257.106v7.3a2.626 2.626 0 1 1-1.75 0v-7.3a2.626 2.626 0 0 1-1.494-3.607L8.62 4.606l-8.09 8.09a1.805 1.805 0 0 0 0 2.551l12.225 12.224a1.803 1.803 0 0 0 2.55 0l12.168-12.168a1.805 1.805 0 0 0 0-2.551z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_gitea" xmlns="http://www.w3.org/2000/svg"><path d="M5.581 7.229c-2.46-.005-5.755 1.559-5.573 5.48.284 6.125 6.56 6.693 9.068 6.743.275 1.149 3.227 5.112 5.412 5.32h9.573c5.741-.381 10.04-17.363 6.853-17.427-5.271.248-8.395.373-11.073.395v5.3l-.835-.369-.005-4.928c-3.075-.001-5.781-.144-10.919-.397-.643-.004-1.539-.113-2.501-.116zm.348 2.166h.293c.349 3.14.917 4.976 2.067 7.781-2.933-.347-5.429-1.199-5.888-4.38-.237-1.647.563-3.365 3.528-3.401zm11.409 3.087c.2.003.404.04.596.128l.999.431-.716 1.305h-.007a.996.996 0 0 0-.321.053l.006-.002c-.349.114-.593.406-.593.749 0 .097.019.189.055.275l-.002-.006a.767.767 0 0 0 .151.233l-.001-.001-1.235 2.248a.99.99 0 0 0-.302.052l.006-.002c-.349.114-.593.406-.593.749 0 .097.019.189.055.275l-.002-.006c.128.31.457.527.843.527a.987.987 0 0 0 .31-.049l-.006.002c.348-.114.592-.406.592-.749 0-.097-.02-.19-.056-.277l.002.006a.784.784 0 0 0-.211-.293l1.203-2.189a.999.999 0 0 0 .397-.041l-.006.002a.942.942 0 0 0 .285-.15l-.001.001c.464.195.844.353 1.117.488.411.203.556.337.6.487.044.147-.004.429-.236.925-.173.369-.46.893-.799 1.511h-.02a.991.991 0 0 0-.321.053l.006-.002c-.349.114-.593.406-.593.749 0 .097.019.189.055.275l-.002-.006c.128.31.457.527.843.527a.987.987 0 0 0 .31-.049l-.006.002c.348-.114.592-.406.592-.749a.703.703 0 0 0-.055-.275l.002.006a.802.802 0 0 0-.183-.27l.001.001c.335-.611.623-1.136.808-1.531.251-.536.381-.935.267-1.32s-.467-.636-.933-.867c-.307-.151-.689-.311-1.147-.503a.723.723 0 0 0-.052-.324l.002.006a.792.792 0 0 0-.194-.279l.704-1.284 3.899 1.684c.704.305.995 1.053.653 1.68l-2.68 4.907c-.343.625-1.184.884-1.888.58l-5.516-2.384c-.704-.304-.996-1.053-.653-1.68l2.68-4.905c.235-.431.707-.687 1.207-.707z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_github" xmlns="http://www.w3.org/2000/svg"><path d="M16 .394c8.833 0 15.999 7.166 15.999 15.999 0 7.062-4.583 13.062-10.937 15.187-.813.146-1.104-.354-1.104-.771 0-.521.021-2.25.021-4.396 0-1.5-.5-2.458-1.083-2.958 3.562-.396 7.312-1.75 7.312-7.896 0-1.75-.625-3.167-1.646-4.291.167-.417.708-2.042-.167-4.25-1.333-.417-4.396 1.646-4.396 1.646a15.032 15.032 0 0 0-8 0S8.937 6.602 7.603 7.018c-.875 2.208-.333 3.833-.167 4.25-1.021 1.125-1.646 2.542-1.646 4.291 0 6.125 3.729 7.5 7.291 7.896-.458.417-.875 1.125-1.021 2.146-.917.417-3.25 1.125-4.646-1.333-.875-1.521-2.458-1.646-2.458-1.646-1.562-.021-.104.979-.104.979 1.042.479 1.771 2.333 1.771 2.333.938 2.854 5.396 1.896 5.396 1.896 0 1.333.021 2.583.021 2.979 0 .417-.292.917-1.104.771C4.582 29.455-.001 23.455-.001 16.393-.001 7.56 7.165.394 15.998.394zM6.063 23.372c.042-.083-.021-.187-.146-.25-.125-.042-.229-.021-.271.042-.042.083.021.187.146.25.104.062.229.042.271-.042zm.646.709c.083-.062.062-.208-.042-.333-.104-.104-.25-.146-.333-.062-.083.062-.062.208.042.333.104.104.25.146.333.062zm.625.937c.104-.083.104-.25 0-.396-.083-.146-.25-.208-.354-.125-.104.062-.104.229 0 .375s.271.208.354.146zm.875.875c.083-.083.042-.271-.083-.396-.146-.146-.333-.167-.417-.062-.104.083-.062.271.083.396.146.146.333.167.417.062zm1.187.521c.042-.125-.083-.271-.271-.333-.167-.042-.354.021-.396.146s.083.271.271.312c.167.062.354 0 .396-.125zm1.313.104c0-.146-.167-.25-.354-.229-.187 0-.333.104-.333.229 0 .146.146.25.354.229.187 0 .333-.104.333-.229zm1.208-.208c-.021-.125-.187-.208-.375-.187-.187.042-.312.167-.292.312.021.125.187.208.375.167s.312-.167.292-.292z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_gitlab" xmlns="http://www.w3.org/2000/svg"><path d="M1.629 11.034 14 26.888.442 17.048a1.09 1.09 0 0 1-.39-1.203l1.578-4.811zm7.217 0h10.309l-5.154 15.854zM5.753 1.475l3.093 9.559H1.63l3.093-9.559a.548.548 0 0 1 1.031 0zm20.618 9.559 1.578 4.811c.141.437-.016.922-.39 1.203l-13.558 9.84 12.371-15.854zm0 0h-7.216l3.093-9.559a.548.548 0 0 1 1.031 0z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_heart" xmlns="http://www.w3.org/2000/svg"><path d="M16 29.714a1.11 1.11 0 0 1-.786-.321L4.072 18.643c-.143-.125-4.071-3.714-4.071-8 0-5.232 3.196-8.357 8.535-8.357 3.125 0 6.053 2.464 7.464 3.857 1.411-1.393 4.339-3.857 7.464-3.857 5.339 0 8.535 3.125 8.535 8.357 0 4.286-3.928 7.875-4.089 8.035L16.785 29.392c-.214.214-.5.321-.786.321z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_info_outline" xmlns="http://www.w3.org/2000/svg"><path d="M12.62 9.793V6.967h2.761v2.826H12.62zM14 25.239q4.601 0 7.92-3.319T25.239 14 21.92 6.08 14 2.761 6.08 6.08 2.761 14t3.319 7.92T14 25.239zM14 0q5.784 0 9.892 4.108T28 14t-4.108 9.892T14 28t-9.892-4.108T0 14t4.108-9.892T14 0zm-1.38 21.033V12.62h2.761v8.413H12.62z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_down" xmlns="http://www.w3.org/2000/svg"><path d="M3.281 5.36 14 16.079 24.719 5.36 28 8.641l-14 14-14-14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M25.875 28.25 22.125 32 6.126 16.001 22.125.002l3.75 3.75-12.25 12.25z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M6.125 28.25 18.375 16 6.125 3.75 9.875 0l15.999 15.999L9.875 31.998z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_up" xmlns="http://www.w3.org/2000/svg"><path d="M24.719 22.64 14 11.921 3.281 22.64 0 19.359l14-14 14 14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_link" xmlns="http://www.w3.org/2000/svg"><path d="M24.037 7.963q3.305 0 5.634 2.366T32 16t-2.329 5.671-5.634 2.366h-6.46v-3.08h6.46q2.028 0 3.493-1.465t1.465-3.493-1.465-3.493-3.493-1.465h-6.46v-3.08h6.46zM9.615 17.578v-3.155h12.77v3.155H9.615zM3.005 16q0 2.028 1.465 3.493t3.493 1.465h6.46v3.08h-6.46q-3.305 0-5.634-2.366T0 16.001t2.329-5.671 5.634-2.366h6.46v3.08h-6.46q-2.028 0-3.493 1.465t-1.465 3.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_mastodon" xmlns="http://www.w3.org/2000/svg"><path d="M30.924 10.506c0-6.941-4.548-8.976-4.548-8.976C24.083.477 20.144.034 16.054.001h-.101C11.862.034 7.926.477 5.633 1.53c0 0-4.548 2.035-4.548 8.976 0 1.589-.031 3.491.02 5.505.165 6.79 1.245 13.479 7.522 15.14 2.893.765 5.379.927 7.38.816 3.629-.2 5.667-1.296 5.667-1.296l-.12-2.633s-2.593.817-5.505.719c-2.887-.099-5.932-.311-6.399-3.855a7.069 7.069 0 0 1-.064-.967v-.028.001s2.833.693 6.423.857c2.195.1 4.253-.129 6.344-.377 4.009-.479 7.5-2.949 7.939-5.207.689-3.553.633-8.676.633-8.676zm-5.366 8.945h-3.329v-8.159c0-1.72-.724-2.592-2.171-2.592-1.6 0-2.403 1.035-2.403 3.083v4.465h-3.311v-4.467c0-2.048-.803-3.083-2.403-3.083-1.447 0-2.171.873-2.171 2.592v8.159H6.441v-8.404c0-1.719.437-3.084 1.316-4.093.907-1.011 2.092-1.528 3.565-1.528 1.704 0 2.995.655 3.848 1.965l.828 1.391.829-1.391c.853-1.311 2.144-1.965 3.848-1.965 1.472 0 2.659.517 3.565 1.528.877 1.009 1.315 2.375 1.315 4.093z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_matrix" xmlns="http://www.w3.org/2000/svg"><path d="M.843.734v30.532H3.04v.733H0V0h3.04v.733zm9.391 9.68v1.543h.044a4.417 4.417 0 0 1 1.489-1.365c.577-.327 1.248-.487 2-.487.72 0 1.377.143 1.975.419.597.277 1.047.776 1.36 1.477.339-.499.8-.941 1.379-1.323.579-.383 1.267-.573 2.061-.573.604 0 1.163.075 1.68.223a3.34 3.34 0 0 1 1.324.707c.368.327.652.745.861 1.268.203.523.307 1.151.307 1.889v7.637h-3.132v-6.468c0-.381-.013-.745-.043-1.083a2.315 2.315 0 0 0-.246-.893l.006.013a1.484 1.484 0 0 0-.577-.593l-.007-.004c-.259-.147-.609-.221-1.047-.221-.443 0-.8.085-1.071.252-.267.166-.483.39-.635.656l-.005.009a2.558 2.558 0 0 0-.307.915l-.002.013a7.156 7.156 0 0 0-.08 1.044v6.359h-3.133v-6.4c0-.339-.005-.671-.024-1.003a2.772 2.772 0 0 0-.197-.936l.007.019a1.41 1.41 0 0 0-.548-.667l-.006-.003c-.259-.167-.635-.253-1.139-.253-.148 0-.345.032-.585.099-.24.068-.48.191-.707.376-.228.184-.425.449-.585.793-.16.345-.24.8-.24 1.36v6.621H7.279v-11.42zm20.923 20.852V.734H28.96V.001H32V32h-3.04v-.733z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_menu" xmlns="http://www.w3.org/2000/svg"><path d="M.001 5.334h31.998v3.583H.001V5.334zm0 12.416v-3.5h31.998v3.5H.001zm0 8.916v-3.583h31.998v3.583H.001z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_notifications" xmlns="http://www.w3.org/2000/svg"><path d="m25.846 22.154 3.308 3.308v1.615H2.847v-1.615l3.308-3.308V14q0-3.846 1.961-6.692t5.423-3.692V2.462q0-1 .692-1.731T16 0t1.769.731.692 1.731v1.154q3.461.846 5.423 3.692T25.846 14v8.154zM16 32q-1.385 0-2.346-.923t-.962-2.308h6.615q0 1.308-1 2.269T15.999 32z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_person" xmlns="http://www.w3.org/2000/svg"><path d="M16 20.023q5.052 0 10.526 2.199t5.473 5.754v4.023H0v-4.023q0-3.555 5.473-5.754t10.526-2.199zM16 16q-3.275 0-5.614-2.339T8.047 8.047t2.339-5.661T16 0t5.614 2.386 2.339 5.661-2.339 5.614T16 16z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_pin" xmlns="http://www.w3.org/2000/svg"><path d="M17.6 19.2h9.6v-1.6L22.4 16V3.2l4.8-1.6V0H4.8v1.6l4.8 1.6V16l-4.8 1.6v1.6h9.6v11.2L16 32l1.6-1.6V19.2z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_rss_feed" xmlns="http://www.w3.org/2000/svg"><path d="M-.481 12.048q8.482 0 14.457 5.976t5.976 14.457h-5.879q0-5.976-4.289-10.264T-.48 17.928v-5.879zm0-11.565q13.204 0 22.601 9.397t9.397 22.601h-5.783q0-10.891-7.662-18.553T-.481 6.266V.483zm0 27.468q0-1.831 1.301-3.132t3.229-1.301 3.181 1.253 1.253 3.181-1.301 3.229-3.132 1.301q-1.928 0-3.229-1.301T-.48 27.952z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_search" xmlns="http://www.w3.org/2000/svg"><path d="M11.925 20.161q3.432 0 5.834-2.402t2.402-5.834-2.402-5.834-5.834-2.402-5.834 2.402-2.402 5.834 2.402 5.834 5.834 2.402zm10.981 0L32 29.255 29.255 32l-9.094-9.094v-1.458l-.515-.515q-3.26 2.831-7.721 2.831-4.976 0-8.45-3.432T.001 11.925t3.474-8.45 8.45-3.474 8.407 3.474 3.432 8.45q0 1.802-.858 4.075t-1.973 3.646l.515.515h1.458z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_security" xmlns="http://www.w3.org/2000/svg"><path d="m16 0 13.072 5.855v8.715q0 6.059-3.745 11.063T16 31.999q-5.583-1.362-9.327-6.366T2.928 14.57V5.855zm0 16v13.004q4.017-1.294 6.808-4.868T26.144 16H16zm0 0V3.2L5.856 7.693v8.306H16z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_star" xmlns="http://www.w3.org/2000/svg"><path d="M14 22.052 5.324 27.31l2.3-9.859L0 10.813l10.056-.854L14 .692l3.944 9.267L28 10.813l-7.624 6.638 2.3 9.859z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_tag" xmlns="http://www.w3.org/2000/svg"><path d="M17.52 17.52v-7.041h-7.041v7.041h7.041zM28 10.479h-7.041v7.041H28v3.439h-7.041V28H17.52v-7.041h-7.041V28H7.04v-7.041H-.001V17.52H7.04v-7.041H-.001V7.04H7.04V-.001h3.439V7.04h7.041V-.001h3.439V7.04H28v3.439z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_timer" xmlns="http://www.w3.org/2000/svg"><path d="M16 29q4.428 0 7.536-3.143t3.107-7.571-3.107-7.536T16 7.643 8.464 10.75t-3.107 7.536 3.107 7.571T16 29zM26.714 9.786q1.214 1.571 2.107 4.036t.893 4.464q0 5.643-4 9.678T16 32t-9.714-4.036-4-9.678 4-9.678T16 4.572q1.929 0 4.464.929t4.107 2.143l2.143-2.214q1.143.929 2.143 2.143zM14.5 19.857v-9.143h3v9.143h-3zM20.571.001v3.071h-9.143V.001h9.143z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_tree" xmlns="http://www.w3.org/2000/svg"><path d="M32 14.423H20.808V9.616h-3.23v12.77h3.23v-4.807H32v12.845H20.808v-4.807h-6.385v-16h-3.23v4.807H.001V1.579h11.192v4.807h9.615V1.579H32v12.845z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_xmpp" xmlns="http://www.w3.org/2000/svg"><path d="M31.995 4.237c-.449.175-1.12.433-1.936.745-1.544.591-2.328.891-2.924 1.093-.613.208-1.287.409-2.635.813-.911.272-1.672.495-2.212.651-.031.875 0 2.177-.292 3.635a21.837 21.837 0 0 1-2.016 5.765c-1.496 2.944-3.236 4.817-3.88 5.476-.056-.059-.112-.117-.168-.179-.707-.763-2.403-2.703-3.815-5.683-1.053-2.223-1.484-4.044-1.605-4.584-.356-1.589-.427-2.955-.427-4.117 0-.075-.036-.129-.101-.149-.721-.223-1.765-.519-2.887-.853-1.271-.379-2.193-.744-3.408-1.2-.493-.185-1.409-.547-2.217-.859C.723 4.499.113 4.236.041 4.236c-.005 0-.015 0-.023.012a.131.131 0 0 0-.019.076c.009.593.08 1.361.256 2.365.615 3.503 2.688 7.061 4.36 9.244 0 0 3.717 5.035 9.128 8.144l.303.176c-.009.008-.02.015-.028.021-1.717 1.316-3.201 1.977-3.579 2.14a15.71 15.71 0 0 1-2.219.772v.407a25.31 25.31 0 0 0 2.72-.487 26.72 26.72 0 0 0 5.075-1.792c.136.067.276.136.42.204 1.527.725 3.571 1.627 6.073 2.048.613.103 1.136.165 1.507.195a.109.109 0 0 0 .115-.091.55.55 0 0 0 .004-.217.107.107 0 0 0-.063-.073c-.505-.209-1.201-.4-1.983-.719-.935-.381-2.241-1.067-3.648-2.128a13.528 13.528 0 0 1-.367-.287c4.64-2.656 7.989-6.588 7.989-6.588 1.735-2.036 4.441-5.623 5.431-9.795.349-1.473.539-2.741.5-3.628z"/></svg></defs></svg>
+
+
+
+
+    <div
+      class="wrapper "
+    >
+      <header class="gblog-header">
+  <div class="container flex flex-wrap">
+    <div class="gblog-header__col-1 flex justify-start hidden-mobile"></div>
+    <div class="gblog-header__col-2 flex align-center justify-center ">
+      <a class="gblog-header__link" rel="me" href="https://re-dojo.github.io/">
+        <span class="gblog-brand flex align-center justify-center">
+          <img
+            class="gblog-brand__img"
+            src="/images/brand/logo.svg"
+            alt=""
+          />
+          <span class="gblog-brand__title">RE-Dojo</span>
+        </span>
+        
+          <span class="gblog-brand__subtitle flex align-center justify-center">Blog about reverse engineering and program analysis</span>
+        
+      </a>
+    </div>
+    <div class="gblog-header__col-3 flex justify-end">
+      <span id="gblog-color-theme">
+        <svg class="gblog-icon gblog_brightness_dark">
+          <title></title>
+          <use xlink:href="#gblog_brightness_dark"></use>
+        </svg>
+        <svg class="gblog-icon gblog_brightness_light">
+          <title></title>
+          <use xlink:href="#gblog_brightness_light"></use>
+        </svg>
+        <svg class="gblog-icon gblog_brightness_auto">
+          <title></title>
+          <use xlink:href="#gblog_brightness_auto"></use>
+        </svg>
+      </span>
+    </div>
+  </div>
+</header>
+<nav class="gblog-nav">
+  <input type="checkbox" id="menu-control" class="hidden" />
+  <div class="gblog-nav__control">
+    <label for="menu-control" class="flex align-center justify-center">
+      <svg class="gblog-icon gblog_menu"><use xlink:href="#gblog_menu"></use></svg>
+      <svg class="gblog-icon gblog_clear"><use xlink:href="#gblog_clear"></use></svg>
+      <span>Navigation</span>
+    </label>
+  </div>
+  <ul class="gblog-nav__list container flex flex-wrap justify-center menu-content">
+    
+    
+      
+    
+    
+  </ul>
+</nav>
+
+
+
+      <main class="gblog-page container">
+        
+  <article class="gblog-post">
+    <header class="gblog-post__header">
+      
+      
+
+
+      <h1 class="gblog-post__title">ECW 2017 - Red Diamond</h1>
+
+      
+        <div class="flex flex-wrap align-center gblog-post__meta gblog-post__meta--head">
+          <span class="flex align-center no-wrap gblog-post__meta--update">
+  <svg class="gblog-icon gblog_date"><use xlink:href="#gblog_date"></use></svg>
+  <span class="gblog-post__tag">
+    <time datetime="2018-09-28T00:00:00Z">
+      
+      Sep 28, 2018
+    </time>
+  </span>
+</span>
+
+<span class="flex align-center no-wrap gblog-post__meta--readtime">
+  <svg class="gblog-icon gblog_timer"><use xlink:href="#gblog_timer"></use></svg>
+  <span class="gblog-post__tag">21 min read</span>
+</span>
+
+
+
+
+
+  
+    
+    
+      
+        <span class="flex align-center no-wrap gblog-post__meta--author">
+          <svg class="gblog-icon gblog_person"><use xlink:href="#gblog_person"></use></svg>
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a class="gblog-button__link" href="/authors/icecr4ck/" title="All posts of this author">
+      icecr4ck
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+
+
+
+
+  
+    
+    
+    
+  
+
+
+
+
+
+
+        </div>
+      
+    </header>
+    <section class="gblog-markdown">
+      <p>Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le <a
+  class="gblog-markdown__link"
+  href="https://challenge-ecw.fr/"
+>challenge ECW</a>. Tout comme l&rsquo;année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense.</p>
+<p>L&rsquo;épreuve qualificative de cette année reprenait les catégories classiques de CTF: Web, Forensics, Crypto et Reverse.</p>
+<p>Parmis les 4 challenges de reverse qui étaient proposés, voici la solution de celui qui m&rsquo;a paru le plus intéressant mais également le plus compliqué à résoudre.</p>
+
+
+
+  <div class="gblog-toc gblog-toc__level--6">
+    <nav id="TableOfContents"><ul>
+        <li><a href="#présentation-du-challenge">Présentation du challenge</a></li>
+        <li><a href="#bytecode-mruby">Bytecode MRuby</a></li>
+        <li><a href="#analyse-statique">Analyse statique</a>
+          <ul>
+            <li><a href="#premier-caractère-du-tableau">Premier caractère du tableau</a></li>
+            <li><a href="#second-dernier-caractère-du-tableau">Second (dernier) caractère du tableau</a></li>
+            <li><a href="#troisième-caractère-du-tableau">Troisième caractère du tableau</a></li>
+            <li><a href="#quatrième-le-second-en-fait-caractère-du-tableau">Quatrième (le second en fait&hellip;) caractère du tableau</a></li>
+            <li><a href="#cinquième-eh-ben-non-le-quatrième-caractère-du-tableau">Cinquième (eh ben non le quatrième) caractère du tableau</a></li>
+            <li><a href="#cinquième-cette-fois-cest-bon-caractère-du-tableau">Cinquième (cette fois c&rsquo;est bon) caractère du tableau</a></li>
+            <li><a href="#sixième-caractère-du-tableau">Sixième caractère du tableau</a></li>
+            <li><a href="#le-septième-et-dernier-ou-pas-caractère-du-tableau">Le septième et dernier (ou pas) caractère du tableau</a></li>
+            <li><a href="#limites-de-lanalyse-statique">Limites de l&rsquo;analyse statique</a></li>
+          </ul>
+        </li>
+        <li><a href="#lanalyse-dynamique">L&rsquo;analyse dynamique</a></li>
+        <li><a href="#retour-à-lanalyse-statique">Retour à l&rsquo;analyse statique</a></li>
+        <li><a href="#conclusion-et-remerciements">Conclusion et remerciements</a></li>
+      </ul></nav>
+    <hr />
+  </div>
+
+
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="présentation-du-challenge"
+    >
+        Présentation du challenge
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#présentation-du-challenge" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Présentation du challenge" href="#pr%c3%a9sentation-du-challenge">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>Le binaire qui nous est donné pour ce challenge est un PE x86-64, sans plus tarder on l&rsquo;ouvre dans son désassembleur préféré pour voir un peu à quoi on a affaire.</p>
+<p>On constate rapidement un nombre élevé de fonctions (un binaire de 6 Mo tout de même), cependant l&rsquo;utilisation d&rsquo;IDA permet de récupérer la quasi totalité des noms de fonctions et variables, ce qui simplifie grandement le travail.</p>
+<p><img
+  src="/images/ecw/functions.PNG"
+  alt="Exemple de fonctions"
+  
+/></p>
+<p>Comme la plupart des fonctions commencent par <strong>mrb</strong>, on fait un peu de Google pour voir à quoi ça fait référence et on trouve rapidement qu&rsquo;il s&rsquo;agit de MRuby, une implémentation plus légère du langage Ruby pouvant être embarqué dans un binaire écrit en C (voir <a
+  class="gblog-markdown__link"
+  href="https://github.com/mruby/mruby"
+>MRuby</a> pour plus d&rsquo;infos).</p>
+<p>Au point d&rsquo;entrée de notre exécutable, on peut voir que plusieurs fonctions relatives à <a
+  class="gblog-markdown__link"
+  href="https://www.cygwin.com/"
+>Cygwin</a> sont appelées, signifiant que le binaire a été compilé avec ce dernier et qu&rsquo;il sera nécessaire d&rsquo;installer Cygwin si on veut pouvoir exécuter/débugger l&rsquo;exécutable.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="bytecode-mruby"
+    >
+        Bytecode MRuby
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#bytecode-mruby" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Bytecode MRuby" href="#bytecode-mruby">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>Ceci étant dit, on peut maintenant s&rsquo;intéresser davantage au code du programme, et particulièrement la fonction <strong>f</strong> qui est la première fonction intéressante à être appelée.</p>
+<p><img
+  src="/images/ecw/bytecode.PNG"
+  alt="Début de la fonction f"
+  
+/></p>
+<p>On peut voir sur la capture ci-dessus qu&rsquo;un segment de données commençant par <strong>RITE0004</strong> est copié en mémoire (dans la variable bin). Un peu de Google montre qu&rsquo;il s&rsquo;agit des premiers bytes d&rsquo;un bytecode MRuby. Il est en effet possible de compiler un script Ruby (valable également en Python par exemple) pour qu&rsquo;il puisse être exécuté plus rapidement. Cependant cela nécessite un programme tiers capable d&rsquo;exécuter ces opcodes spécifiques, autrement dit une VM MRuby.</p>
+<p>Afin de regarder plus précisément à quoi correspond ce bytecode MRuby, je l&rsquo;ai extrait en utilisant ce bout de code IDAPython.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">idaapi</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">struct</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">sea</span> <span class="o">=</span> <span class="n">ScreenEA</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">mrb</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;reddiamond.mrb&#34;</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mh">0x6be</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mrb</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="n">Byte</span><span class="p">(</span><span class="n">sea</span><span class="o">+</span><span class="n">i</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl"><span class="n">mrb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></span></code></pre></div><p>En ouvrant le fichier <code>reddiamond.mrb</code> avec un éditeur hexadécimal, on observe des strings qui nous intéressent pas mal comme <code>Let me check if you deserve a flag ...</code> ou encore <code>flag is:</code>.</p>
+<p>Le challenge est donc de reverser ce petit bout de bytecode pour comprendre comment le flag est généré. Pour cela, il y a 2 écoles:</p>
+<ul>
+<li>analyse statique: on utilise l&rsquo;interpréteur MRuby (disponible <a
+  class="gblog-markdown__link"
+  href="https://github.com/mruby/mruby"
+>ici</a>) pour obtenir une traduction des opcodes et reverser statiquement à partir de là</li>
+<li>analyse dynamique: on essaye de comprendre comment fonctionne la VM pour débugger le bytecode et breaker aux endroits opportuns</li>
+</ul>
+<p>Pour ma part, j&rsquo;ai fini par utiliser les 2 méthodes après avoir passé un bout de temps à reverser statiquement chaque opcode, je pense malgré tout qu&rsquo;il était possible de tout faire statiquement pour quelqu&rsquo;un de familier avec les opcodes MRuby.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="analyse-statique"
+    >
+        Analyse statique
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#analyse-statique" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Analyse statique" href="#analyse-statique">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>Après avoir téléchargé l&rsquo;interpréteur MRuby (voir plus haut pour le lien), on peut l&rsquo;utiliser de la manière suivante pour récupérer tous les opcodes traduits.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ mruby --verbose -b reddiamond.mrb
+</span></span><span class="line"><span class="cl">irep 0x7fba3c702fd0 <span class="nv">nregs</span><span class="o">=</span><span class="m">7</span> <span class="nv">nlocals</span><span class="o">=</span><span class="m">3</span> <span class="nv">pools</span><span class="o">=</span><span class="m">11</span> <span class="nv">syms</span><span class="o">=</span><span class="m">12</span> <span class="nv">reps</span><span class="o">=</span><span class="m">2</span>
+</span></span><span class="line"><span class="cl">      <span class="m">000</span> OP_LOADSELF	R3
+</span></span><span class="line"><span class="cl">      <span class="m">001</span> OP_STRING	R4	L<span class="o">(</span>0<span class="o">)</span>	<span class="p">;</span> <span class="s2">&#34;CRACKME!&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="m">002</span> OP_SEND	R3	:puts	<span class="m">1</span>
+</span></span><span class="line"><span class="cl">      <span class="m">003</span> OP_LOADSELF	R3
+</span></span><span class="line"><span class="cl">      <span class="m">004</span> OP_LOADSELF	R4
+</span></span><span class="line"><span class="cl">      <span class="m">005</span> OP_LOADL	R5	L<span class="o">(</span>1<span class="o">)</span>	<span class="p">;</span> <span class="m">400000</span>
+</span></span><span class="line"><span class="cl">      <span class="m">006</span> OP_SEND	R4	:rand	<span class="m">1</span>
+</span></span><span class="line"><span class="cl">      <span class="m">007</span> OP_SEND	R3	:usleep	<span class="m">1</span>
+</span></span><span class="line"><span class="cl">      <span class="m">008</span> OP_LOADSELF	R3
+</span></span><span class="line"><span class="cl">      <span class="m">009</span> OP_STRING	R4	L<span class="o">(</span>2<span class="o">)</span>	<span class="p">;</span> <span class="s2">&#34;Let me check if you deserve a flag ...&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="m">010</span> OP_SEND	R3	:puts	<span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>...<span class="o">]</span>
+</span></span></code></pre></div><p>Chaque ligne commençant par <strong>irep</strong> représente une fonction et les lignes numérotées en dessous représentent le code de la fonction (chaque ligne = 1 opcode). On dénote ainsi 6 fonctions distinctes.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">irep 0x7fba3c702fd0 nregs=7 nlocals=3 pools=11 syms=12 reps=2
+</span></span><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">irep 0x7fba3c7034b0 nregs=25 nlocals=5 pools=10 syms=19 reps=1
+</span></span><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">irep 0x7fba3c703a80 nregs=8 nlocals=3 pools=0 syms=6 reps=0
+</span></span><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">irep 0x7fba3c703b70 nregs=3 nlocals=1 pools=0 syms=2 reps=2
+</span></span><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">irep 0x7fba3c703c30 nregs=5 nlocals=2 pools=0 syms=1 reps=0
+</span></span><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">irep 0x7fba3c703ce0 nregs=5 nlocals=2 pools=0 syms=1 reps=0
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Outre nous indiquer la présence d&rsquo;une fonction, cet en-tête donne également le nombre de registres (25 au max) utilisés dans la fonction ainsi que le nombre de variables locales et de symboles.</p>
+<p>Comme l&rsquo;entrypoint n&rsquo;est pas précisé dans un MRB, on sait que la première fonction (0x7fba3c702fd0) représente notre main, ce qui paraît logique en voyant les strings affichées.</p>
+<p>Sachant cela, on peut commencer à analyser chaque opcode pour voir un peu ce qui se passe dans cette fonction, pour cela 2 liens du repo Github de MRuby m&rsquo;ont beaucoup servi (voir <a
+  class="gblog-markdown__link"
+  href="https://github.com/mruby/mruby/blob/master/include/mruby/opcode.h"
+>ici</a> et <a
+  class="gblog-markdown__link"
+  href="https://github.com/mruby/mruby/blob/master/src/vm.c"
+>ici</a>)</p>
+<p>Les premiers opcodes du main vont afficher quelques strings qui ne nous intéressent pas trop et vont également exécuter plusieurs fois la fonction usleep (probablement pour éviter un bruteforce du flag).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">000 OP_LOADSELF	R3
+</span></span><span class="line"><span class="cl">001 OP_STRING	R4	L(0)	; &#34;CRACKME!&#34;
+</span></span><span class="line"><span class="cl">002 OP_SEND	R3	:puts	1
+</span></span><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">007 OP_SEND	R3	:usleep	1
+</span></span><span class="line"><span class="cl">008 OP_LOADSELF	R3
+</span></span><span class="line"><span class="cl">009 OP_STRING	R4	L(2)	; &#34;Let me check if you deserve a flag ...&#34;
+</span></span><span class="line"><span class="cl">010 OP_SEND	R3	:puts	1
+</span></span><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">017 OP_SEND	R3	:usleep	1
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Ce qui nous intéresse davantage se situe à l&rsquo;opcode 27 où la fonction <code>found?</code> est appelée. Selon le résultat de cette fonction, 2 comportements sont possibles (<code>OP_JMPNOT</code>):</p>
+<ul>
+<li>soit le programme jump à l&rsquo;opcode 46, affiche la string &ldquo;NO :(&rdquo; et quitte le programme</li>
+<li>soit le programme continue à l&rsquo;opcode 29, afficher la string &ldquo;YES :)&rdquo; avec notre flag et quitte le programme</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">027 OP_SEND	R3	:found?	0
+</span></span><span class="line"><span class="cl">028 OP_JMPNOT	R3	046 
+</span></span><span class="line"><span class="cl">// Good boy
+</span></span><span class="line"><span class="cl">029 OP_LOADSELF	R3
+</span></span><span class="line"><span class="cl">030 OP_STRING	R4	L(5)	; &#34;YES :)&#34;
+</span></span><span class="line"><span class="cl">031 OP_SEND	R3	:puts	1
+</span></span><span class="line"><span class="cl">032 OP_GETCONST	R3	:MD5
+</span></span><span class="line"><span class="cl">033 OP_STRING	R4	L(6)	; &#34;\342\235\250\342\225\257\302\260\342\226\241\302\260\342\235\251\342\225\257\357\270\265\342\224\273\342\224\201\342\224\273&#34;
+</span></span><span class="line"><span class="cl">034 OP_GETGLOBAL	R5	:$salt
+</span></span><span class="line"><span class="cl">035 OP_ADD	R4	:+	1
+</span></span><span class="line"><span class="cl">036 OP_SEND	R3	:md5_hex	1
+</span></span><span class="line"><span class="cl">037 OP_MOVE	R1	R3		; R1:flag
+</span></span><span class="line"><span class="cl">038 OP_LOADSELF	R3
+</span></span><span class="line"><span class="cl">039 OP_STRING	R4	L(7)	; &#34;\tflag is: &#39;&#34;
+</span></span><span class="line"><span class="cl">040 OP_MOVE	R5	R1		; R1:flag
+</span></span><span class="line"><span class="cl">041 OP_STRCAT	R4	R5
+</span></span><span class="line"><span class="cl">042 OP_STRING	R5	L(8)	; &#34;&#39;&#34;
+</span></span><span class="line"><span class="cl">043 OP_STRCAT	R4	R5
+</span></span><span class="line"><span class="cl">044 OP_SEND	R3	:puts	1
+</span></span><span class="line"><span class="cl">045 OP_JMP	049
+</span></span><span class="line"><span class="cl">// Bad boy
+</span></span><span class="line"><span class="cl">046 OP_LOADSELF	R3
+</span></span><span class="line"><span class="cl">047 OP_STRING	R4	L(9)	; &#34;NO :(&#34;
+</span></span><span class="line"><span class="cl">048 OP_SEND	R3	:puts	1
+</span></span><span class="line"><span class="cl">049 OP_JMP	069
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Au premier abord, on pourrait se dire que la longue string est peut-être notre flag, cependant une rapide lecture des opcodes montre que cette string est en fait hashée (MD5) avec la variable globale <code>salt</code> pour donner le flag.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">flag = md5($salt+&#34;\xE2\x9D\xA8\xE2\x95\xAF\xC2\xB0\xE2\x96\xA1\xC2\xB0\xE2\x9D\xA9\xE2\x95\xAF\xEF\xB8\xB5\xE2\x94\xBB\xE2\x94\x81\xE2\x94\xBB&#34;)
+</span></span></code></pre></div><p>Il faut donc aller regarder un peu du côté de la fonction <code>found?</code> pour voir où est-ce que cette variable globale est initialisée, c&rsquo;est aussi là que l&rsquo;analyse statique devient plus complexe&hellip;</p>
+<p>Le début de la fonction est assez compliqué pour pas grand chose au final, tout ce que fait ce petit bout de code est de générer un tableau comprenant les valeurs &ldquo;utf-0&rdquo; &ldquo;utf-1&rdquo;&hellip; jusqu&rsquo;à &ldquo;utf-30&rdquo; pour récupérer uniquement &ldquo;utf-8&rdquo; et &ldquo;utf-16&rdquo;.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">// Génération du tableau dans R2
+</span></span><span class="line"><span class="cl">001 OP_STRING	R5	L(0)	; &#34;utf-0&#34;
+</span></span><span class="line"><span class="cl">002 OP_STRING	R6	L(1)	; &#34;utf-9&#34;
+</span></span><span class="line"><span class="cl">003 OP_RANGE	R5	R5	0
+</span></span><span class="line"><span class="cl">004 OP_SEND	R5	:to_a	0
+</span></span><span class="line"><span class="cl">005 OP_STRING	R6	L(2)	; &#34;utf-10&#34;
+</span></span><span class="line"><span class="cl">006 OP_STRING	R7	L(3)	; &#34;utf-30&#34;
+</span></span><span class="line"><span class="cl">007 OP_RANGE	R6	R6	0
+</span></span><span class="line"><span class="cl">008 OP_SEND	R6	:to_a	0
+</span></span><span class="line"><span class="cl">009 OP_ADD	R5	:+	1
+</span></span><span class="line"><span class="cl">010 OP_MOVE	R2	R5		; R2:&#34;\302\265&#34;
+</span></span><span class="line"><span class="cl">011 OP_LOADSELF	R5
+</span></span><span class="line"><span class="cl">012 OP_GETCONST	R6	:Iconv
+</span></span><span class="line"><span class="cl">013 OP_MOVE	R7	R2		; R2:&#34;\302\265&#34;
+</span></span><span class="line"><span class="cl">// Stockage de &#34;utf-8&#34; dans R7
+</span></span><span class="line"><span class="cl">014 OP_LOADI	R8	8
+</span></span><span class="line"><span class="cl">015 OP_SEND	R7	:[]	1
+</span></span><span class="line"><span class="cl">016 OP_MOVE	R8	R2		; R2:&#34;\302\265&#34;
+</span></span><span class="line"><span class="cl">// Stockage de &#34;utf-16&#34; dans R8
+</span></span><span class="line"><span class="cl">017 OP_LOADI	R9	16
+</span></span><span class="line"><span class="cl">018 OP_SEND	R8	:[]	1
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>La suite du code montre que le programme extrait ces 2 strings pour convertir la string <code>ARGV[2]</code> de UTF-16 en UTF-8, en utilisant la fonction suivante.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="line"><span class="cl"><span class="no">Iconv</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">to</span><span class="p">,</span> <span class="n">from</span><span class="p">,</span> <span class="n">str</span><span class="p">)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">// Stocke la string &#34;ARGV[2]&#34; en UTF-16 dans les registres R11 à R24 
+</span></span><span class="line"><span class="cl">021 OP_LOADI	R11	0
+</span></span><span class="line"><span class="cl">022 OP_LOADI	R12	65
+</span></span><span class="line"><span class="cl">023 OP_LOADI	R13	0
+</span></span><span class="line"><span class="cl">024 OP_LOADI	R14	82
+</span></span><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">035 OP_ARRAY	R9	R9	16
+</span></span><span class="line"><span class="cl">036 OP_STRING	R10	L(4)	; &#34;C*&#34;
+</span></span><span class="line"><span class="cl">037 OP_SEND	R9	:pack	1
+</span></span><span class="line"><span class="cl">// Appel de la fonction conv de la classe Iconv (voir opcode 12)
+</span></span><span class="line"><span class="cl">038 OP_SEND	R6	:conv	3
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>La suite du programme consiste à récupérer la valeur contenue dans <code>ARGV[2]</code> qui <strong>ne correspond pas au premier mais bel et bien au second argument donné au programme</strong> (le premier argument n&rsquo;est donc pas utilisé par le programme).</p>
+<p>Le programme doit donc être exécuté de la manière suivante pour obtenir le flag.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</span></span></code></pre></div><p>Une fois que le programme a récupéré notre input, il va prendre uniquement les 8 premiers caractères de celui-ci et les stocker dans un tableau, puis vérifier chacun d&rsquo;entre eux de manière différente.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">051 OP_LOADI	R6	0
+</span></span><span class="line"><span class="cl">052 OP_LOADI	R7	7
+</span></span><span class="line"><span class="cl">// Range de 0 à 7 par pas de 1
+</span></span><span class="line"><span class="cl">053 OP_RANGE	R6	R6	0
+</span></span><span class="line"><span class="cl">// R5 contient notre input, le range est donc appliqué sur celui-ci pour ne récupérer que les 8 premiers caractères dans un tableau
+</span></span><span class="line"><span class="cl">054 OP_SEND	R5	:[]	1
+</span></span><span class="line"><span class="cl">// Le tableau contenant les 8 premiers caractères est stocké dans R3
+</span></span><span class="line"><span class="cl">055 OP_MOVE	R3	R5
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="premier-caractère-du-tableau"
+    >
+        Premier caractère du tableau
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#premier-caractère-du-tableau" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Premier caractère du tableau" href="#premier-caract%c3%a8re-du-tableau">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">058 OP_MOVE	R5	R3		; R3:&#34;\302\244&#34;
+</span></span><span class="line"><span class="cl">059 OP_SEND	R5	:first	0
+</span></span><span class="line"><span class="cl">060 OP_STRING	R6	L(5)	; &#34;W&#34;
+</span></span><span class="line"><span class="cl">061 OP_EQ		R5	:==	1
+</span></span><span class="line"><span class="cl">062 OP_MOVE	R4	R5		; R4:&#34;\302\247&#34;
+</span></span><span class="line"><span class="cl">063 OP_JMPNOT	R5	068
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Le premier caractère est très facile à comprendre, le programme va simplement utiliser la fonction <code>first</code> pour récupérer le premier caractère du tableau et le comparer à <code>W</code>, le retour de l&rsquo;égalité est placé dans R4 (qui correspond à la valeur de retour de la fonction) puis il jump à l&rsquo;opcode 68 si l&rsquo;égalité n&rsquo;est pas vérifiée. Ce dernier correspond au <code>OP_JMPNOT</code> du caractère suivant qu&rsquo;il va suivre également, et ainsi de suite jusqu&rsquo;à la fin de la fonction pour finalement retourner la valeur 0.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="second-dernier-caractère-du-tableau"
+    >
+        Second (dernier) caractère du tableau
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#second-dernier-caractère-du-tableau" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Second (dernier) caractère du tableau" href="#second-dernier-caract%c3%a8re-du-tableau">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">064 OP_MOVE	R5	R3		; R3:&#34;\302\244&#34;
+</span></span><span class="line"><span class="cl">065 OP_SEND	R5	:last	0
+</span></span><span class="line"><span class="cl">066 OP_STRING	R6	L(6)	; &#34;a&#34;
+</span></span><span class="line"><span class="cl">067 OP_EQ		R5	:==	1
+</span></span><span class="line"><span class="cl">068 OP_MOVE	R4	R5		; R4:&#34;\302\247&#34;
+</span></span><span class="line"><span class="cl">069 OP_JMPNOT	R5	077
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Le second caractère est en réalité le dernier puisque le programme utilise la fonction <code>last</code>, celui-ci est comparé à <code>a</code>, puis la même routine est appliquée selon le résultat de l&rsquo;égalité.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="troisième-caractère-du-tableau"
+    >
+        Troisième caractère du tableau
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#troisième-caractère-du-tableau" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Troisième caractère du tableau" href="#troisi%c3%a8me-caract%c3%a8re-du-tableau">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">070 OP_MOVE	R5	R3		; R3:&#34;\302\244&#34;
+</span></span><span class="line"><span class="cl">071 OP_LOADI	R6	1
+</span></span><span class="line"><span class="cl">072 OP_ADDI	R6	:+	1
+</span></span><span class="line"><span class="cl">073 OP_SEND	R5	:[]	1
+</span></span><span class="line"><span class="cl">074 OP_MOVE	R6	R3		; R3:&#34;\302\244&#34;
+</span></span><span class="line"><span class="cl">075 OP_SEND	R6	:first	0
+</span></span><span class="line"><span class="cl">076 OP_EQ		R5	:==	1
+</span></span><span class="line"><span class="cl">077 OP_MOVE	R4	R5		; R4:&#34;\302\247&#34;
+</span></span><span class="line"><span class="cl">078 OP_JMPNOT	R5	085
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Celui-ci commence déjà à devenir plus compliqué, en convertissant les opcodes en quelque chose de plus compréhensible ça donne la séquence suivante:</p>
+<ul>
+<li>R6 = 1</li>
+<li>R6 += 1</li>
+<li>R5 = input[R6]</li>
+<li>R6 = first(input)</li>
+<li>R5 == R6 ?</li>
+</ul>
+<p>Cela revient finalement à comparer le troisième caractère de notre clé avec <code>W</code>.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="quatrième-le-second-en-fait-caractère-du-tableau"
+    >
+        Quatrième (le second en fait&hellip;) caractère du tableau
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#quatrième-le-second-en-fait-caractère-du-tableau" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Quatrième (le second en fait&hellip;) caractère du tableau" href="#quatri%c3%a8me-le-second-en-fait-caract%c3%a8re-du-tableau">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">079 OP_MOVE	R5	R3		; R3:&#34;\302\244&#34;
+</span></span><span class="line"><span class="cl">080 OP_LOADI	R6	1
+</span></span><span class="line"><span class="cl">081 OP_SEND	R5	:[]	1
+</span></span><span class="line"><span class="cl">082 OP_LOADI	R6	0
+</span></span><span class="line"><span class="cl">083 OP_SEND	R6	:to_s	0
+</span></span><span class="line"><span class="cl">084 OP_EQ		R5	:==	1
+</span></span><span class="line"><span class="cl">085 OP_MOVE	R4	R5		; R4:&#34;\302\247&#34;
+</span></span><span class="line"><span class="cl">086 OP_JMPNOT	R5	095
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Les instructions ci-dessus peuvent facilement se traduire de la manière suivante:</p>
+<ul>
+<li>R6 = 1</li>
+<li>R5 = input[R6]</li>
+<li>R6 = to_s(0)</li>
+<li>R5 == R6 ?</li>
+</ul>
+<p>Un peu de google montre que la fonction <code>to_s</code> convertit simplement un integer en string, donc le deuxième caractère est <code>0</code>.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="cinquième-eh-ben-non-le-quatrième-caractère-du-tableau"
+    >
+        Cinquième (eh ben non le quatrième) caractère du tableau
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#cinquième-eh-ben-non-le-quatrième-caractère-du-tableau" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Cinquième (eh ben non le quatrième) caractère du tableau" href="#cinqui%c3%a8me-eh-ben-non-le-quatri%c3%a8me-caract%c3%a8re-du-tableau">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<pre tabindex="0"><code>[...]
+087 OP_MOVE	R5	R3		; R3:&#34;\302\244&#34;
+088 OP_LOADI	R6	3
+089 OP_SEND	R5	:[]	1
+090 OP_SEND	R5	:to_i	0
+091 OP_SUBI	R5	:-	1
+092 OP_LOADI	R6	2
+093 OP_ADDI	R6	:+	2
+094 OP_EQ		R5	:==	1
+095 OP_MOVE	R4	R5		; R4:&#34;\302\247&#34;
+096 OP_JMPNOT	R5	103
+[...]
+</code></pre><p>Encore une fois on peut représenter le code de la manière suivante:</p>
+<ul>
+<li>R6 = 3</li>
+<li>R5 = input[R6]</li>
+<li>R5 = to_i(R5)</li>
+<li>R5 -= 1</li>
+<li>R6 = 2</li>
+<li>R6 += 2</li>
+<li>R5 == R6 ?</li>
+</ul>
+<p>À l&rsquo;inverse de la fonction <code>to_s</code>, la fonction <code>to_i</code> convertit une string en integer, le programme va donc chercher le quatrième caractère de notre input, le convertir en integer et lui soustraire 1 pour finalement le comparer à 4. Le quatrième caractère est donc <code>5</code>.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="cinquième-cette-fois-cest-bon-caractère-du-tableau"
+    >
+        Cinquième (cette fois c&rsquo;est bon) caractère du tableau
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#cinquième-cette-fois-cest-bon-caractère-du-tableau" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Cinquième (cette fois c&rsquo;est bon) caractère du tableau" href="#cinqui%c3%a8me-cette-fois-cest-bon-caract%c3%a8re-du-tableau">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">097 OP_MOVE	R5	R3		; R3:&#34;\302\244&#34;
+</span></span><span class="line"><span class="cl">098 OP_STRING	R6	L(7)	; &#34;4&#34;
+</span></span><span class="line"><span class="cl">099 OP_SEND	R6	:to_i	0
+</span></span><span class="line"><span class="cl">100 OP_SEND	R5	:[]	1
+</span></span><span class="line"><span class="cl">101 OP_STRING	R6	L(8)	; &#34;9&#34;
+</span></span><span class="line"><span class="cl">102 OP_EQ		R5	:==	1
+</span></span><span class="line"><span class="cl">103 OP_MOVE	R4	R5		; R4:&#34;\302\247&#34;
+</span></span><span class="line"><span class="cl">104 OP_JMPNOT	R5	113
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Toujours le même raisonnement, le cinquième caractère est donc <code>9</code>, voici une traduction sous forme de pseudo-code.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">input[to_i(&#34;4&#34;)] == &#34;9&#34; ?
+</span></span></code></pre></div><div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="sixième-caractère-du-tableau"
+    >
+        Sixième caractère du tableau
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#sixième-caractère-du-tableau" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Sixième caractère du tableau" href="#sixi%c3%a8me-caract%c3%a8re-du-tableau">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">105 OP_MOVE	R5	R3		; R3:&#34;\302\244&#34;
+</span></span><span class="line"><span class="cl">106 OP_LOADI	R6	5
+</span></span><span class="line"><span class="cl">107 OP_LOADI	R7	-1
+</span></span><span class="line"><span class="cl">108 OP_RANGE	R6	R6	0
+</span></span><span class="line"><span class="cl">109 OP_SEND	R5	:[]	1
+</span></span><span class="line"><span class="cl">110 OP_SEND	R5	:first	0
+</span></span><span class="line"><span class="cl">111 OP_STRING	R6	L(9)	; &#34;(&#34;
+</span></span><span class="line"><span class="cl">112 OP_EQ		R5	:==	1
+</span></span><span class="line"><span class="cl">113 OP_MOVE	R4	R5		; R4:&#34;\302\247&#34;
+</span></span><span class="line"><span class="cl">114 OP_JMPNOT	R5	122
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Celui-ci se veut un peu plus pénible à comprendre, l&rsquo;idée derrière consiste à générer un range allant de 5 à 0 par pas de -1 (instructions 106 à 108), et d&rsquo;appliquer ce range à notre input pour obtenir un tableau inversé des 6 premiers caractères de notre clé.</p>
+<p>Une fois ce tableau obtenu, le premier élément de ce dernier (correspondant au 6e caractère de l&rsquo;input) est comparé au caractère <code>(</code>.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="le-septième-et-dernier-ou-pas-caractère-du-tableau"
+    >
+        Le septième et dernier (ou pas) caractère du tableau
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#le-septième-et-dernier-ou-pas-caractère-du-tableau" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Le septième et dernier (ou pas) caractère du tableau" href="#le-septi%c3%a8me-et-dernier-ou-pas-caract%c3%a8re-du-tableau">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">115 OP_MOVE	R5	R3		; R3:&#34;\302\244&#34;
+</span></span><span class="line"><span class="cl">116 OP_LOADSYM	R6	:[]
+</span></span><span class="line"><span class="cl">117 OP_LOADI	R7	-2
+</span></span><span class="line"><span class="cl">118 OP_SEND	R5	:send	2
+</span></span><span class="line"><span class="cl">119 OP_SEND	R5	:to_f	0
+</span></span><span class="line"><span class="cl">120 OP_LOADI	R6	8
+</span></span><span class="line"><span class="cl">121 OP_EQ		R5	:==	1
+</span></span><span class="line"><span class="cl">122 OP_MOVE	R4	R5 
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Après avoir fait un peu de google pour comprendre que la fonction <code>to_f</code> convertit un integer/string en float et qu&rsquo;un tableau peut être indexé en sens inverse avec des indices négatifs, ce caractère ne présente aucune difficulté.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">to_f(input[-2]) == 8 ?
+</span></span></code></pre></div><p>Le septième caractère est donc <code>8</code>, ce qui fait que nous avons pu récupérer les 8 premiers caractères de la clé, c&rsquo;est à dire <code>W0W59(8a</code>.</p>
+<p>Cependant, la fonction ne s&rsquo;arrête pas là et c&rsquo;est ici que les problèmes commencent.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="limites-de-lanalyse-statique"
+    >
+        Limites de l&rsquo;analyse statique
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#limites-de-lanalyse-statique" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Limites de l&rsquo;analyse statique" href="#limites-de-lanalyse-statique">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>L&rsquo;analyse des opcodes en statique commence à montrer ces limites lorsqu&rsquo;il faut comprendre la séquence d&rsquo;instructions suivantes.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">123 OP_LOADI	R5	8
+</span></span><span class="line"><span class="cl">124 OP_LAMBDA	R6	I(+1)	block
+</span></span><span class="line"><span class="cl">125 OP_SENDB	R5	:times	0
+</span></span><span class="line"><span class="cl">126 OP_MOVE	R5	R4
+</span></span><span class="line"><span class="cl">127 OP_JMPNOT	R5	132
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>On peut voir que la fonction <code>_times_</code> est appelée pour répéter un bloc de code 8 fois, le problème est que ne nous savons pas de quel bloc il s&rsquo;agit.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">132 OP_MOVE	R4	R5		; R4:&#34;\302\247&#34;
+</span></span><span class="line"><span class="cl">133 OP_SETGLOBAL	:$salt	R3		; R3:&#34;\302\244&#34;
+</span></span><span class="line"><span class="cl">134 OP_RETURN	R4	normal		; R4:&#34;\302\247&#34;
+</span></span></code></pre></div><p>Si ce bloc de code retourne 0, le programme jump à l&rsquo;instruction 132 qui stocke notre input dans la variable globale <code>salt</code> et termine la fonction en retournant 0.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">128 OP_MOVE	R5	R2		; R2:&#34;\302\265&#34;
+</span></span><span class="line"><span class="cl">129 OP_SEND	R5	:size	0
+</span></span><span class="line"><span class="cl">130 OP_LOADI	R6	16
+</span></span><span class="line"><span class="cl">131 OP_EQ	R5	:==	1
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Il faut donc que ce bloc retourne <code>_Vrai_</code> pour obtenir le flag, si c&rsquo;est le cas, la taille de notre input est comparée à 16 avant de poursuivre.</p>
+<p>Comme nous avons les 8 premiers caractères et que le bloc de code (qui nous est inconnu) est exécuté 8 fois, on peut supposer que cette routine doit vérifier un caractère à la fois à partir du 9ème.</p>
+<p>Il nous faut juste savoir ce qui est exécuté et c&rsquo;est là que l&rsquo;analyse dynamique entre en jeu !</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="lanalyse-dynamique"
+    >
+        L&rsquo;analyse dynamique
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#lanalyse-dynamique" class="gblog-post__anchor clip flex align-center" aria-label="Anchor L&rsquo;analyse dynamique" href="#lanalyse-dynamique">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>L&rsquo;analyse dynamique implique d&rsquo;exécuter le programme, il faut donc installer <code>cygwin</code> au préalable pour pouvoir lancer le challenge.</p>
+<p>Personnellement, j&rsquo;ai choisi d&rsquo;utiliser <code>gdb</code> pour debugger le binaire puisqu&rsquo;il est intégré dans <code>cygwin</code>.</p>
+<p>Comme précisé précedemment le binaire doit être exécuté de la manière suivante si on veut avoir une quelconque chance d&rsquo;obtenir le flag.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</span></span><span class="line"><span class="cl"><span class="c1"># ou dans gdb</span>
+</span></span><span class="line"><span class="cl">$ gdb ./86288dbbdadbe4d7e04dc1a4c4603f5b.exe
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> r &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</span></span></code></pre></div><p>Sachant cela, revenons dans IDA pour comprendre comment on va pouvoir breaker sur une instruction particulière de notre bytecode.</p>
+<p>Lorsqu&rsquo;on analyse un binaire protégé par une VM, une des premières choses à comprendre est de voir comment celle-ci va aller chercher une instruction en mémoire (le dispatcher), puis comment celle-ci va être décodée (pour récupérer l&rsquo;opcode et les opérandes) et enfin comment le bon handler (le code natif correspondant à l&rsquo;opcode, il y en a un pour chaque opcode) va être appelé. Une fois qu&rsquo;on est en possession de ces informations, on sait dans quelle variable le pointeur d&rsquo;instruction est stocké (ce qui nous permet de breaker sur n&rsquo;importe quelle instruction) et on sait où sont nos opérandes.</p>
+<p>En résumé une VM est une grosse boucle qui va effectuer les actions suivantes.</p>
+<ol>
+<li>Prendre une instruction en mémoire (là où le bytecode a été mappé).</li>
+<li>Décoder l&rsquo;instruction pour récupéré l&rsquo;opcode et les opérandes.</li>
+<li>Exécuter le handler correspondant à l&rsquo;opcode.</li>
+<li>Recommencer en prenant l&rsquo;instruction suivante.</li>
+</ol>
+<p>Dans notre cas, il faut jeter un coup d&rsquo;oeil à la fonction <code>mrb_vm_exec</code> qui comporte notamment les différents handlers des opcodes. Comme IDA récupère tous les symboles, on peut voir qu&rsquo;au début de la fonction, la variable <code>pc</code> est initialisée avec le registre r9.</p>
+<p><img
+  src="/images/ecw/init_pc.png"
+  alt="Initialisation du program counter"
+  
+/></p>
+<p>Cette variable correspond au <code>Program Counter</code> qui est notre pointeur d&rsquo;instruction. Autrement dit, on peut se servir du contenu du registre r9 pour breaker au moment où le bytecode MRuby commence à être exécuté.</p>
+<p>Comme c&rsquo;est la variable pc qui contient notre pointeur d&rsquo;instruction, on peut regarder à quel moment elle est mise à jour pour passer à l&rsquo;instruction suivante. Il s&rsquo;agit d&rsquo;un point particulièrement important car il existe plusieurs manières de gérer ce point là:</p>
+<ul>
+<li>soit il existe un dispatcher qui gère la mise à jour du pointeur d&rsquo;instruction et dans ce cas chaque handler va jumper vers ce dispatcher une fois fini pour qu&rsquo;il puisse récupérer et décoder l&rsquo;instruction suivante;</li>
+<li>soit chaque handler gère la mise à jour du pointeur d&rsquo;instruction et le décodage de l&rsquo;instruction et dans ce cas on passe directement de handler à handler.</li>
+</ul>
+<p>Pour distinguer les 2, il suffit simplement de regarder les cross-références de la variable <code>pc</code> dans IDA. Dans notre cas, on constate rapidement qu&rsquo;elle est mise à jour dans chaque handler et qu&rsquo;on se trouve donc dans le second cas. Comme les instructions sont alignées sur 32-bits en MRuby, le pointeur d&rsquo;instruction est incrémenté de 4 à chaque instruction.</p>
+<p>Sachant cela, on peut désormais breaker à l&rsquo;instruction que l&rsquo;on souhaite en mettant un premier breakpoint conditionnel (voir <a
+  class="gblog-markdown__link"
+  href="https://sourceware.org/gdb/onlinedocs/gdb/Conditions.html"
+>ici</a> pour la doc) pour breaker au début du bytecode, à partir de là on peut récupérer l&rsquo;adresse mémoire à laquelle on retrouve notre pointeur d&rsquo;instruction, puis mettre un watchpoint conditionnel (voir <a
+  class="gblog-markdown__link"
+  href="https://sourceware.org/gdb/onlinedocs/gdb/Set-Watchpoints.html"
+>ici</a>) sur ce dernier pour breaker à l&rsquo;instruction que l&rsquo;on souhaite.</p>
+<p>Il y a toutefois un bémol à cette technique, il y a plusieurs instructions qui sont strictement identiques (que ce soit l&rsquo;opcode ou les opérandes). Dans ce cas, le seul moyen de savoir où l&rsquo;on se situe dans le flot d&rsquo;instructions est de regarder les instructions précédentes et suivantes pour se repérer. Sinon, une bonne solution est d&rsquo;avancer dans le code petit à petit pour être sur de s&rsquo;y retrouver.</p>
+<p>Un exemple pour illustrer tout ça. Mettons que je veuille breaker à la 3ème instruction du <code>main</code>.</p>
+<p>La première étape va consister à breaker sur le début du programme en utilisant les commandes suivantes (l&rsquo;adresse <code>0x1004350EC</code> correspond à l&rsquo;instruction initialisant le pointeur d&rsquo;instruction dans la fonction <code>vm_mrb_exec</code> et <code>0x01800006</code> correspond à la première instruction).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">(gdb) b *0x1004350EC
+</span></span><span class="line"><span class="cl">(gdb) condition 1 *$r9 == 0x01800006
+</span></span><span class="line"><span class="cl">(gdb) r &lt;premier_arg_osef&gt; &lt;second_arg_clé&gt;
+</span></span></code></pre></div><p>On peut alors récupérer l&rsquo;adresse mémoire où se trouve la variable <code>pc</code> (<code>0xffffc298</code> dans mon cas) pour créer notre watchpoint conditionnel. Le pointeur d&rsquo;instruction est initialisé à <code>0x60009d170</code>, donc notre 3ème instruction à laquelle on veut breaker est à <code>0x60009d178</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">(gdb) watch *0xffffc298
+</span></span><span class="line"><span class="cl">(gdb) condition 2 *0xffffc298 == 0x9d178
+</span></span><span class="line"><span class="cl">(gdb) c
+</span></span></code></pre></div><p>Et on se retrouve ainsi au moment où le pointeur d&rsquo;instruction est mis à jour à la fin du handler de la seconde instruction :-)</p>
+<p>Si on revient maintenant au blocage sur l&rsquo;analyse statique, il nous suffit d&rsquo;utiliser cette technique pour breaker sur l&rsquo;instruction 125 de la fonction <code>found?</code>. Puis de breaker sur l&rsquo;instruction suivante (en incrémentant de 4 la condition de notre watchpoint) pour voir quel handler est appelé.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">125 OP_SENDB    R5      :times  0
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Finalement, on se rend compte que le bloc qui est appelé est en réalité la 3ème fonction du bytecode (voir ci-dessous).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">irep 0x7fd0a4d06620 nregs=8 nlocals=3 pools=0 syms=6 reps=0
+</span></span><span class="line"><span class="cl">      000 OP_ENTER	1:0:0:0:0:0:0
+</span></span><span class="line"><span class="cl">      001 OP_GETUPVAR	R3	4	0
+</span></span><span class="line"><span class="cl">      002 OP_JMPNOT	R3	015
+</span></span><span class="line"><span class="cl">      003 OP_GETUPVAR	R3	2	0
+</span></span><span class="line"><span class="cl">      004 OP_MOVE	R4	R1		; R1:n
+</span></span><span class="line"><span class="cl">      005 OP_SEND	R3	:[]	1
+</span></span><span class="line"><span class="cl">      006 OP_GETUPVAR	R4	2	0
+</span></span><span class="line"><span class="cl">      007 OP_MOVE	R5	R1		; R1:n
+</span></span><span class="line"><span class="cl">      008 OP_SEND	R5	:-@	0
+</span></span><span class="line"><span class="cl">      009 OP_SUBI	R5	:-	1
+</span></span><span class="line"><span class="cl">      010 OP_SEND	R4	:[]	1
+</span></span><span class="line"><span class="cl">      011 OP_MOVE	R5	R1		; R1:n
+</span></span><span class="line"><span class="cl">      012 OP_ADDI	R5	:+	1
+</span></span><span class="line"><span class="cl">      013 OP_SEND	R4	:^	1
+</span></span><span class="line"><span class="cl">      014 OP_EQ		R3	:==	1
+</span></span><span class="line"><span class="cl">      015 OP_SETUPVAR	R3	4	0
+</span></span><span class="line"><span class="cl">      016 OP_RETURN	R3	normal
+</span></span></code></pre></div><p>Cette fonction va donc être appelée 8 fois d&rsquo;affilée (fonction <code>times</code> vu précédemment) pour tester les 8 caractères restants de notre clé.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="retour-à-lanalyse-statique"
+    >
+        Retour à l&rsquo;analyse statique
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#retour-à-lanalyse-statique" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Retour à l&rsquo;analyse statique" href="#retour-%c3%a0-lanalyse-statique">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>Maintenant qu&rsquo;on sait quelle fonction est appelée, il ne reste plus qu&rsquo;à l&rsquo;analyser pour voir ce qu&rsquo;elle fait.</p>
+<p>L&rsquo;opcode <code>OP_GETUPVAR</code> va aller chercher la valeur du registre de la fonction appelante selon l&rsquo;opérande qui est utilisé.</p>
+<p>Par exemple pour l&rsquo;instruction 1 de notre bloc, c&rsquo;est la valeur de R4 de la fonction <code>found?</code> qui va être stockée dans R3.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">001 OP_GETUPVAR   R3      4       0
+</span></span><span class="line"><span class="cl">002 OP_JMPNOT     R3      015
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Pour rappel, cette valeur correspond au résultat de l&rsquo;égalité du 8ème caractère (le 7ème en fait si vous vous souvenez bien) de notre input. Comme cette instruction est suivie du opcode <code>OP_JMPNOT</code>, si l&rsquo;égalité est fausse, le programme jump directement à l&rsquo;instruction 15 du bloc qui stocke la valeur de R3 dans le registre R4 de la fonction <code>found?</code> et termine l&rsquo;exécution de la fonction.</p>
+<p>Si notre caractère est bon, la fonction continue à l&rsquo;instruction 3.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">003 OP_GETUPVAR   R3      2       0
+</span></span><span class="line"><span class="cl">004 OP_MOVE       R4      R1              ; R1:n
+</span></span><span class="line"><span class="cl">005 OP_SEND       R3      :[]     1
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Cette fois-ci, <code>OP_GETUPVAR</code> permet de récupérer le R2 de <code>found?</code> qui correspond à notre input en entier (pas juste les 8 premiers caractères) défini à l&rsquo;instruction 49 de la fonction <code>found?</code>. Grâce aux symboles on peut voir que R1 représente <code>n</code>, c&rsquo;est-à-dire l&rsquo;itération de la fonction <code>times</code>, il va donc varier de 0 à 7 par pas de 1 à chaque exécution de la fonction. Comme il s&rsquo;agit de la première exécution, R1 est vide donc le premier caractère de notre input est stocké dans R3 (c&rsquo;est-à dire le caractère <code>W</code>).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">006 OP_GETUPVAR   R4      2       0
+</span></span><span class="line"><span class="cl">007 OP_MOVE       R5      R1              ; R1:n
+</span></span><span class="line"><span class="cl">008 OP_SEND       R5      :-@     0
+</span></span><span class="line"><span class="cl">009 OP_SUBI       R5      :-      1
+</span></span><span class="line"><span class="cl">010 OP_SEND       R4      :[]     1
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Ensuite, notre clé est à nouveau récupérée pour être stockée dans R4 en utilisant à nouveau l&rsquo;opcode <code>OP_GETUPVAR</code>, puis R1 (qui vaut toujours 0) est stocké dans R5 et l&rsquo;instruction 8 converti la valeur de R5 en valeur négative (1 en -1 par exemple). Cependant, comme R5 vaut 0, il reste à 0. Finalement, on soustrait 1 à R5 (ce qui donne -1) pour récupérer le dernier caractère de notre input (le 16e donc) et le stocker dans R4.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Plain" data-lang="Plain"><span class="line"><span class="cl">[...]
+</span></span><span class="line"><span class="cl">011 OP_MOVE       R5      R1              ; R1:n
+</span></span><span class="line"><span class="cl">012 OP_ADDI       R5      :+      1
+</span></span><span class="line"><span class="cl">013 OP_SEND       R4      :^      1
+</span></span><span class="line"><span class="cl">014 OP_EQ         R3      :==     1
+</span></span><span class="line"><span class="cl">[...]
+</span></span></code></pre></div><p>Finalement, l&rsquo;itérateur (R1) est à nouveau copié dans R5, auquel on ajoute 1, puis on XOR le tout avec R4 qui correspond au dernier caractère de notre clé. Cela a simplement pour effet d&rsquo;ajouter 1 à l&rsquo;ordinal de ce dernier. Le résultat est ensuite comparé à R3 correspondant au premier caractère de la clé. On peut ainsi rapidement en déduire que le dernier caractère de la clé est <code>V</code>.</p>
+<p>Comme R1 est incrémenté à chaque exécution de la fonction, on comprend que les caractères de la seconde partie de la clé sont vérifiés à partir de la première partie. Pour résumer tout ça, voici une implémentation du check des 8 derniers caractères en pseudo-code.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">is_equal</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># on part du principe que le 8e caractère est bon</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="n">is_equal</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">		<span class="n">a</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="o">-</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">^</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nb">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">a</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">			<span class="n">is_equal</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="k">return</span> <span class="n">is_equal</span>
+</span></span></code></pre></div><p>Le déroulement de cette boucle nous permet enfin de récupérer la clé en entier, soit: <code>W0W59(8ai?.\&lt;1T2V</code></p>
+<p>Il ne reste plus qu&rsquo;à valider pour voir si on arrive à obtenir le flag, en prenant le soin de escape les caractères spéciaux pour Bash avec des backslashes.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ /cygdrive/c/Users/john/Desktop/86288dbbdadbe4d7e04dc1a4c4603f5b.exe give_me_the_flag W0W59<span class="se">\(</span>8ai?.<span class="se">\&lt;</span>1T2V
+</span></span><span class="line"><span class="cl">CRACKME!
+</span></span><span class="line"><span class="cl">Let me check <span class="k">if</span> you deserve a flag ...
+</span></span><span class="line"><span class="cl">YES :<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        flag is: <span class="s1">&#39;983b428e721bcfceabf6c77d9e819d8d&#39;</span>
+</span></span></code></pre></div><p>Et miracle, ça marche !! :-)</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="conclusion-et-remerciements"
+    >
+        Conclusion et remerciements
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/ecw2017/red_diamond/#conclusion-et-remerciements" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Conclusion et remerciements" href="#conclusion-et-remerciements">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>C&rsquo;est tout pour ce write-up (bien joué à tous ceux qui ont eu le courage de tout lire), selon moi c&rsquo;était sans doute un des challenges les plus durs de ce CTF mais aussi l&rsquo;un des plus enrichissant !</p>
+<p>Je remercie les auteurs du chall qui ont dû se casser la tête pour le créer, mais également tous ceux qui ont organisé le CTF d&rsquo;une manière générale, j&rsquo;espère que c&rsquo;est un event qui pourra perdurer.</p>
+<p>Merci à scud pour l&rsquo;aide sur la compréhension de la VM MRuby, je n&rsquo;aurais sans doute pas réussi à finir sans ça.</p>
+    </section>
+  </article>
+
+      </main>
+
+      <footer class="gblog-footer">
+  <nav class="container flex">
+    <div>
+      <section class="flex flex-wrap align-center">
+        
+        
+        
+        
+      </section>
+      <section class="flex flex-wrap align-center">
+        <span class="gblog-footer__item">
+          Built with <a href="https://gohugo.io/" class="gblog-footer__link">Hugo</a> and
+          <svg class="gblog-icon gblog_heart"><use xlink:href="#gblog_heart"></use></svg>
+        </span>
+      </section>
+      
+      
+        <section class="flex flex-wrap align-center">
+          <span class="gblog-footer__item">
+            Content licensed under
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="gblog-footer__link no-wrap">CC BY-SA 4.0</a>
+          </span>
+        </section>
+      
+    </div>
+    
+      <div class="flex flex-25 justify-end">
+        <span class="gblog-footer__item text-right">
+          <a class="gblog-footer__link fake-link" href="#" aria-label="Back to top">
+            <svg class="gblog-icon gblog_keyboard_arrow_up">
+              <use xlink:href="#gblog_keyboard_arrow_up"></use>
+            </svg>
+            <span class="hidden-mobile">Back to top</span>
+          </a>
+        </span>
+      </div>
+    
+  </nav>
+</footer>
+
+    </div>
+  </body>
+</html>

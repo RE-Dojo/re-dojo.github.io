@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RE-Dojo</title>
+    <link>https://re-dojo.github.io/posts/</link>
+    <description>Recent content on RE-Dojo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 19 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://re-dojo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flare-On 10 solutions</title>
+      <link>https://re-dojo.github.io/posts/flareon10/</link>
+      <pubDate>Sun, 19 Nov 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/posts/flareon10/</guid>
+      <description>&lt;p&gt;I once again participated in the &lt;a
+  class=&#34;gblog-markdown__link&#34;
+  href=&#34;https://flare-on10.ctfd.io/&#34;
+&gt;Flare-On&lt;/a&gt; challenge organized by the FLARE team.&lt;/p&gt;
+&lt;p&gt;This year, there was a total of 13 challenges to solve, which is more than previous years and the difficulty was significantly higher as well. Apart from classic Windows C/C++ executables, this year&amp;rsquo;s contest featured a Rust challenge, a Android application, a hard disk image compromised with a ransomware and even a &lt;a
+  class=&#34;gblog-markdown__link&#34;
+  href=&#34;https://en.wikipedia.org/wiki/PDP-11&#34;
+&gt;PDP-11&lt;/a&gt; challenge.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Flare-On 9 solutions</title>
+      <link>https://re-dojo.github.io/posts/flareon9/</link>
+      <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/posts/flareon9/</guid>
+      <description>&lt;p&gt;This year, I participated in the &lt;a
+  class=&#34;gblog-markdown__link&#34;
+  href=&#34;https://flare-on9.ctfd.io/&#34;
+&gt;Flare-On&lt;/a&gt; challenge organized by the FLARE team from &lt;del&gt;Mandiant&lt;/del&gt; Google.&lt;/p&gt;
+&lt;p&gt;In total, 11 challenges of reverse engineering with increasing difficulty were to be solved. I did managed to resolve them all and as there was not a lot of activity on this blog recently, I pushed myself to put together some write-ups.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>FCSC 2020 - Keykoolol</title>
+      <link>https://re-dojo.github.io/posts/fcsc2020/keykoolol/</link>
+      <pubDate>Sat, 09 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/posts/fcsc2020/keykoolol/</guid>
+      <description>&lt;p&gt;A few weeks ago, I participated in the France CyberSecurity Challenge (or &lt;a
+  class=&#34;gblog-markdown__link&#34;
+  href=&#34;https://france-cybersecurity-challenge.fr/&#34;
+&gt;FCSC&lt;/a&gt; in short); a Jeopardy CTF organized by the National Cybersecurity Agency of France (&lt;a
+  class=&#34;gblog-markdown__link&#34;
+  href=&#34;https://www.ssi.gouv.fr/en/&#34;
+&gt;ANSSI&lt;/a&gt;) to select the french team that will participate to the European Cybersecurity Challenge (ECSC) at the end of 2020.&lt;/p&gt;
+&lt;p&gt;Among the challenges proposed (crypto, reverse, pwn, web, forensic, hardware), I really liked doing one of the reverse track named &lt;strong&gt;keykoolol&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>NorthSec 2019 - Doom</title>
+      <link>https://re-dojo.github.io/posts/nsec2019/doom/</link>
+      <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/posts/nsec2019/doom/</guid>
+      <description>&lt;p&gt;We, once again, participated in the NorthSec competition.
+This article is about the DOOM challenge which was pretty interesting as you had to validate it at the VR station.
+@actgardner already made a write-up that you can find &lt;a
+  class=&#34;gblog-markdown__link&#34;
+  href=&#34;http://www.agardner.me/securit/ctf/northsec/2019/2019/05/19/northsec-ctf-part-1-doom.html&#34;
+&gt;here&lt;/a&gt;.
+I wanted to complete it and show another solution that icecr4ck and I came up with.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>NorthSec 2018 - Mars Analytica</title>
+      <link>https://re-dojo.github.io/posts/nsec2018/mars_analytica/</link>
+      <pubDate>Sun, 28 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/posts/nsec2018/mars_analytica/</guid>
+      <description>In May 2018, the NorthSec conference and its on-site CTF competition were held. Once again the competition was awesome, the challenges were very diverse and the infrastructure was well configured.
+One of the reverse engineering challenges was a program called MarsAnalytica. This challenge remained unsolved at the end of the CTF. This binary was worth a lot of points and I think it was the right amount of points due to the time one would have to spend to solve it.</description>
+    </item>
+    
+    <item>
+      <title>ECW 2017 - Red Diamond</title>
+      <link>https://re-dojo.github.io/posts/ecw2017/red_diamond/</link>
+      <pubDate>Fri, 28 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://re-dojo.github.io/posts/ecw2017/red_diamond/</guid>
+      <description>&lt;p&gt;Pour la deuxième année consécutive, Thales et Airbus ont organisé un CTF à destination des étudiants européens: le &lt;a
+  class=&#34;gblog-markdown__link&#34;
+  href=&#34;https://challenge-ecw.fr/&#34;
+&gt;challenge ECW&lt;/a&gt;. Tout comme l&amp;rsquo;année dernière, celui-ci est séparé en une épreuve qualificative individuelle (CTF Jeopardy classique) et une phase finale par équipe avec un format Attaque/Défense.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

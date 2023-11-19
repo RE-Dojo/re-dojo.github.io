@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="en"
+  class="color-toggle-hidden"
+  
+>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="referrer" content="no-referrer" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content="Hugo 0.101.0" />
+  <meta name="robots" content="index, follow" />
+  <meta name="description" content="I once again participated in the Flare-On challenge organized by the FLARE team.
+This year, there was a total of 13 challenges to solve, which is more than previous years and the difficulty was significantly higher as well. Apart from classic Windows C/C&#43;&#43; executables, this year’s contest featured a Rust challenge, a Android application, a hard disk image compromised with a ransomware and even a PDP-11 challenge." />
+    <meta name="author" content="icecr4ck" />
+
+    <title>Flare-On 10 solutions | RE-Dojo</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+<link
+  rel="icon"
+  type="image/png"
+  sizes="32x32"
+  href="/favicon/favicon-32x32.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  sizes="16x16"
+  href="/favicon/favicon-16x16.png"
+/>
+
+    
+
+    
+  <meta
+    property="og:title"
+    content="Flare-On 10 solutions"
+  />
+  <meta property="og:site_name" content="RE-Dojo" />
+  <meta property="og:description" content="I once again participated in the Flare-On challenge organized by the FLARE team.
+This year, there was a total of 13 challenges to solve, which is more than previous years and the difficulty was significantly higher as well. Apart from classic Windows C/C&#43;&#43; executables, this year’s contest featured a Rust challenge, a Android application, a hard disk image compromised with a ransomware and even a PDP-11 challenge." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://re-dojo.github.io/posts/flareon10/" />
+
+<meta property="article:section" content="Posts" />
+    <meta
+      property="article:published_time"
+      content="2023-11-19T00:00:00+00:00"
+    />
+    <meta
+      property="article:modified_time"
+      content="2023-11-19T00:00:00+00:00"
+    />
+
+
+  <meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Flare-On 10 solutions" />
+  <meta name="twitter:description" content="I once again participated in the Flare-On challenge organized by the FLARE team.
+This year, there was a total of 13 challenges to solve, which is more than previous years and the difficulty was significantly higher as well. Apart from classic Windows C/C&#43;&#43; executables, this year’s contest featured a Rust challenge, a Android application, a hard disk image compromised with a ransomware and even a PDP-11 challenge." />
+
+<script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "BlogPosting",
+      "articleSection": "Posts",
+      "name": "Flare-On 10 solutions",
+      "url" : "https://re-dojo.github.io/posts/flareon10/",
+      "headline": "Flare-On 10 solutions",
+      "description": "I once again participated in the Flare-On challenge organized by the FLARE team.\nThis year, there was a total of 13 challenges to solve, which is more than previous years and the difficulty was significantly higher as well. Apart from classic Windows C\/C\u002b\u002b executables, this year’s contest featured a Rust challenge, a Android application, a hard disk image compromised with a ransomware and even a PDP-11 challenge.",
+      "wordCount" : "4840",
+      "license": "CC BY-SA 4.0",
+      "inLanguage": "en",
+      "isFamilyFriendly": "true",
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://re-dojo.github.io/posts/flareon10/"
+      },
+      "author" : [
+          {
+              "@type": "Person",
+              "name": "icecr4ck"
+          }
+      ],
+      "copyrightHolder" : "RE-Dojo",
+      "copyrightYear" : "2023",
+      "dateCreated": "2023-11-19T00:00:00.00Z",
+      "datePublished": "2023-11-19T00:00:00.00Z",
+      "dateModified": "2023-11-19T00:00:00.00Z",
+      "publisher":{
+          "@type":"Organization",
+          "name": "RE-Dojo",
+          "url": "https://re-dojo.github.io/",
+          "logo": {
+              "@type": "ImageObject",
+              "url": "https://re-dojo.github.io/images/brand/logo.svg",
+              "width":"32",
+              "height":"32"
+          }
+      }
+  }
+  </script>
+
+
+    
+  <script src="/js/colortheme-67ebb30b.bundle.min.js"></script>
+<script src="/js/main-91724a27.bundle.min.js"></script>
+
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/Metropolis.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/LiberationSans.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  as="font"
+  href="/fonts/GeekblogIcons.woff2"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+
+<link
+  rel="preload"
+  href="/main-78aaa671.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/main-78aaa671.min.css"
+  media="all"
+/>
+
+<link
+  rel="preload"
+  href="/mobile-8caf109e.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/mobile-8caf109e.min.css"
+  media="screen and (max-width: 45rem)"
+/>
+
+<link
+  rel="preload"
+  href="/print-cc34f864.min.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/print-cc34f864.min.css"
+  media="print"
+/>
+
+<link
+  rel="preload"
+  href="/custom.css"
+  as="style"
+/>
+<link
+  rel="stylesheet"
+  href="/custom.css"
+  media="all"
+/>
+  <link href="https://re-dojo.github.io/posts/flareon10/" rel="canonical" type="text/html" />
+    <link href="https://re-dojo.github.io/index.xml" rel="alternate" type="application/rss+xml" title="RE-Dojo RSS Feed" />
+
+<!-- Made with Geekblog theme https://github.com/thegeeklab/hugo-geekblog -->
+
+    
+
+  </head>
+
+  <body>
+    
+  <!-- geekblog include: sprites/geekblog.svg -->
+  <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_back" xmlns="http://www.w3.org/2000/svg"><path d="M31.999 14.035v3.93H7.673l11.134 11.228L16 32 .001 16.001 16 .002l2.807 2.807L7.673 14.037h24.326z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M7.954 17.965v5.988L.001 16l7.953-7.953v5.988H32v3.93H7.954z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M24.046 14.035V8.047L31.999 16l-7.953 7.953v-5.988H0v-3.93h24.046z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_bitbucket" xmlns="http://www.w3.org/2000/svg"><path d="M15.905 13.355c.189 1.444-1.564 2.578-2.784 1.839-1.375-.602-1.375-2.784-.034-3.403 1.151-.705 2.818.223 2.818 1.564zm1.907-.361c-.309-2.44-3.076-4.056-5.328-3.042-1.426.636-2.389 2.148-2.32 3.747.086 2.097 2.08 3.815 4.176 3.626s3.729-2.234 3.472-4.331zm4.108-9.315c-.756-.997-2.045-1.169-3.179-1.358-3.214-.516-6.513-.533-9.727.034-1.066.172-2.269.361-2.939 1.323 1.1 1.031 2.664 1.186 4.073 1.358 2.544.327 5.156.344 7.699.017 1.426-.172 3.008-.309 4.073-1.375zm.979 17.788c-.481 1.684-.206 3.953-1.994 4.932-3.076 1.701-6.806 1.89-10.191 1.289-1.787-.327-3.884-.894-4.864-2.578-.43-1.65-.705-3.334-.98-5.018l.103-.275.309-.155c5.121 3.386 12.288 3.386 17.427 0 .808.241.206 1.22.189 1.805zM26.01 4.951c-.584 3.764-1.255 7.51-1.908 11.257-.189 1.1-1.255 1.719-2.148 2.183-3.214 1.615-6.96 1.89-10.483 1.512-2.389-.258-4.829-.894-6.771-2.389-.911-.705-.911-1.908-1.083-2.922-.602-3.523-1.289-7.046-1.719-10.604.206-1.547 1.942-2.217 3.231-2.698C6.848.654 8.686.362 10.508.19c3.884-.378 7.854-.241 11.618.859 1.341.395 2.784.945 3.695 2.097.412.533.275 1.203.189 1.805z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_bookmark" xmlns="http://www.w3.org/2000/svg"><path d="M20.357 5.856q1.157 0 2.043.851t.885 2.008v23.284l-10.212-4.357-10.144 4.357V8.715q0-1.157.885-2.008t2.042-.851h14.502zm5.787 18.859V5.856q0-1.157-.851-2.042t-2.008-.885H8.715q0-1.157.885-2.042t2.043-.885h14.502q1.157 0 2.043.885t.885 2.042v23.216z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_auto" xmlns="http://www.w3.org/2000/svg"><path d="M16.846 18.938h2.382L15.22 7.785h-2.44L8.772 18.938h2.382l.871-2.44h3.95zm7.087-9.062L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809zm-11.385 4.937L14 10.282l1.452 4.531h-2.904z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_dark" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565q-1.51 0-3.079.697 1.917.871 3.108 2.701T15.22 14t-1.191 4.037-3.108 2.701q1.568.697 3.079.697zm9.933-11.559L27.999 14l-4.066 4.124v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_brightness_light" xmlns="http://www.w3.org/2000/svg"><path d="M14 21.435q3.079 0 5.257-2.178T21.435 14t-2.178-5.257T14 6.565 8.743 8.743 6.565 14t2.178 5.257T14 21.435zm9.933-3.311v5.809h-5.809L14 27.999l-4.124-4.066H4.067v-5.809L.001 14l4.066-4.124V4.067h5.809L14 .001l4.124 4.066h5.809v5.809L27.999 14z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_check" xmlns="http://www.w3.org/2000/svg"><path d="M8.885 20.197 25.759 3.323l2.24 2.24L8.885 24.677 0 15.792l2.24-2.24z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_check_circle_outline" xmlns="http://www.w3.org/2000/svg"><path d="M14 25.239q4.601 0 7.92-3.319T25.239 14 21.92 6.08 14 2.761 6.08 6.08 2.761 14t3.319 7.92T14 25.239zM14 0q5.784 0 9.892 4.108T28 14t-4.108 9.892T14 28t-9.892-4.108T0 14t4.108-9.892T14 0zm6.441 7.822 1.972 1.972-11.239 11.239L4.207 14l1.972-1.972 4.995 4.995z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_clear" xmlns="http://www.w3.org/2000/svg"><path d="M32 3.222 19.222 16 32 28.778l-3.221 3.221-12.778-12.778L3.223 31.999.002 28.778 12.78 16 .002 3.222 3.223.001l12.778 12.778L28.779.001z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_cloud_off" xmlns="http://www.w3.org/2000/svg"><path d="M9.023 10.5H7q-1.914 0-3.281 1.395t-1.367 3.309 1.367 3.281T7 19.852h11.375zM3.5 4.976l1.477-1.477L24.5 23.022l-1.477 1.477-2.352-2.297H6.999q-2.898 0-4.949-2.051t-2.051-4.949q0-2.844 1.969-4.867t4.758-2.133zm19.086 5.578q2.242.164 3.828 1.832T28 16.351q0 3.008-2.461 4.758l-1.695-1.695q1.805-.984 1.805-3.063 0-1.422-1.039-2.461t-2.461-1.039h-1.75v-.602q0-2.68-1.859-4.539t-4.539-1.859q-1.531 0-2.953.711l-1.75-1.695Q11.431 3.5 14.001 3.5q2.953 0 5.496 2.078t3.09 4.977z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_code" xmlns="http://www.w3.org/2000/svg"><path d="M9.917 24.5a1.75 1.75 0 1 0-3.501.001 1.75 1.75 0 0 0 3.501-.001zm0-21a1.75 1.75 0 1 0-3.501.001A1.75 1.75 0 0 0 9.917 3.5zm11.666 2.333a1.75 1.75 0 1 0-3.501.001 1.75 1.75 0 0 0 3.501-.001zm1.75 0a3.502 3.502 0 0 1-1.75 3.026c-.055 6.581-4.721 8.039-7.82 9.023-2.898.911-3.846 1.349-3.846 3.117v.474a3.502 3.502 0 0 1 1.75 3.026c0 1.932-1.568 3.5-3.5 3.5s-3.5-1.568-3.5-3.5c0-1.294.711-2.424 1.75-3.026V6.526A3.502 3.502 0 0 1 4.667 3.5c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5a3.502 3.502 0 0 1-1.75 3.026v9.06c.93-.456 1.914-.766 2.807-1.039 3.391-1.075 5.323-1.878 5.359-5.687a3.502 3.502 0 0 1-1.75-3.026c0-1.932 1.568-3.5 3.5-3.5s3.5 1.568 3.5 3.5z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_contacts" xmlns="http://www.w3.org/2000/svg"><path d="M22.688 22.688v-2q0-1.5-2.281-2.438t-4.406-.938-4.406.938-2.281 2.438v2h13.375zM16 9q-1.25 0-2.125.875T13 12t.875 2.125T16 15t2.125-.875T19 12t-.875-2.125T16 9zm10.688-3.687q1.063 0 1.844.813t.781 1.875v16q0 1.063-.781 1.875t-1.844.813H5.313q-1.063 0-1.844-.813t-.781-1.875v-16q0-1.063.781-1.875t1.844-.813h21.375zM5.313 32v-2.688h21.375V32H5.313zM26.688 0v2.688H5.313V0h21.375z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_copy" xmlns="http://www.w3.org/2000/svg"><path d="M23.502 25.438V7.626H9.562v17.812h13.94zm0-20.315q1.013 0 1.787.745t.774 1.757v17.812q0 1.013-.774 1.787t-1.787.774H9.562q-1.013 0-1.787-.774t-.774-1.787V7.625q0-1.013.774-1.757t1.787-.745h13.94zM19.689 0v2.562H4.438v17.812H1.936V2.562q0-1.013.745-1.787T4.438.001h15.251z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_create" xmlns="http://www.w3.org/2000/svg"><path d="m31.499 7.167-3.25 3.25-6.666-6.666 3.25-3.25q.5-.5 1.25-.5t1.25.5l4.166 4.166q.5.5.5 1.25t-.5 1.25zM.001 25.333 19.667 5.667l6.666 6.666L6.667 31.999H.001v-6.666z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_dangerous" xmlns="http://www.w3.org/2000/svg"><path d="M21.802 19.833 15.969 14l5.833-5.833-1.969-1.969L14 12.031 8.167 6.198 6.198 8.167 12.031 14l-5.833 5.833 1.969 1.969L14 15.969l5.833 5.833zM19.833 0 28 8.167v11.666L19.833 28H8.167L0 19.833V8.167L8.167 0h11.666z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_date" xmlns="http://www.w3.org/2000/svg"><path d="M27.192 28.844V11.192H4.808v17.652h22.384zm0-25.689q1.277 0 2.253.976t.976 2.253v22.459q0 1.277-.976 2.216t-2.253.939H4.808q-1.352 0-2.291-.901t-.939-2.253V6.385q0-1.277.939-2.253t2.291-.976h1.577V.001h3.23v3.155h12.769V.001h3.23v3.155h1.577zm-3.155 11.267v3.155h-3.23v-3.155h3.23zm-6.46 0v3.155h-3.155v-3.155h3.155zm-6.384 0v3.155h-3.23v-3.155h3.23z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_download" xmlns="http://www.w3.org/2000/svg"><path d="M2.866 28.209h26.269v3.79H2.866v-3.79zm26.268-16.925L16 24.418 2.866 11.284h7.493V.001h11.283v11.283h7.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_email" xmlns="http://www.w3.org/2000/svg"><path d="M28.845 9.615v-3.23L16 14.422 3.155 6.385v3.23L16 17.577zm0-6.46q1.277 0 2.216.977T32 6.385v19.23q0 1.277-.939 2.253t-2.216.977H3.155q-1.277 0-2.216-.977T0 25.615V6.385q0-1.277.939-2.253t2.216-.977h25.69z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_error_outline" xmlns="http://www.w3.org/2000/svg"><path d="M14 25.239q4.601 0 7.92-3.319T25.239 14 21.92 6.08 14 2.761 6.08 6.08 2.761 14t3.319 7.92T14 25.239zM14 0q5.784 0 9.892 4.108T28 14t-4.108 9.892T14 28t-9.892-4.108T0 14t4.108-9.892T14 0zm-1.38 6.967h2.761v8.413H12.62V6.967zm0 11.239h2.761v2.826H12.62v-2.826z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_fire" xmlns="http://www.w3.org/2000/svg"><path d="M17.689 21.998q-.32.32-.8.576t-.864.384q-1.152.384-2.272.032t-1.888-.992q-.128-.128-.096-.256t.16-.192q1.216-.384 1.92-1.216t.96-1.792q.192-.896-.064-1.728t-.384-1.728q-.128-.704-.096-1.376t.288-1.312q0-.128.128-.128t.192.064q.384.832.992 1.472t1.28 1.216 1.216 1.248.672 1.568q.064.384.064.704.064.96-.32 1.92t-1.088 1.536zm3.84-10.944q-.768-.704-1.6-1.28t-1.6-1.344q-1.536-1.536-2.016-3.584t.16-4.16q.128-.32-.096-.544t-.544-.096q-.768.32-1.44.768t-1.312.896q-1.984 1.664-3.136 3.936T8.633 10.51t.8 5.088q0 .128.032.256t.032.256q0 .576-.512.832t-1.024-.192q-.128-.192-.192-.32-1.024-1.28-1.376-2.912t-.096-3.232q.064-.384-.288-.576t-.608.128q-1.28 1.664-1.856 3.68t-.448 4.064q0 .576.096 1.184t.288 1.184q.448 1.536 1.216 2.816 1.216 2.048 3.264 3.424t4.416 1.696q2.496.32 5.024-.256t4.448-2.304q1.408-1.344 2.208-3.104t.864-3.68-.704-3.712q-.064-.128-.096-.224t-.096-.224q-.576-1.088-1.28-1.984-.256-.384-.544-.704t-.672-.64z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_git" xmlns="http://www.w3.org/2000/svg"><path d="M27.472 12.753 15.247.529a1.803 1.803 0 0 0-2.55 0l-2.84 2.84 2.137 2.137a2.625 2.625 0 0 1 3.501 3.501l3.499 3.499a2.625 2.625 0 1 1-1.237 1.237l-3.499-3.499c-.083.04-.169.075-.257.106v7.3a2.626 2.626 0 1 1-1.75 0v-7.3a2.626 2.626 0 0 1-1.494-3.607L8.62 4.606l-8.09 8.09a1.805 1.805 0 0 0 0 2.551l12.225 12.224a1.803 1.803 0 0 0 2.55 0l12.168-12.168a1.805 1.805 0 0 0 0-2.551z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_gitea" xmlns="http://www.w3.org/2000/svg"><path d="M5.581 7.229c-2.46-.005-5.755 1.559-5.573 5.48.284 6.125 6.56 6.693 9.068 6.743.275 1.149 3.227 5.112 5.412 5.32h9.573c5.741-.381 10.04-17.363 6.853-17.427-5.271.248-8.395.373-11.073.395v5.3l-.835-.369-.005-4.928c-3.075-.001-5.781-.144-10.919-.397-.643-.004-1.539-.113-2.501-.116zm.348 2.166h.293c.349 3.14.917 4.976 2.067 7.781-2.933-.347-5.429-1.199-5.888-4.38-.237-1.647.563-3.365 3.528-3.401zm11.409 3.087c.2.003.404.04.596.128l.999.431-.716 1.305h-.007a.996.996 0 0 0-.321.053l.006-.002c-.349.114-.593.406-.593.749 0 .097.019.189.055.275l-.002-.006a.767.767 0 0 0 .151.233l-.001-.001-1.235 2.248a.99.99 0 0 0-.302.052l.006-.002c-.349.114-.593.406-.593.749 0 .097.019.189.055.275l-.002-.006c.128.31.457.527.843.527a.987.987 0 0 0 .31-.049l-.006.002c.348-.114.592-.406.592-.749 0-.097-.02-.19-.056-.277l.002.006a.784.784 0 0 0-.211-.293l1.203-2.189a.999.999 0 0 0 .397-.041l-.006.002a.942.942 0 0 0 .285-.15l-.001.001c.464.195.844.353 1.117.488.411.203.556.337.6.487.044.147-.004.429-.236.925-.173.369-.46.893-.799 1.511h-.02a.991.991 0 0 0-.321.053l.006-.002c-.349.114-.593.406-.593.749 0 .097.019.189.055.275l-.002-.006c.128.31.457.527.843.527a.987.987 0 0 0 .31-.049l-.006.002c.348-.114.592-.406.592-.749a.703.703 0 0 0-.055-.275l.002.006a.802.802 0 0 0-.183-.27l.001.001c.335-.611.623-1.136.808-1.531.251-.536.381-.935.267-1.32s-.467-.636-.933-.867c-.307-.151-.689-.311-1.147-.503a.723.723 0 0 0-.052-.324l.002.006a.792.792 0 0 0-.194-.279l.704-1.284 3.899 1.684c.704.305.995 1.053.653 1.68l-2.68 4.907c-.343.625-1.184.884-1.888.58l-5.516-2.384c-.704-.304-.996-1.053-.653-1.68l2.68-4.905c.235-.431.707-.687 1.207-.707z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_github" xmlns="http://www.w3.org/2000/svg"><path d="M16 .394c8.833 0 15.999 7.166 15.999 15.999 0 7.062-4.583 13.062-10.937 15.187-.813.146-1.104-.354-1.104-.771 0-.521.021-2.25.021-4.396 0-1.5-.5-2.458-1.083-2.958 3.562-.396 7.312-1.75 7.312-7.896 0-1.75-.625-3.167-1.646-4.291.167-.417.708-2.042-.167-4.25-1.333-.417-4.396 1.646-4.396 1.646a15.032 15.032 0 0 0-8 0S8.937 6.602 7.603 7.018c-.875 2.208-.333 3.833-.167 4.25-1.021 1.125-1.646 2.542-1.646 4.291 0 6.125 3.729 7.5 7.291 7.896-.458.417-.875 1.125-1.021 2.146-.917.417-3.25 1.125-4.646-1.333-.875-1.521-2.458-1.646-2.458-1.646-1.562-.021-.104.979-.104.979 1.042.479 1.771 2.333 1.771 2.333.938 2.854 5.396 1.896 5.396 1.896 0 1.333.021 2.583.021 2.979 0 .417-.292.917-1.104.771C4.582 29.455-.001 23.455-.001 16.393-.001 7.56 7.165.394 15.998.394zM6.063 23.372c.042-.083-.021-.187-.146-.25-.125-.042-.229-.021-.271.042-.042.083.021.187.146.25.104.062.229.042.271-.042zm.646.709c.083-.062.062-.208-.042-.333-.104-.104-.25-.146-.333-.062-.083.062-.062.208.042.333.104.104.25.146.333.062zm.625.937c.104-.083.104-.25 0-.396-.083-.146-.25-.208-.354-.125-.104.062-.104.229 0 .375s.271.208.354.146zm.875.875c.083-.083.042-.271-.083-.396-.146-.146-.333-.167-.417-.062-.104.083-.062.271.083.396.146.146.333.167.417.062zm1.187.521c.042-.125-.083-.271-.271-.333-.167-.042-.354.021-.396.146s.083.271.271.312c.167.062.354 0 .396-.125zm1.313.104c0-.146-.167-.25-.354-.229-.187 0-.333.104-.333.229 0 .146.146.25.354.229.187 0 .333-.104.333-.229zm1.208-.208c-.021-.125-.187-.208-.375-.187-.187.042-.312.167-.292.312.021.125.187.208.375.167s.312-.167.292-.292z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_gitlab" xmlns="http://www.w3.org/2000/svg"><path d="M1.629 11.034 14 26.888.442 17.048a1.09 1.09 0 0 1-.39-1.203l1.578-4.811zm7.217 0h10.309l-5.154 15.854zM5.753 1.475l3.093 9.559H1.63l3.093-9.559a.548.548 0 0 1 1.031 0zm20.618 9.559 1.578 4.811c.141.437-.016.922-.39 1.203l-13.558 9.84 12.371-15.854zm0 0h-7.216l3.093-9.559a.548.548 0 0 1 1.031 0z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_heart" xmlns="http://www.w3.org/2000/svg"><path d="M16 29.714a1.11 1.11 0 0 1-.786-.321L4.072 18.643c-.143-.125-4.071-3.714-4.071-8 0-5.232 3.196-8.357 8.535-8.357 3.125 0 6.053 2.464 7.464 3.857 1.411-1.393 4.339-3.857 7.464-3.857 5.339 0 8.535 3.125 8.535 8.357 0 4.286-3.928 7.875-4.089 8.035L16.785 29.392c-.214.214-.5.321-.786.321z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_info_outline" xmlns="http://www.w3.org/2000/svg"><path d="M12.62 9.793V6.967h2.761v2.826H12.62zM14 25.239q4.601 0 7.92-3.319T25.239 14 21.92 6.08 14 2.761 6.08 6.08 2.761 14t3.319 7.92T14 25.239zM14 0q5.784 0 9.892 4.108T28 14t-4.108 9.892T14 28t-9.892-4.108T0 14t4.108-9.892T14 0zm-1.38 21.033V12.62h2.761v8.413H12.62z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_down" xmlns="http://www.w3.org/2000/svg"><path d="M3.281 5.36 14 16.079 24.719 5.36 28 8.641l-14 14-14-14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_left" xmlns="http://www.w3.org/2000/svg"><path d="M25.875 28.25 22.125 32 6.126 16.001 22.125.002l3.75 3.75-12.25 12.25z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_keyboard_arrow_right" xmlns="http://www.w3.org/2000/svg"><path d="M6.125 28.25 18.375 16 6.125 3.75 9.875 0l15.999 15.999L9.875 31.998z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_keyboard_arrow_up" xmlns="http://www.w3.org/2000/svg"><path d="M24.719 22.64 14 11.921 3.281 22.64 0 19.359l14-14 14 14z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_link" xmlns="http://www.w3.org/2000/svg"><path d="M24.037 7.963q3.305 0 5.634 2.366T32 16t-2.329 5.671-5.634 2.366h-6.46v-3.08h6.46q2.028 0 3.493-1.465t1.465-3.493-1.465-3.493-3.493-1.465h-6.46v-3.08h6.46zM9.615 17.578v-3.155h12.77v3.155H9.615zM3.005 16q0 2.028 1.465 3.493t3.493 1.465h6.46v3.08h-6.46q-3.305 0-5.634-2.366T0 16.001t2.329-5.671 5.634-2.366h6.46v3.08h-6.46q-2.028 0-3.493 1.465t-1.465 3.493z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_mastodon" xmlns="http://www.w3.org/2000/svg"><path d="M30.924 10.506c0-6.941-4.548-8.976-4.548-8.976C24.083.477 20.144.034 16.054.001h-.101C11.862.034 7.926.477 5.633 1.53c0 0-4.548 2.035-4.548 8.976 0 1.589-.031 3.491.02 5.505.165 6.79 1.245 13.479 7.522 15.14 2.893.765 5.379.927 7.38.816 3.629-.2 5.667-1.296 5.667-1.296l-.12-2.633s-2.593.817-5.505.719c-2.887-.099-5.932-.311-6.399-3.855a7.069 7.069 0 0 1-.064-.967v-.028.001s2.833.693 6.423.857c2.195.1 4.253-.129 6.344-.377 4.009-.479 7.5-2.949 7.939-5.207.689-3.553.633-8.676.633-8.676zm-5.366 8.945h-3.329v-8.159c0-1.72-.724-2.592-2.171-2.592-1.6 0-2.403 1.035-2.403 3.083v4.465h-3.311v-4.467c0-2.048-.803-3.083-2.403-3.083-1.447 0-2.171.873-2.171 2.592v8.159H6.441v-8.404c0-1.719.437-3.084 1.316-4.093.907-1.011 2.092-1.528 3.565-1.528 1.704 0 2.995.655 3.848 1.965l.828 1.391.829-1.391c.853-1.311 2.144-1.965 3.848-1.965 1.472 0 2.659.517 3.565 1.528.877 1.009 1.315 2.375 1.315 4.093z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_matrix" xmlns="http://www.w3.org/2000/svg"><path d="M.843.734v30.532H3.04v.733H0V0h3.04v.733zm9.391 9.68v1.543h.044a4.417 4.417 0 0 1 1.489-1.365c.577-.327 1.248-.487 2-.487.72 0 1.377.143 1.975.419.597.277 1.047.776 1.36 1.477.339-.499.8-.941 1.379-1.323.579-.383 1.267-.573 2.061-.573.604 0 1.163.075 1.68.223a3.34 3.34 0 0 1 1.324.707c.368.327.652.745.861 1.268.203.523.307 1.151.307 1.889v7.637h-3.132v-6.468c0-.381-.013-.745-.043-1.083a2.315 2.315 0 0 0-.246-.893l.006.013a1.484 1.484 0 0 0-.577-.593l-.007-.004c-.259-.147-.609-.221-1.047-.221-.443 0-.8.085-1.071.252-.267.166-.483.39-.635.656l-.005.009a2.558 2.558 0 0 0-.307.915l-.002.013a7.156 7.156 0 0 0-.08 1.044v6.359h-3.133v-6.4c0-.339-.005-.671-.024-1.003a2.772 2.772 0 0 0-.197-.936l.007.019a1.41 1.41 0 0 0-.548-.667l-.006-.003c-.259-.167-.635-.253-1.139-.253-.148 0-.345.032-.585.099-.24.068-.48.191-.707.376-.228.184-.425.449-.585.793-.16.345-.24.8-.24 1.36v6.621H7.279v-11.42zm20.923 20.852V.734H28.96V.001H32V32h-3.04v-.733z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_menu" xmlns="http://www.w3.org/2000/svg"><path d="M.001 5.334h31.998v3.583H.001V5.334zm0 12.416v-3.5h31.998v3.5H.001zm0 8.916v-3.583h31.998v3.583H.001z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_notifications" xmlns="http://www.w3.org/2000/svg"><path d="m25.846 22.154 3.308 3.308v1.615H2.847v-1.615l3.308-3.308V14q0-3.846 1.961-6.692t5.423-3.692V2.462q0-1 .692-1.731T16 0t1.769.731.692 1.731v1.154q3.461.846 5.423 3.692T25.846 14v8.154zM16 32q-1.385 0-2.346-.923t-.962-2.308h6.615q0 1.308-1 2.269T15.999 32z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_person" xmlns="http://www.w3.org/2000/svg"><path d="M16 20.023q5.052 0 10.526 2.199t5.473 5.754v4.023H0v-4.023q0-3.555 5.473-5.754t10.526-2.199zM16 16q-3.275 0-5.614-2.339T8.047 8.047t2.339-5.661T16 0t5.614 2.386 2.339 5.661-2.339 5.614T16 16z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_pin" xmlns="http://www.w3.org/2000/svg"><path d="M17.6 19.2h9.6v-1.6L22.4 16V3.2l4.8-1.6V0H4.8v1.6l4.8 1.6V16l-4.8 1.6v1.6h9.6v11.2L16 32l1.6-1.6V19.2z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_rss_feed" xmlns="http://www.w3.org/2000/svg"><path d="M-.481 12.048q8.482 0 14.457 5.976t5.976 14.457h-5.879q0-5.976-4.289-10.264T-.48 17.928v-5.879zm0-11.565q13.204 0 22.601 9.397t9.397 22.601h-5.783q0-10.891-7.662-18.553T-.481 6.266V.483zm0 27.468q0-1.831 1.301-3.132t3.229-1.301 3.181 1.253 1.253 3.181-1.301 3.229-3.132 1.301q-1.928 0-3.229-1.301T-.48 27.952z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_search" xmlns="http://www.w3.org/2000/svg"><path d="M11.925 20.161q3.432 0 5.834-2.402t2.402-5.834-2.402-5.834-5.834-2.402-5.834 2.402-2.402 5.834 2.402 5.834 5.834 2.402zm10.981 0L32 29.255 29.255 32l-9.094-9.094v-1.458l-.515-.515q-3.26 2.831-7.721 2.831-4.976 0-8.45-3.432T.001 11.925t3.474-8.45 8.45-3.474 8.407 3.474 3.432 8.45q0 1.802-.858 4.075t-1.973 3.646l.515.515h1.458z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_security" xmlns="http://www.w3.org/2000/svg"><path d="m16 0 13.072 5.855v8.715q0 6.059-3.745 11.063T16 31.999q-5.583-1.362-9.327-6.366T2.928 14.57V5.855zm0 16v13.004q4.017-1.294 6.808-4.868T26.144 16H16zm0 0V3.2L5.856 7.693v8.306H16z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_star" xmlns="http://www.w3.org/2000/svg"><path d="M14 22.052 5.324 27.31l2.3-9.859L0 10.813l10.056-.854L14 .692l3.944 9.267L28 10.813l-7.624 6.638 2.3 9.859z"/></svg><svg viewBox="-7.27 -7.27 42.55 42.55" id="gblog_tag" xmlns="http://www.w3.org/2000/svg"><path d="M17.52 17.52v-7.041h-7.041v7.041h7.041zM28 10.479h-7.041v7.041H28v3.439h-7.041V28H17.52v-7.041h-7.041V28H7.04v-7.041H-.001V17.52H7.04v-7.041H-.001V7.04H7.04V-.001h3.439V7.04h7.041V-.001h3.439V7.04H28v3.439z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_timer" xmlns="http://www.w3.org/2000/svg"><path d="M16 29q4.428 0 7.536-3.143t3.107-7.571-3.107-7.536T16 7.643 8.464 10.75t-3.107 7.536 3.107 7.571T16 29zM26.714 9.786q1.214 1.571 2.107 4.036t.893 4.464q0 5.643-4 9.678T16 32t-9.714-4.036-4-9.678 4-9.678T16 4.572q1.929 0 4.464.929t4.107 2.143l2.143-2.214q1.143.929 2.143 2.143zM14.5 19.857v-9.143h3v9.143h-3zM20.571.001v3.071h-9.143V.001h9.143z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_tree" xmlns="http://www.w3.org/2000/svg"><path d="M32 14.423H20.808V9.616h-3.23v12.77h3.23v-4.807H32v12.845H20.808v-4.807h-6.385v-16h-3.23v4.807H.001V1.579h11.192v4.807h9.615V1.579H32v12.845z"/></svg><svg viewBox="-7.27 -7.27 46.55 46.55" id="gblog_xmpp" xmlns="http://www.w3.org/2000/svg"><path d="M31.995 4.237c-.449.175-1.12.433-1.936.745-1.544.591-2.328.891-2.924 1.093-.613.208-1.287.409-2.635.813-.911.272-1.672.495-2.212.651-.031.875 0 2.177-.292 3.635a21.837 21.837 0 0 1-2.016 5.765c-1.496 2.944-3.236 4.817-3.88 5.476-.056-.059-.112-.117-.168-.179-.707-.763-2.403-2.703-3.815-5.683-1.053-2.223-1.484-4.044-1.605-4.584-.356-1.589-.427-2.955-.427-4.117 0-.075-.036-.129-.101-.149-.721-.223-1.765-.519-2.887-.853-1.271-.379-2.193-.744-3.408-1.2-.493-.185-1.409-.547-2.217-.859C.723 4.499.113 4.236.041 4.236c-.005 0-.015 0-.023.012a.131.131 0 0 0-.019.076c.009.593.08 1.361.256 2.365.615 3.503 2.688 7.061 4.36 9.244 0 0 3.717 5.035 9.128 8.144l.303.176c-.009.008-.02.015-.028.021-1.717 1.316-3.201 1.977-3.579 2.14a15.71 15.71 0 0 1-2.219.772v.407a25.31 25.31 0 0 0 2.72-.487 26.72 26.72 0 0 0 5.075-1.792c.136.067.276.136.42.204 1.527.725 3.571 1.627 6.073 2.048.613.103 1.136.165 1.507.195a.109.109 0 0 0 .115-.091.55.55 0 0 0 .004-.217.107.107 0 0 0-.063-.073c-.505-.209-1.201-.4-1.983-.719-.935-.381-2.241-1.067-3.648-2.128a13.528 13.528 0 0 1-.367-.287c4.64-2.656 7.989-6.588 7.989-6.588 1.735-2.036 4.441-5.623 5.431-9.795.349-1.473.539-2.741.5-3.628z"/></svg></defs></svg>
+
+
+
+
+    <div
+      class="wrapper "
+    >
+      <header class="gblog-header">
+  <div class="container flex flex-wrap">
+    <div class="gblog-header__col-1 flex justify-start hidden-mobile"></div>
+    <div class="gblog-header__col-2 flex align-center justify-center ">
+      <a class="gblog-header__link" rel="me" href="https://re-dojo.github.io/">
+        <span class="gblog-brand flex align-center justify-center">
+          <img
+            class="gblog-brand__img"
+            src="/images/brand/logo.svg"
+            alt=""
+          />
+          <span class="gblog-brand__title">RE-Dojo</span>
+        </span>
+        
+          <span class="gblog-brand__subtitle flex align-center justify-center">Blog about reverse engineering and program analysis</span>
+        
+      </a>
+    </div>
+    <div class="gblog-header__col-3 flex justify-end">
+      <span id="gblog-color-theme">
+        <svg class="gblog-icon gblog_brightness_dark">
+          <title></title>
+          <use xlink:href="#gblog_brightness_dark"></use>
+        </svg>
+        <svg class="gblog-icon gblog_brightness_light">
+          <title></title>
+          <use xlink:href="#gblog_brightness_light"></use>
+        </svg>
+        <svg class="gblog-icon gblog_brightness_auto">
+          <title></title>
+          <use xlink:href="#gblog_brightness_auto"></use>
+        </svg>
+      </span>
+    </div>
+  </div>
+</header>
+<nav class="gblog-nav">
+  <input type="checkbox" id="menu-control" class="hidden" />
+  <div class="gblog-nav__control">
+    <label for="menu-control" class="flex align-center justify-center">
+      <svg class="gblog-icon gblog_menu"><use xlink:href="#gblog_menu"></use></svg>
+      <svg class="gblog-icon gblog_clear"><use xlink:href="#gblog_clear"></use></svg>
+      <span>Navigation</span>
+    </label>
+  </div>
+  <ul class="gblog-nav__list container flex flex-wrap justify-center menu-content">
+    
+    
+      
+    
+    
+  </ul>
+</nav>
+
+
+
+      <main class="gblog-page container">
+        
+  <article class="gblog-post">
+    <header class="gblog-post__header">
+      
+      
+
+
+      <h1 class="gblog-post__title">Flare-On 10 solutions</h1>
+
+      
+        <div class="flex flex-wrap align-center gblog-post__meta gblog-post__meta--head">
+          <span class="flex align-center no-wrap gblog-post__meta--update">
+  <svg class="gblog-icon gblog_date"><use xlink:href="#gblog_date"></use></svg>
+  <span class="gblog-post__tag">
+    <time datetime="2023-11-19T00:00:00Z">
+      
+      Nov 19, 2023
+    </time>
+  </span>
+</span>
+
+<span class="flex align-center no-wrap gblog-post__meta--readtime">
+  <svg class="gblog-icon gblog_timer"><use xlink:href="#gblog_timer"></use></svg>
+  <span class="gblog-post__tag">23 min read</span>
+</span>
+
+
+
+
+
+  
+    
+    
+      
+        <span class="flex align-center no-wrap gblog-post__meta--author">
+          <svg class="gblog-icon gblog_person"><use xlink:href="#gblog_person"></use></svg>
+          
+  <span class="gblog-post__tag gblog-button gblog-button--regular">
+    <a class="gblog-button__link" href="/authors/icecr4ck/" title="All posts of this author">
+      icecr4ck
+    </a>
+  </span>
+
+        </span>
+      
+    
+    
+  
+
+
+
+
+
+
+
+
+
+        </div>
+      
+    </header>
+    <section class="gblog-markdown">
+      <p>I once again participated in the <a
+  class="gblog-markdown__link"
+  href="https://flare-on10.ctfd.io/"
+>Flare-On</a> challenge organized by the FLARE team.</p>
+<p>This year, there was a total of 13 challenges to solve, which is more than previous years and the difficulty was significantly higher as well. Apart from classic Windows C/C++ executables, this year&rsquo;s contest featured a Rust challenge, a Android application, a hard disk image compromised with a ransomware and even a <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/PDP-11"
+>PDP-11</a> challenge.</p>
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_solves.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_solves.png"
+              alt="Flare-On 10 solves"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Flare-On 10 solves
+          </figcaption>
+    </figure>
+  </div>
+
+<p>To avoid writing a post longer <a
+  class="gblog-markdown__link"
+  href="https://re-dojo.github.io/post/2022-11-13-FlareOn-9/"
+>last year</a>, I only wrote solutions for the challenges I liked and learned the most from. Solutions from the challenge authors are available on Mandiant&rsquo;s <a
+  class="gblog-markdown__link"
+  href="https://www.mandiant.com/resources/blog/flareon10-challenge-solutions"
+>blog</a>.</p>
+<p>Thanks to the FLARE team for the hard work, I hope this challenge will continue to live on.</p>
+
+
+
+  <div class="gblog-toc gblog-toc__level--6">
+    <nav id="TableOfContents"><ul>
+        <li><a href="#challenge-6---flaresay">Challenge 6 - FlareSay</a>
+          <ul>
+            <li><a href="#dos-game">DOS game</a></li>
+            <li><a href="#pe-analysis">PE analysis</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-9---mbransom">Challenge 9 - mbransom</a>
+          <ul>
+            <li><a href="#mbr-analysis-setup">MBR analysis setup</a></li>
+            <li><a href="#first-track-decryption">First track decryption</a></li>
+            <li><a href="#first-track-analysis">First track analysis</a></li>
+            <li><a href="#decrypting-the-disk">Decrypting the disk</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-11---over_the_rainbow">Challenge 11 - over_the_rainbow</a>
+          <ul>
+            <li><a href="#static-analysis">Static analysis</a></li>
+            <li><a href="#cryptanalysis">Cryptanalysis</a></li>
+            <li><a href="#coppersmith-attack-with-sage">Coppersmith attack with sage</a></li>
+            <li><a href="#getting-the-flag">Getting the flag</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-12---hvm">Challenge 12 - HVM</a>
+          <ul>
+            <li><a href="#hypervisor-analysis">Hypervisor analysis</a></li>
+            <li><a href="#decrypting-the-functions">Decrypting the functions</a></li>
+            <li><a href="#retrieving-the-inputs">Retrieving the inputs</a></li>
+          </ul>
+        </li>
+        <li><a href="#challenge-13---y0da">Challenge 13 - y0da</a>
+          <ul>
+            <li><a href="#defeating-the-obfuscation">Defeating the obfuscation</a></li>
+            <li><a href="#getting-lessons-from-yoda">Getting lessons from Yoda</a></li>
+            <li><a href="#becoming-a-real-jedi">Becoming a real jedi</a></li>
+          </ul>
+        </li>
+      </ul></nav>
+    <hr />
+  </div>
+
+
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="challenge-6---flaresay"
+    >
+        Challenge 6 - FlareSay
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#challenge-6---flaresay" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Challenge 6 - FlareSay" href="#challenge-6---flaresay">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">You’re doing great champ! This challenge is a modern (and retro) take on the classic game Simon Says. The cool thing about this one though is it will make you give up, and maybe take that sales job after all. It’s better for everybody that way.
+</span></span></code></pre></div><p>This challenge was quite interesting as it appears to be a DOS executable at first glance (output of <code>file</code> command), but actually this is also a valid PE executable. This gives two different execution flows but both are necessary to get the flag.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="dos-game"
+    >
+        DOS game
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#dos-game" class="gblog-post__anchor clip flex align-center" aria-label="Anchor DOS game" href="#dos-game">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>For this first part, we have to specify IDA to load it as a <code>MS-DOS executable</code> and not a PE. Interestingly, IDA is able to detect an overlay corresponding to the PE header.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_6_1.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_6_1.png"
+              alt="IDA pop-up when loading DOS executable"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            IDA pop-up when loading DOS executable
+          </figcaption>
+    </figure>
+  </div>
+
+<p>Once IDA finished its analysis, we get to the following function corresponding to the entry point.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_6_2.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_6_2.png"
+              alt="IDA disassembly of main function in DOS executable"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            IDA disassembly of main function in DOS executable
+          </figcaption>
+    </figure>
+  </div>
+
+<p>Two software interrupts are frequently used in this program, <code>int 10h</code> and <code>int 21h</code>. The former provides video services (setting video mode, reading and writing pixels, etc.) and the latter is known as the <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/DOS_API"
+>DOS API</a>. It exposes a lot of basic functions to the developer such as creating a file, allocating memory, and so on. I found this <a
+  class="gblog-markdown__link"
+  href="https://www.stanislavs.org/helppc/int_21.html"
+>website</a> quite useful to have a reference of the available functions.</p>
+<p>At this point, in order to have a better idea of the game graphics, I emulated it using <a
+  class="gblog-markdown__link"
+  href="https://www.dosbox.com/"
+>DOXBox</a>. This emulator even has a built-in debugger which helps a lot to get a memory view of the game at any point in the execution. After a nice intro music and a colored splash screen, we finally get to the game.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_6_3.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_6_3.png"
+              alt="DOSBox emulation of DOS executable"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            DOSBox emulation of DOS executable
+          </figcaption>
+    </figure>
+  </div>
+
+<p>The goal of the game is to repeat the highlighted square sequence using keyboard keys. At first, the sequence is only a single square but it increments by one at each win.</p>
+<p>Back to static analysis, there is an interesting function at <code>0x108C3</code> that checks if a specific sequence of keys have been pressed on while the game is loading. The expected sequence is <code>Up-Up-Down-Down-Left-Right-Left-Right-b-a</code>, a well known cheat code named the <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Konami_Code"
+>Konami Code</a>. If it is correctly entered, the screen blinks once and a checksum of the sequence key codes is computed and set at a specific location in memory.</p>
+<p>By looking at the cross-references of this memory location, it appears that it is used as a state value in a function that generates pseudo-random numbers. The latter is responsible for defining the sequence of squares that the user has to repeat. Here is a Python implementation of this algorithm.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">rand</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span><span class="mh">0x5a7f</span> <span class="o">*</span> <span class="n">state</span> <span class="o">+</span> <span class="mh">0x3079</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="nb">max</span> <span class="o">-</span> <span class="nb">min</span><span class="p">)</span>
+</span></span></code></pre></div><p>The game ends when the user has successfully won 128 times in a row. Then, the program patches the executable on the disk by overwriting 16 bytes at offset <code>0x8E85</code>. The source data used for patching is progressively built by the function at <code>0x1017E</code> while the user keeps winning. Obviously, those 16 bytes are very dependent on the initial state of the random function but we can safely assume that the challenge author expects us to use the one generated when the Konami code is entered.</p>
+<p>From there, several solutions are possible, such as statically reconstructring the algorithm of the function at <code>0x1017E</code> to get patch data or modify the game to win without user input (likely the easiest). For my part, I chose to use <a
+  class="gblog-markdown__link"
+  href="https://github.com/cea-sec/miasm"
+>miasm</a> to emulate the pseudo-random function and the function producing patch data. The script is quite simple and available <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-10/Challenge_6_FlareSay/emulate_and_patch.py"
+>here</a>.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="pe-analysis"
+    >
+        PE analysis
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#pe-analysis" class="gblog-post__anchor clip flex align-center" aria-label="Anchor PE analysis" href="#pe-analysis">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>Once the patch is applied on the executable, we can move to the PE part of the challenge.</p>
+<p>At the entry point, a 32-bit checksum of our patched data is computed and compared with <code>0x31D9F5FF</code>. If it matches, the same data is used as a RC4 key to decrypt 84 bytes at <code>0x408EA0</code>. Finally, the decrypted data is printed to the user in a message box.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_6_4.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_6_4.png"
+              alt="Message box printing decrypted flag"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Message box printing decrypted flag
+          </figcaption>
+    </figure>
+  </div>
+
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="challenge-9---mbransom"
+    >
+        Challenge 9 - mbransom
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#challenge-9---mbransom" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Challenge 9 - mbransom" href="#challenge-9---mbransom">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">You’re doing so great! Go out and celebrate. Take a day off kid, you’ve earned it. Watch your scoreboard position fall like the sand through the hourglass. Avoid this VM and feel the joy the outside world has to offer. Or crush this one and earn even more internet points, those will come in handy.
+</span></span></code></pre></div><p>For this challenge, we have a raw disk image named <code>hda.img</code> to analyze.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ file hda.img 
+</span></span><span class="line"><span class="cl">hda.img: DOS/MBR boot sector<span class="p">;</span> partition <span class="m">1</span> : <span class="nv">ID</span><span class="o">=</span>0x6, active, start-CHS <span class="o">(</span>0x0,1,1<span class="o">)</span>, end-CHS <span class="o">(</span>0x3ff,15,63<span class="o">)</span>, startsector 63, <span class="m">1032129</span> sectors
+</span></span></code></pre></div><div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="mbr-analysis-setup"
+    >
+        MBR analysis setup
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#mbr-analysis-setup" class="gblog-post__anchor clip flex align-center" aria-label="Anchor MBR analysis setup" href="#mbr-analysis-setup">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>In order to analyze a Master Boot Record (<a
+  class="gblog-markdown__link"
+  href="https://wiki.osdev.org/MBR_%28x86%29"
+>MBR</a>), we need some tooling. In my opinion, the combination of IDA with the <a
+  class="gblog-markdown__link"
+  href="http://bochs.sourceforge.net/"
+>Bochs</a> emulator is a good solution. Hex-Rays even provides an <a
+  class="gblog-markdown__link"
+  href="http://hexblog.com/ida_pro/files/mbr_bochs.zip"
+>archive</a> containing all the necessary files to setup our lab. The archive comes with a blog <a
+  class="gblog-markdown__link"
+  href="https://hex-rays.com/blog/develop-your-master-boot-record-and-debug-it-with-ida-pro-and-the-bochs-debugger-plugin/"
+>post</a> written in 2007 but still relevant.</p>
+<p>In this case, only a single file file from Hex-Rays archive is required: <code>bochsrc</code>. The latter needs to be edited to match the disk image filename and eventually the disk geometry.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">romimage: file=$BXSHARE/BIOS-bochs-latest 
+</span></span><span class="line"><span class="cl">vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest
+</span></span><span class="line"><span class="cl">megs: 16
+</span></span><span class="line"><span class="cl">ata0: enabled=1, ioaddr1=0x1f0, ioaddr2=0x3f0, irq=14
+</span></span><span class="line"><span class="cl">ata0-master: type=disk, path=&#34;hda.img&#34;, mode=flat, cylinders=20, heads=16, spt=63
+</span></span><span class="line"><span class="cl">boot: disk
+</span></span></code></pre></div><p>Once the <code>bochsrc</code> file has been correctly edited, we can test it with the Bochs emulator using the following command line.</p>
+<pre tabindex="0"><code>&#34;C:\Program Files\Bochs-2.7\bochsdbg.exe&#34; -f bochsrc -q
+</code></pre><p>The video output clearly indicates we are dealing with a ransomware here.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_9_1.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_9_1.png"
+              alt="Bochs emulator running the compromised disk image"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Bochs emulator running the compromised disk image
+          </figcaption>
+    </figure>
+  </div>
+
+<p>Afterwards, we can open <code>bochsrc</code> in IDA and start analyzing and debugging the MBR.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="first-track-decryption"
+    >
+        First track decryption
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#first-track-decryption" class="gblog-post__anchor clip flex align-center" aria-label="Anchor First track decryption" href="#first-track-decryption">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>The MBR starts with remapping itself from <code>0x7C00</code> to <code>0x600</code>, and jumps at <code>0x61D</code>. Then, it iterates over the partition table entries until it finds an active partition that has an attribute whose LSB is set to 1. As the latter is non documented, it likely means the partition is encrypted (confirmed in Mandiant&rsquo;s write-up).</p>
+<p>Afterwards, it gets the number of sectors for the first track using the interrupt <a
+  class="gblog-markdown__link"
+  href="https://www.stanislavs.org/helppc/int_13-8.html"
+>13,8</a> and maps the sectors at <code>0x1000</code> using the interrupt <a
+  class="gblog-markdown__link"
+  href="https://www.stanislavs.org/helppc/int_13-2.html"
+>13,2</a>.</p>
+<p>The sectors are then decrypted using RC4 with the key <code>Obfuscation12345</code> and the program continues at <code>0x1000</code>. This decryption process can be easily bypassed by setting a breakpoint before the jump in IDA Bochs debugger.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="first-track-analysis"
+    >
+        First track analysis
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#first-track-analysis" class="gblog-post__anchor clip flex align-center" aria-label="Anchor First track analysis" href="#first-track-analysis">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>The first track contains the ransomware bootstrap code responsible for decrypting the disk if the correct decryption key is entered. As specified in the ransomware message, the key consists of 16 hexadecimal characters.</p>
+<p>The function checking the decryption key can be found by looking for the interrupt <a
+  class="gblog-markdown__link"
+  href="https://www.stanislavs.org/helppc/int_16-0.html"
+>16,0</a> that reads a character. Once the 16 hexadecimal characters are read, the key is verified in function at <code>0x1296</code>.</p>
+<p>The first check performed by the function consists to XOR each byte of the victim identifier (<code>3487B3B41F20</code>) with a byte of decryption key and check if the result is equal to <code>0x55</code>. This immediately gives the first twelve characters of the key: <code>61D2E6E14A75</code>.</p>
+<p>The second check seems much more complicated as it depends on two other functions (see screenshot below) however it is not necessary to analyze it to get the full key. As shown on the disassembly below, the key is valid if the function returns <code>0</code>, otherwise it returns the adress pointing to an error message (either at <code>0x18FB</code> or at <code>0x18E3</code>). Thus, it is possible to use this information as a stop condition to brute-force the last four hexadecimal characters of the key.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_9_2.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_9_2.png"
+              alt="IDA disassembly of second check on decryption key"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            IDA disassembly of second check on decryption key
+          </figcaption>
+    </figure>
+  </div>
+
+<p>As there are not a lot of candidates to test (only 65536), performance is not really an issue in this case. I used miasm to emulate the function at <code>0x1296</code> (previously dumped from IDA Bochs debugger). The script is very simple and can be found <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-10/Challenge_9_mbransom/bruteforce.py"
+>here</a>.</p>
+<p>After a few minutes, we get the full decryption key: <code>61D2E6E14A754ADC</code>.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="decrypting-the-disk"
+    >
+        Decrypting the disk
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#decrypting-the-disk" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Decrypting the disk" href="#decrypting-the-disk">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>Once the decryption process is over, we get access to the disk files, including the one containing the flag.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_9_3.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_9_3.png"
+              alt="Bochs emulator running decrypted disk image"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Bochs emulator running decrypted disk image
+          </figcaption>
+    </figure>
+  </div>
+
+<p>Obviously, the disk was encrypted using the <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Blowfish_%28cipher%29"
+>Blowfish</a> cipher but this was not needed to solve this challenge.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="challenge-11---over_the_rainbow"
+    >
+        Challenge 11 - over_the_rainbow
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#challenge-11---over_the_rainbow" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Challenge 11 - over_the_rainbow" href="#challenge-11---over_the_rainbow">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">I’m told this one is easy if you are really good. Based on your solve times so far Google Bard predicts your performance will be: “1 out of 5 stars. I’d give it 0 stars if I could. Food arrived over an hour late, covered in oil. I wouldn’t feed it to my dog”
+</span></span></code></pre></div><p>This one is another ransomware related challenge, but this time we have a PE executable developed in C++. An encrypted file named <code>very_important_file.d3crypt_m3</code> is also provided, the goal of the challenge is to decrypt it.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="static-analysis"
+    >
+        Static analysis
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#static-analysis" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Static analysis" href="#static-analysis">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>The executable expects one command line parameter: the directory path containing files to encrypt.</p>
+<p>Once executed, the program starts two threads:</p>
+<ul>
+<li>one thread iterating over files in the target directory, checking for each file if its extension matches <code>.3ncrypt_m3</code> and sending it to the other thread if it does;</li>
+<li>a second thread encrypting a file contents and writing the output to a new file whose extension ends with <code>.d3crypt_m3</code>.</li>
+</ul>
+<p>Looking closer at the cryptography used, we can identify that the <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant"
+>ChaCha20</a> stream cipher is used to encrypt files with an ephemeral key. More precisely, this algorithm needs an initial state, arranged as a 4x4 matrix of 32-bit words.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_11_1.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_11_1.png"
+              alt="ChaCha20 initial state"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            ChaCha20 initial state
+              (<a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant"
+>Wikipedia</a>)
+          </figcaption>
+    </figure>
+  </div>
+
+<p>In this case, it is worth to note that the constant <code>expand 32-byte k</code> is put at the last four words of the state instead of the first four ones. The rest of the words are generated by the pseudo-random generator of OpenSSL.</p>
+<p>The state is passed to a block routine applying add-rotate-XOR (<a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Block_cipher#Operations"
+>ARX</a>) operations and the output key stream is XOR-ed with the file contents. The result is XOR-ed with a second key of 24 bytes, also randomly generated using OpenSSL PRNG. In a nutshell, a file is encrypted using the following algorithm.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">file_size</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&amp;</span> <span class="mi">63</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">chacha20_block</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">state_in</span><span class="p">,</span> <span class="n">state_out</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">state_out</span><span class="p">[</span><span class="n">i</span> <span class="o">&amp;</span> <span class="mi">63</span><span class="p">]</span> <span class="o">^</span> <span class="n">xor_key</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="mi">24</span><span class="p">];</span>
+</span></span></code></pre></div><p>The ChaCha20 initial state and the XOR key are encrypted with <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/RSA_%28cryptosystem%29"
+>RSA</a>. For that purpose, a RSA 2048-bit public key is embedded in the implant. Interestingly, the RSA encryption is actually applied on a 256 bytes buffer and not only on the key materials. This buffer has the following structure.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">rsa_input</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">null_bytes</span><span class="p">[</span><span class="mi">168</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">xor_key</span><span class="p">[</span><span class="mi">24</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">chacha20_state</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Once encrypted, this structure is appended to the end of the encrypted file. At this point, it is clear we have to find a weakness in the RSA encryption in order to recover the XOR key and the ChaCha20 initial state.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="cryptanalysis"
+    >
+        Cryptanalysis
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#cryptanalysis" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Cryptanalysis" href="#cryptanalysis">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>RSA public key is composed of a modulus <code>N</code> and a public exponent <code>e</code>. The encryption consists to do a modular exponentiation of the cleartext (encoded as an integer) using these two components.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">ciphertext</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">cleartext</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+</span></span></code></pre></div><p>RSA relies on the difficulty to factor the product (<code>N</code>) of two large numbers (<code>p</code> and <code>q</code>). Here <code>N</code> is large enough (2048-bit) so it is not possible to retrieve <code>p</code> and <code>q</code> in practice.</p>
+<p>Another category of attacks is related to the size of the public exponent. If the latter is small enough (equal to <code>3</code>) and <code>cleartext^3</code> is smaller than <code>N</code>, then it is possible to decrypt the ciphertext by computing its cube root.</p>
+<p>Back to our case, it turns out the public exponent is <code>3</code> however the cleartext is slightly too large. Indeed, the buffer is 256 bytes long but the first 168 bytes are null, which leaves 88 non-null bytes and <code>88 * 8 * 3 = 2112 bits &gt; 2048 bits</code>.</p>
+<p>That being said, we know a part of the cleartext as the last 16 bytes must be equal to <code>expand 32-byte k</code>. Because of that, it is possible to use the <a
+  class="gblog-markdown__link"
+  href="https://www.wikiwand.com/en/Coppersmith_method"
+>Coppersmith method</a> in order to decrypt the ciphertext. I will not go into details on the mathematics behind as this is already well described on the previous link. This method is implemented by several computer algebra system, personally I chose to use <a
+  class="gblog-markdown__link"
+  href="https://www.sagemath.org/"
+>SageMath</a> as it is based on Python.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="coppersmith-attack-with-sage"
+    >
+        Coppersmith attack with sage
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#coppersmith-attack-with-sage" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Coppersmith attack with sage" href="#coppersmith-attack-with-sage">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>Once installed, SageMath provides an IPython shell by running <code>sage</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ sage
+</span></span><span class="line"><span class="cl">┌────────────────────────────────────────────────────────────────────┐
+</span></span><span class="line"><span class="cl">│ SageMath version 9.8, Release Date: 2023-02-11                     │
+</span></span><span class="line"><span class="cl">│ Using Python 3.11.6. Type <span class="s2">&#34;help()&#34;</span> <span class="k">for</span> help.                       │
+</span></span><span class="line"><span class="cl">└────────────────────────────────────────────────────────────────────┘
+</span></span><span class="line"><span class="cl">sage:
+</span></span></code></pre></div><p>First, we need to define our variables. Here, <code>c</code> corresponds to the RSA encrypted data (last 256 bytes of the encrypted file) encoded as integer.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">sage</span><span class="p">:</span> <span class="n">e</span> <span class="o">=</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl"><span class="n">sage</span><span class="p">:</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">25470150703730072315086034936055649836295236884601534304156993296936285040601301375939610442634162257314189499275100972455566398455602026574433195970815202585090501432569441133857842325042217925159448570072586058996240505604332536419689764920477213974406475165093073579216369638057129512420088827606714396031123135244463251843168817519429473193827165432916372277360150211932008151288302906204095482949720169306181114320172114379252171541724857670073249548632622866650173757036971232388781059615489960396402755953330835572369467647829965472365925514887194394952977362957692659807638830075891677256168792219800752995169</span>
+</span></span><span class="line"><span class="cl"><span class="n">sage</span><span class="p">:</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">2425592482954093142911053394287864523808964564181573160646727426912420816161421295499810615636292488448086115375476578572126347389008149317940146698511301628342882097728861790163917385171608505786502099378180432350549613073164000743046053171252337966368352372410009389267473352698726296264255749133362831429534971651466910078754923485995987572417696906602747262956933918749969313809832939636800411857199483428558375468904127868025514462771636245588377871475012975670951402940280762132382274242486303138563790236596067661371781157135962527788369561955804123957047366621254000506424769282365883497834294487244664347316</span>
+</span></span></code></pre></div><p>Then, we define the cleartext <code>m</code> as a sequence of null bytes (representing the unknown bytes) followed by the known cleartext.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">sage</span><span class="p">:</span> <span class="n">m</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;</span><span class="se">\x00</span><span class="s2">&#34;</span><span class="o">*</span><span class="mi">72</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&#34;expand 32-byte k&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">sage</span><span class="p">:</span> <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">hex</span><span class="p">(),</span> <span class="mi">16</span><span class="p">)</span>
+</span></span></code></pre></div><p>The Coppersmith attack is done on a monic polynomial (single variable and the leading coefficient is 1) modulo <code>N</code>. Here, we have the polynomial 
+
+  
+  <link
+    rel="stylesheet"
+    href="/katex-1799419e.min.css"
+  />
+  <script defer src="/js/katex-0beee02f.bundle.min.js"></script>
+  
+
+
+
+<span class="gblog-katex ">
+  \(f(x) = (m &#43; 2^{128}x)^e - c \mod N\)</span> however it is not monic. Luckily, <code>sage</code> can make it monic for us.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">sage</span><span class="p">:</span> <span class="n">P</span><span class="o">.&lt;</span><span class="n">x</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">PolynomialRing</span><span class="p">(</span><span class="n">Zmod</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">sage</span><span class="p">:</span> <span class="n">f</span> <span class="o">=</span> <span class="p">((</span><span class="n">msg</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">128</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">^</span><span class="n">e</span><span class="p">)</span> <span class="o">-</span> <span class="n">c</span>
+</span></span><span class="line"><span class="cl"><span class="n">sage</span><span class="p">:</span> <span class="n">f</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">monic</span><span class="p">()</span>
+</span></span></code></pre></div><p>Finally, we can run the Coppersmith method on our polynomial. In <code>sage</code>, this is implemented by the <code>small_roots()</code> function. The latter can take a parameter named <code>epsilon</code> determining the running time. By default, it is equal to <code>1/8</code>. In this case, it needs to be set to <code>1/20</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">sage</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">small_roots</span><span class="p">(</span><span class="n">epsilon</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="mi">6730722853673567334832243774533669260003790577373139776704376326794058404121535292812433356801604068239665891105595607303018172210866035032633357162971325439700251947045071</span><span class="p">]</span>
+</span></span></code></pre></div><div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="getting-the-flag"
+    >
+        Getting the flag
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#getting-the-flag" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Getting the flag" href="#getting-the-flag">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>After getting the XOR key and the initial state, I decrypted the file by reimplementing the decryption algorithm in Python (script available <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-10/Challenge_11_over_the_rainbow/decrypt_file.py"
+>here</a>).</p>
+<p>The flag is <code>Wa5nt_th1s_Supp0s3d_t0_b3_4_r3vers1nG_ch4l1eng3@flare-on.com</code></p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="challenge-12---hvm"
+    >
+        Challenge 12 - HVM
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#challenge-12---hvm" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Challenge 12 - HVM" href="#challenge-12---hvm">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">This is the second smallest challenge this year! If only that mattered.
+</span></span></code></pre></div><p>I think this challenge was my favourite this year. It is a PE executable that leverages the <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/hypervisor-platform"
+>Windows Hypervisor Platform API</a> to implement an obfuscation mechanism.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="hypervisor-analysis"
+    >
+        Hypervisor analysis
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#hypervisor-analysis" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Hypervisor analysis" href="#hypervisor-analysis">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>The executable expects two command line parameters, both have a constrained length:</p>
+<ul>
+<li>first one length is higher than 8 and lower than 48;</li>
+<li>second one length is higher than 24, lower than 56 and must be a multiple of 4.</li>
+</ul>
+<p>After checking the parameters length, the program makes use of several functions of the Windows Hypervisor Platform API. This user-mode API can be used to create and manage partitions (logical unit of isolation in Hyper-V), memory mappings for the partition and virtual processors. The whole API is documented on MSDN.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_12_1.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_12_1.png"
+              alt="Overview of Windows Hypervisor Platform architecture"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Overview of Windows Hypervisor Platform architecture
+              (<a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/hypervisor-platform"
+>MSDN</a>)
+          </figcaption>
+    </figure>
+  </div>
+
+<p>In this challenge, this API is used as follows.</p>
+<ol>
+<li>Create and setup a new partition using <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/funcs/whvcreatepartition"
+>WHvCreatePartition()</a>, <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/funcs/whvsetpartitionproperty"
+>WHvSetPartitionProperty()</a> and <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/funcs/whvsetuppartition"
+>WHvSetupPartition()</a>.</li>
+<li>Configure a memory mapping for the partition through <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/funcs/whvmapgparange"
+>WHvMapGpaRange()</a>.</li>
+<li>Create a virtual processor with <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/funcs/whvcreatevirtualprocessor"
+>WHvCreateVirtualProcessor()</a>.</li>
+<li>Set some registers (<code>RAX</code> and the <code>CS</code> segment register) of the virtual processor using <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/funcs/whvsetvirtualprocessorregisters"
+>WHvSetVirtualProcessorRegisters()</a>).</li>
+<li>Copy the shellcode to run (stored in a PE resource) to the memory mapping.</li>
+<li>Copy the user inputs to the memory mapping.</li>
+<li>Enter a while loop and run the virtual processor using <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/funcs/whvrunvirtualprocessor"
+>WHvRunVirtualProcessor()</a>.</li>
+</ol>
+<p>The function <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/funcs/whvrunvirtualprocessor"
+>WHvRunVirtualProcessor()</a> takes a pointer to a <code>WHV_RUN_VP_EXIT_CONTEXT</code> structure. When the execution of the virtual processor terminates, it indicates the exit reason and gives some context values.</p>
+<p>Here, the program verifies if the exit reason is <a
+  class="gblog-markdown__link"
+  href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/funcs/ioportaccess"
+>WHvRunVpExitReasonX64IoPortAccess</a>. The latter occurs when the virtual processor was executing an I/O port instruction such as <code>in</code> or <code>out</code>. In both cases, registers <code>R8</code> and <code>R9</code> and <code>RIP</code> are read. The value present in <code>R8</code> is used as a RC4 key and <code>R9</code> contains the size of the data to process. However, depending on the instruction, the data pointer differs:</p>
+<ul>
+<li>if a <code>in</code> instruction triggered the exit, then the keystream is applied on data at <code>RIP + 2</code>;</li>
+<li>if a <code>out</code> instruction caused the exit, then the keystream is applied on data at <code>RIP - R9 - 16</code>.</li>
+</ul>
+<p>After using RC4, the instruction pointer is incremented by 2 and the virtual processor execution continues.</p>
+<p>At this point, we understand that a <code>in</code> instruction triggers an exit in order to decrypt some code at <code>RIP + 2</code> and the execution continues there. Whereas a <code>out</code> instruction likely leads to encryption of code already executed (at <code>RIP - R9 - 16</code>).</p>
+<p>The virtual processor execution is definitely terminated when the exit reason is <code>WHvRunVpExitReasonX64Halt</code> (execution of <code>halt</code> instruction).</p>
+<p>Finally, the program checks if the value of <code>RAX</code> (in the virtual processor) is equal to <code>0x1337</code> and if it is, the flag is decrypted using the second command line parameter as a XOR key.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="decrypting-the-functions"
+    >
+        Decrypting the functions
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#decrypting-the-functions" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Decrypting the functions" href="#decrypting-the-functions">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>After extracting the resource containing the shellcode executed by the virtual processor, I added it to IDA as a new segment and started analyzing it.</p>
+<p>The 64-bit entrypoint is at the offset <code>0xCF2</code> of the shellcode.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_12_2.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_12_2.png"
+              alt="IDA disassembly of VM entry point"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            IDA disassembly of VM entry point
+          </figcaption>
+    </figure>
+  </div>
+
+<p>After entering the function, we get our first <code>in</code> instruction followed by encrypted data.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_12_3.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_12_3.png"
+              alt="IDA disassembly of first obfuscated function"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            IDA disassembly of first obfuscated function
+          </figcaption>
+    </figure>
+  </div>
+
+<p>From what we understood during the analysis of the hypervisor, <code>R8</code> contains the RC4 key, <code>R9</code> the size of data to decrypt and <code>RIP + 2</code> points to the data. Decryption can be done using a few lines of IDAPython.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">ida_ua</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">ida_bytes</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">ida_kernwin</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">ARC4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ea</span> <span class="o">=</span> <span class="n">ida_kernwin</span><span class="o">.</span><span class="n">get_screen_ea</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">insn</span> <span class="o">=</span> <span class="n">ida_ua</span><span class="o">.</span><span class="n">insn_t</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">length</span> <span class="o">=</span> <span class="n">ida_ua</span><span class="o">.</span><span class="n">decode_insn</span><span class="p">(</span><span class="n">insn</span><span class="p">,</span> <span class="n">ea</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">rc4_key_int</span> <span class="o">=</span> <span class="n">insn</span><span class="o">.</span><span class="n">ops</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+</span></span><span class="line"><span class="cl"><span class="n">rc4_key</span> <span class="o">=</span> <span class="n">rc4_key_int</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">byteorder</span><span class="o">=</span><span class="s2">&#34;little&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ea</span> <span class="o">+=</span> <span class="n">length</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">length</span> <span class="o">=</span> <span class="n">ida_ua</span><span class="o">.</span><span class="n">decode_insn</span><span class="p">(</span><span class="n">insn</span><span class="p">,</span> <span class="n">ea</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">data_size</span> <span class="o">=</span> <span class="n">insn</span><span class="o">.</span><span class="n">ops</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ea</span> <span class="o">+=</span> <span class="n">length</span> <span class="o">+</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="n">ida_bytes</span><span class="o">.</span><span class="n">get_bytes</span><span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">data_size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">dec_data</span> <span class="o">=</span> <span class="n">ARC4</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">rc4_key</span><span class="p">)</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ida_bytes</span><span class="o">.</span><span class="n">patch_bytes</span><span class="p">(</span><span class="n">ea</span><span class="p">,</span> <span class="n">dec_data</span><span class="p">)</span>
+</span></span></code></pre></div><p>Running this script decrypts the actual instructions of the function. As expected, a <code>out</code> instruction is executed before the function returns to encrypt it again.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_12_4.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_12_4.png"
+              alt="IDA disassembly of first function decrypted"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            IDA disassembly of first function decrypted
+          </figcaption>
+    </figure>
+  </div>
+
+<p>From there, it appears that all the functions of the shellcode seem to be wrapped by these decryption and encryption routines. The RC4 key is unique for each function and obviously the size differs as well. However, the instructions opcodes of these routines and the operands of the <code>in</code> and <code>out</code> instructions remain constant from one function to another. Thus, it is possible to use the following search pattern to find all the encrypted functions and progressively decrypt them.</p>
+<pre tabindex="0"><code>49 B8 ?? ?? ?? ?? ?? ?? ?? ?? 41 B9 ?? ?? ?? ?? E4 03
+</code></pre><p>Obviously, the process of searching and decrypting can be automated using a few more lines of IDAPython, my script is available <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-10/Challenge_12_HVM/deobfuscate.py"
+>here</a>.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="retrieving-the-inputs"
+    >
+        Retrieving the inputs
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#retrieving-the-inputs" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Retrieving the inputs" href="#retrieving-the-inputs">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>Once the functions are all decrypted, getting the first parameter value is straightforward as it is simply XOR-ed with the key <code>loremipsumloremipsumloremipsumloremipsumloremips</code> and the result is compared with an hardcoded value. This gives the following string for the first input.</p>
+<pre tabindex="0"><code>FLARE2023FLARE2023FLARE2023FLARE2023
+</code></pre><p>Retrieving the second parameter is a bit more complicated. It is decoded using base64 and decrypted through a slightly modified <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Salsa20"
+>Salsa20</a> cipher. Then, the result is compared with the first parameter, the success value (<code>0x1337</code>) is returned if it matches.</p>
+<p>From there, I chose to emulate the modified Salsa20 to reverse the process and retrieve the second parameter. My script based on miasm is available <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-10/Challenge_12_HVM/get_flag.py"
+>here</a>. The script also decrypts the flag.</p>
+<pre tabindex="0"><code>Second parameter: zBYpTBUWJvf9MUH4KtcYv7sdUVUPcjOCiU5G5i63bb+LLBZsAmEk9YlNMplv5SiN
+Flag: c4n_i_sh1p_a_vm_as_an_exe_ask1ng_4_a_frnd@flare-on.com
+</code></pre><div class="flex align-center gblog-post__anchorwrap">
+    <h2 id="challenge-13---y0da"
+    >
+        Challenge 13 - y0da
+    </h2>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#challenge-13---y0da" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Challenge 13 - y0da" href="#challenge-13---y0da">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">So close to the end you can almost taste it. Keep going champ, complete this challenge and take your place as one of the Reverse Engineers of All-Time.
+</span></span></code></pre></div><p>The last challenge is a PE executable obfuscated with spaghetti code.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="defeating-the-obfuscation"
+    >
+        Defeating the obfuscation
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#defeating-the-obfuscation" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Defeating the obfuscation" href="#defeating-the-obfuscation">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>After opening the executable in IDA, we quickly realize that we are dealing with spaghetti code: each basic block is composed of one relevant instruction and one jump instruction leading to the next basic block.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_1.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_1.png"
+              alt="IDA disassembly of executable entry point"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            IDA disassembly of executable entry point
+          </figcaption>
+    </figure>
+  </div>
+
+<p>There are many ways to defeat this obfuscation, and actually IDA is able, to a limited extent, to natively deal with it using <a
+  class="gblog-markdown__link"
+  href="https://hex-rays.com/blog/igors-tip-of-the-week-86-function-chunks/"
+>function chunks</a>. As many disassemblers, IDA has a support for functions split into several disjoint ranges. Each contiguous range of instructions is named <em>chunk</em>. The chunk at the start of the function is named <em>entry chunk</em> whereas the others are called <em>tail chunks</em>. A tail chunk may be shared by multiple functions. Chunks are usually detected during autoanalysis, however when it is not the case, they can be manually added or removed, from the UI (Edit &gt; Functions &gt; Append/Remove function tail) but also using the API.</p>
+<p>My strategy consisted to use IDAPython to reconstruct each function via function chunks, and then take advantage of the decompiler optimizations (or in other words pressing F5) to get deobfuscated functions close to the original source code. For that purpose, we first need to undefine the existing functions created by IDA during autoanalysis except the function at the entry point. This can be easily done using the following snippet of code.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">idautils</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">ida_funcs</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">ida_idaapi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">inf</span> <span class="o">=</span> <span class="n">ida_idaapi</span><span class="o">.</span><span class="n">get_inf_structure</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">func_ea</span> <span class="ow">in</span> <span class="n">idautils</span><span class="o">.</span><span class="n">Functions</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">func_ea</span> <span class="o">==</span> <span class="n">inf</span><span class="o">.</span><span class="n">start_ip</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ida_funcs</span><span class="o">.</span><span class="n">del_func</span><span class="p">(</span><span class="n">func_ea</span><span class="p">)</span>
+</span></span></code></pre></div><p>For each obfuscated function, the algorithm to deobfuscate it is the one described below.</p>
+<ol>
+<li>Identify the last tail chunk of the function and add the jump location to the todo list.</li>
+<li>Pop an address from the todo list. Stop the algorithm when the list is empty.</li>
+<li>If the block pointed by the address already belong to the function, go to step 2.</li>
+<li>Delete existing code at this location and disassemble again to get the correct instructions.</li>
+<li>If the first instruction is a <code>ret</code>, create a tail chunk containing the instruction, append it to the function and go to step 2.</li>
+<li>If the first instruction is a conditional jump, put the jump location in the todo list.</li>
+<li>If the second instruction is not a <code>jmp</code>, then raise an error for unsupported code pattern.</li>
+<li>Create a tail chunk from the two instructions and append it to the function.</li>
+<li>Add the unconditional jump location to the todo list and go to step 2.</li>
+</ol>
+<p>The script implementing this algorithm is available on my <a
+  class="gblog-markdown__link"
+  href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-10/Challenge_13_y0da/deobfuscator.py"
+>Github</a>.</p>
+<p>Once the functions are reconstructed, there is one last step before enjoying the decompiler output: fixing the calling conventions and the stack frames. Usually, this is automatically done by IDA but as the function reconstruction was done manually, it is necessary to tell IDA how large is the stack, how many parameters are passed, and so on. I did not manage to automate this part as some functions are using <a
+  class="gblog-markdown__link"
+  href="https://hex-rays.com/blog/igors-tip-of-the-week-51-custom-calling-conventions/"
+>custom calling conventions</a> but fortunately, there are not a lot of functions to fix.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="getting-lessons-from-yoda"
+    >
+        Getting lessons from Yoda
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#getting-lessons-from-yoda" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Getting lessons from Yoda" href="#getting-lessons-from-yoda">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>The program starts with reconstructing a few strings and a beautiful Yoda in ASCII art on the stack.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_2.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_2.png"
+              alt="Hex-Rays decompiler output of first deobfuscated function"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Hex-Rays decompiler output of first deobfuscated function
+          </figcaption>
+    </figure>
+  </div>
+
+<p>The DLL names shown on the screenshot above are used to resolve several Windows API functions through the import-by-hash technique. Mandiant provides a SQLite <a
+  class="gblog-markdown__link"
+  href="https://github.com/mandiant/flare-ida/tree/master/shellcode_hashes"
+>database</a> containing a lot of function names hashes, this is quite useful to deal with this technique.</p>
+<p>Then, a network socket is created to listen for TCP connections on port 1337. When a connection is initiated to this port, we get access to a command line shell (by running <code>%SYSTEMROOT%\\%COMSPEC%</code> in a new process).</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_3.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_3.png"
+              alt="Shell accessible on port TCP/1337"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Shell accessible on port TCP/1337
+          </figcaption>
+    </figure>
+  </div>
+
+<p>Two threads are started to handle connections received on the socket:</p>
+<ul>
+<li>one that receives data from the socket, processes it and forwards it to the other thread;</li>
+<li>a second one processing incoming data from the first thread, and eventually sending the output to the socket.</li>
+</ul>
+<p>The first thread handles two special cases:</p>
+<ul>
+<li>incoming data is equal to <code>gimmie_advic3</code>, then it randomly picks an &ldquo;advice&rdquo; and writes it to the socket;</li>
+<li>incoming data is equal to <code>gimmie_s3cr3t</code>, then it asks for a password and if the latter is correct, it uses it as a RC4 key to decrypt a resource embedded in the executable.</li>
+</ul>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_4.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_4.png"
+              alt="Special commands to get an advice and the secret"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Special commands to get an advice and the secret
+          </figcaption>
+    </figure>
+  </div>
+
+<p>The password is split in four parts, separated by the <code>_</code> character. For each part, its MD5 hash is computed and checked against a hardcoded one. The four MD5 hashes as well as their corresponding clear value are given below.</p>
+<pre tabindex="0"><code>4c8476db197a1039153ca724674f7e13: patience
+627fe11eeef8994b7254fc1da4a0a3c7: y0u
+d0e6ef34e76c41b0fac84f608289d013: must
+48367c670f6189cf3f413be394f4f335: h4v3
+</code></pre><p>After entering the good password, we do not get the flag though, but a weird string looking like base64 encoded data.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_5.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_5.png"
+              alt="Output after entering the correct password"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Output after entering the correct password
+          </figcaption>
+    </figure>
+  </div>
+
+<p>Decrypting the resource using the password as a RC4 key does not produce better results as we get a false flag.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_6.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_6.png"
+              alt="False flag"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            False flag
+          </figcaption>
+    </figure>
+  </div>
+
+<p>At this point, we understand we need to go deeper by analyzing how the second thread processes data before writing this weird encoded output.</p>
+<div class="flex align-center gblog-post__anchorwrap">
+    <h3 id="becoming-a-real-jedi"
+    >
+        Becoming a real jedi
+    </h3>
+    <a data-clipboard-text="https://re-dojo.github.io/posts/flareon10/#becoming-a-real-jedi" class="gblog-post__anchor clip flex align-center" aria-label="Anchor Becoming a real jedi" href="#becoming-a-real-jedi">
+        <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
+    </a>
+</div>
+<p>After reading the decrypted resource, the second thread looks for two 32-bit markers into it:</p>
+<ul>
+<li><code>0x3BAAE1FF</code>;</li>
+<li><code>0xC5A1E2FF</code>.</li>
+</ul>
+<p>Both markers can be found at the end of the resource, respectively at offsets <code>0x1B0F1</code> and <code>0x1B12E</code>. They are used to extract two chunks of data: one of 57 bytes and a second one of 451 bytes.</p>
+<p>Then, a <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Mersenne_Twister"
+>Mersenne Twister</a> PRNG is instantiated using a seed set in the main function (<code>0x10d4</code>). Interestingly, the seed is first passed through a <a
+  class="gblog-markdown__link"
+  href="https://en.wikipedia.org/wiki/Linear_congruential_generator"
+>linear congruential generator</a> known to be used in Pokémon Machine v2 distributions (see <a
+  class="gblog-markdown__link"
+  href="https://bulbapedia.bulbagarden.net/wiki/Pseudorandom_number_generation_in_Pok%C3%A9mon"
+>here</a> for more details).</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_7.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_7.png"
+              alt="Hex-Rays decompiler output of LCRNG"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Hex-Rays decompiler output of LCRNG
+          </figcaption>
+    </figure>
+  </div>
+
+<p>The Mersenne Twister is used to generate 60 pseudo-random bytes. These bytes and the two chunks of data extracted from the decrypted resource are passed to a routine at <code>0x18004936E</code>. The latter iterates over each byte of the first chunk, and gives it to a second routine at <code>0x18001D361</code>. Here is the decompiler output for this one (after deobfuscation and fixing the calling convention).</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_8.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_8.png"
+              alt="Hex-Rays decompiler output of function at 0x18001D361"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Hex-Rays decompiler output of function at 0x18001D361
+          </figcaption>
+    </figure>
+  </div>
+
+<p>Looking at the disassembly explains why the decompiler is blind: this function purpose is to build a ROP chain using the gadgets present in the second chunk and then to jump to it.</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_9.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_9.png"
+              alt="IDA disassembly of function building the ROP chain"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            IDA disassembly of function building the ROP chain
+          </figcaption>
+    </figure>
+  </div>
+
+<p>One way to reconstruct the actual assembly code executed by the ROP chain is to put a breakpoint before the jump to the chain entry, dump the addresses of the gadgets on the stack, and retrieve the corresponding instructions by reading the second chunk. After creating a new segment in IDA for this function, we get the following decompiler output (partial as the function is too large).</p>
+
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gblog-post__figure"
+    >
+      <a class="gblog-markdown__link--raw" href="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_10.png">
+        <picture>
+            <source
+                srcset=""
+            />
+          <img
+                src="https://re-dojo.github.io/posts/flareon10/images/flareon10_13_10.png"
+              alt="Hex-Rays decompiler partial output of the function built by the ROP chain"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Hex-Rays decompiler partial output of the function built by the ROP chain
+          </figcaption>
+    </figure>
+  </div>
+
+<p>As one can see, the function applies a lot of MBA (Mixed Boolean-Arithmetic) expressions on the byte given as input. At first, I thought this could be simplified using a MBA expression simplifier like <a
+  class="gblog-markdown__link"
+  href="https://github.com/quarkslab/arybo"
+>Arybo</a> but I did not get good results. Besides, at the end of the function, another set of MBA expressions using the data generated by Mersenne Twister is applied on the resulting byte. A Python implementation of this transformation is given below.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">random</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="n">random</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">random</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span> <span class="o">^</span> <span class="n">random</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+</span></span></code></pre></div><p>After processing the first chunk, the result is encoded using base32 with a custom alphabet and finally written to the socket.</p>
+<p>The following diagram sums up the whole process.</p>
+
+
+  
+  <script defer src="/js/mermaid-012be351.bundle.min.js"></script>
+  
+
+
+
+<pre class="gblog-mermaid mermaid ">
+flowchart LR
+A(JPEG) --> B(Encrypted flag)
+A --> C(ROP gadgets)
+B --> D{Decryption routine}
+C --> D
+E(Seed) --> F{LCRNG}
+F --> G{Mersenne-Twister}
+G --> D 
+D --> H{Base32}
+H --> I(Output)
+</pre>
+
+<p>At this point, I initially thought it was necessary to bruteforce the seed in order to get the flag decrypted. I lost plenty of time in doing that (notably in reimplementing the decryption routine in C) however this was not the solution. Actually, I found the flag by chance when I tried to get the output of the decrypted routine before the usage of the Mersenne-Twister data in order to debug my brute-force algorithm. To understand the expected solution, the previous diagram should actually looks like this.</p>
+
+
+
+
+<pre class="gblog-mermaid mermaid ">
+flowchart LR
+A(JPEG) --> B(Encrypted flag)
+A --> C(ROP gadgets)
+B --> D{Decryption routine}
+C --> D
+E(Seed) --> F{LCRNG}
+F --> G{Mersenne-Twister}
+D --> H(Flag)
+H --> I{Encryption routine}
+G --> I
+I --> J{Base32}
+J --> K(Output)
+</pre>
+
+<p>The flag is <code>P0w3rfu1_y0u_h4v3_b3c0m3_my_y0ung_flareaw4n@flare-on.com</code>.</p>
+    </section>
+  </article>
+
+      </main>
+
+      <footer class="gblog-footer">
+  <nav class="container flex">
+    <div>
+      <section class="flex flex-wrap align-center">
+        
+        
+        
+        
+      </section>
+      <section class="flex flex-wrap align-center">
+        <span class="gblog-footer__item">
+          Built with <a href="https://gohugo.io/" class="gblog-footer__link">Hugo</a> and
+          <svg class="gblog-icon gblog_heart"><use xlink:href="#gblog_heart"></use></svg>
+        </span>
+      </section>
+      
+      
+        <section class="flex flex-wrap align-center">
+          <span class="gblog-footer__item">
+            Content licensed under
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="gblog-footer__link no-wrap">CC BY-SA 4.0</a>
+          </span>
+        </section>
+      
+    </div>
+    
+      <div class="flex flex-25 justify-end">
+        <span class="gblog-footer__item text-right">
+          <a class="gblog-footer__link fake-link" href="#" aria-label="Back to top">
+            <svg class="gblog-icon gblog_keyboard_arrow_up">
+              <use xlink:href="#gblog_keyboard_arrow_up"></use>
+            </svg>
+            <span class="hidden-mobile">Back to top</span>
+          </a>
+        </span>
+      </div>
+    
+  </nav>
+</footer>
+
+    </div>
+  </body>
+</html>
