@@ -559,7 +559,7 @@ This year, there was a total of 13 challenges to solve, which is more than previ
         <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
     </a>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">You’re doing so great! Go out and celebrate. Take a day off kid, you’ve earned it. Watch your scoreboard position fall like the sand through the hourglass. Avoid this VM and feel the joy the outside world has to offer. Or crush this one and earn even more internet points, those will come in handy.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">You’re doing so great! Go out and celebrate. Take a day off kid, you’ve earned it. Watch your scoreboard position fall like the sand through the hourglass. Avoid this VM and feel the joy the outside world has to offer. Or crush this one and earn even more internet points, those will come in handy.
 </span></span></code></pre></div><p>For this challenge, we have a raw disk image named <code>hda.img</code> to analyze.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ file hda.img 
 </span></span><span class="line"><span class="cl">hda.img: DOS/MBR boot sector<span class="p">;</span> partition <span class="m">1</span> : <span class="nv">ID</span><span class="o">=</span>0x6, active, start-CHS <span class="o">(</span>0x0,1,1<span class="o">)</span>, end-CHS <span class="o">(</span>0x3ff,15,63<span class="o">)</span>, startsector 63, <span class="m">1032129</span> sectors
@@ -593,8 +593,8 @@ This year, there was a total of 13 challenges to solve, which is more than previ
 </span></span><span class="line"><span class="cl">ata0-master: type=disk, path=&#34;hda.img&#34;, mode=flat, cylinders=20, heads=16, spt=63
 </span></span><span class="line"><span class="cl">boot: disk
 </span></span></code></pre></div><p>Once the <code>bochsrc</code> file has been correctly edited, we can test it with the Bochs emulator using the following command line.</p>
-<pre tabindex="0"><code>&#34;C:\Program Files\Bochs-2.7\bochsdbg.exe&#34; -f bochsrc -q
-</code></pre><p>The video output clearly indicates we are dealing with a ransomware here.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">&#34;C:\Program Files\Bochs-2.7\bochsdbg.exe&#34; -f bochsrc -q
+</span></span></code></pre></div><p>The video output clearly indicates we are dealing with a ransomware here.</p>
 
 
 
@@ -730,7 +730,7 @@ This year, there was a total of 13 challenges to solve, which is more than previ
         <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
     </a>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">I’m told this one is easy if you are really good. Based on your solve times so far Google Bard predicts your performance will be: “1 out of 5 stars. I’d give it 0 stars if I could. Food arrived over an hour late, covered in oil. I wouldn’t feed it to my dog”
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">I’m told this one is easy if you are really good. Based on your solve times so far Google Bard predicts your performance will be: “1 out of 5 stars. I’d give it 0 stars if I could. Food arrived over an hour late, covered in oil. I wouldn’t feed it to my dog”
 </span></span></code></pre></div><p>This one is another ransomware related challenge, but this time we have a PE executable developed in C++. An encrypted file named <code>very_important_file.d3crypt_m3</code> is also provided, the goal of the challenge is to decrypt it.</p>
 <div class="flex align-center gblog-post__anchorwrap">
     <h3 id="static-analysis"
@@ -885,7 +885,7 @@ This year, there was a total of 13 challenges to solve, which is more than previ
         <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
     </a>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">This is the second smallest challenge this year! If only that mattered.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">This is the second smallest challenge this year! If only that mattered.
 </span></span></code></pre></div><p>I think this challenge was my favourite this year. It is a PE executable that leverages the <a
   class="gblog-markdown__link"
   href="https://learn.microsoft.com/en-us/virtualization/api/hypervisor-platform/hypervisor-platform"
@@ -1089,8 +1089,8 @@ This year, there was a total of 13 challenges to solve, which is more than previ
   </div>
 
 <p>From there, it appears that all the functions of the shellcode seem to be wrapped by these decryption and encryption routines. The RC4 key is unique for each function and obviously the size differs as well. However, the instructions opcodes of these routines and the operands of the <code>in</code> and <code>out</code> instructions remain constant from one function to another. Thus, it is possible to use the following search pattern to find all the encrypted functions and progressively decrypt them.</p>
-<pre tabindex="0"><code>49 B8 ?? ?? ?? ?? ?? ?? ?? ?? 41 B9 ?? ?? ?? ?? E4 03
-</code></pre><p>Obviously, the process of searching and decrypting can be automated using a few more lines of IDAPython, my script is available <a
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">49 B8 ?? ?? ?? ?? ?? ?? ?? ?? 41 B9 ?? ?? ?? ?? E4 03
+</span></span></code></pre></div><p>Obviously, the process of searching and decrypting can be automated using a few more lines of IDAPython, my script is available <a
   class="gblog-markdown__link"
   href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-10/Challenge_12_HVM/deobfuscate.py"
 >here</a>.</p>
@@ -1104,8 +1104,8 @@ This year, there was a total of 13 challenges to solve, which is more than previ
     </a>
 </div>
 <p>Once the functions are all decrypted, getting the first parameter value is straightforward as it is simply XOR-ed with the key <code>loremipsumloremipsumloremipsumloremipsumloremips</code> and the result is compared with an hardcoded value. This gives the following string for the first input.</p>
-<pre tabindex="0"><code>FLARE2023FLARE2023FLARE2023FLARE2023
-</code></pre><p>Retrieving the second parameter is a bit more complicated. It is decoded using base64 and decrypted through a slightly modified <a
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">FLARE2023FLARE2023FLARE2023FLARE2023
+</span></span></code></pre></div><p>Retrieving the second parameter is a bit more complicated. It is decoded using base64 and decrypted through a slightly modified <a
   class="gblog-markdown__link"
   href="https://en.wikipedia.org/wiki/Salsa20"
 >Salsa20</a> cipher. Then, the result is compared with the first parameter, the success value (<code>0x1337</code>) is returned if it matches.</p>
@@ -1113,9 +1113,9 @@ This year, there was a total of 13 challenges to solve, which is more than previ
   class="gblog-markdown__link"
   href="https://github.com/icecr4ck/write-ups/blob/master/FlareOn-10/Challenge_12_HVM/get_flag.py"
 >here</a>. The script also decrypts the flag.</p>
-<pre tabindex="0"><code>Second parameter: zBYpTBUWJvf9MUH4KtcYv7sdUVUPcjOCiU5G5i63bb+LLBZsAmEk9YlNMplv5SiN
-Flag: c4n_i_sh1p_a_vm_as_an_exe_ask1ng_4_a_frnd@flare-on.com
-</code></pre><div class="flex align-center gblog-post__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">Second parameter: zBYpTBUWJvf9MUH4KtcYv7sdUVUPcjOCiU5G5i63bb+LLBZsAmEk9YlNMplv5SiN
+</span></span><span class="line"><span class="cl">Flag: c4n_i_sh1p_a_vm_as_an_exe_ask1ng_4_a_frnd@flare-on.com
+</span></span></code></pre></div><div class="flex align-center gblog-post__anchorwrap">
     <h2 id="challenge-13---y0da"
     >
         Challenge 13 - y0da
@@ -1124,7 +1124,7 @@ Flag: c4n_i_sh1p_a_vm_as_an_exe_ask1ng_4_a_frnd@flare-on.com
         <svg class="gblog-icon gblog_link"><use xlink:href="#gblog_link"></use></svg>
     </a>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-md" data-lang="md"><span class="line"><span class="cl">So close to the end you can almost taste it. Keep going champ, complete this challenge and take your place as one of the Reverse Engineers of All-Time.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">So close to the end you can almost taste it. Keep going champ, complete this challenge and take your place as one of the Reverse Engineers of All-Time.
 </span></span></code></pre></div><p>The last challenge is a PE executable obfuscated with spaghetti code.</p>
 <div class="flex align-center gblog-post__anchorwrap">
     <h3 id="defeating-the-obfuscation"
@@ -1292,11 +1292,11 @@ Flag: c4n_i_sh1p_a_vm_as_an_exe_ask1ng_4_a_frnd@flare-on.com
   </div>
 
 <p>The password is split in four parts, separated by the <code>_</code> character. For each part, its MD5 hash is computed and checked against a hardcoded one. The four MD5 hashes as well as their corresponding clear value are given below.</p>
-<pre tabindex="0"><code>4c8476db197a1039153ca724674f7e13: patience
-627fe11eeef8994b7254fc1da4a0a3c7: y0u
-d0e6ef34e76c41b0fac84f608289d013: must
-48367c670f6189cf3f413be394f4f335: h4v3
-</code></pre><p>After entering the good password, we do not get the flag though, but a weird string looking like base64 encoded data.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plain" data-lang="plain"><span class="line"><span class="cl">4c8476db197a1039153ca724674f7e13: patience
+</span></span><span class="line"><span class="cl">627fe11eeef8994b7254fc1da4a0a3c7: y0u
+</span></span><span class="line"><span class="cl">d0e6ef34e76c41b0fac84f608289d013: must
+</span></span><span class="line"><span class="cl">48367c670f6189cf3f413be394f4f335: h4v3
+</span></span></code></pre></div><p>After entering the good password, we do not get the flag though, but a weird string looking like base64 encoded data.</p>
 
 
 
